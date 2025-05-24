@@ -20,6 +20,8 @@ public class Course {
 
     private String slug;
 
+    private String code;
+
     public int getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class Course {
 
     public void setSlug(String slug) {
         this.slug = slug;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
