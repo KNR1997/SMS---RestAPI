@@ -1,8 +1,10 @@
 package com.example.sms.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "roles")
 public class Role {
 
@@ -14,11 +16,4 @@ public class Role {
     @Column(length = 20)
     private ERole name;
 
-    public ERole getName() {
-        return name;
-    }
-
-    public void setName(ERole name) {
-        this.name = name;
-    }
 }

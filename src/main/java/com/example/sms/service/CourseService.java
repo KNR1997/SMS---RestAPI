@@ -2,7 +2,7 @@ package com.example.sms.service;
 
 import com.example.sms.dto.CourseDTO;
 import com.example.sms.entity.Course;
-import com.example.sms.exception.CourseNotFoundException;
+import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,10 @@ public class CourseService {
     }
 
     public Course createCourse(CourseDTO createDto) {
+        if (courseRepository.existsBySlug(createDto.getSlug())) {
+            throw new BadRequestException("Course with slug '" + createDto.getSlug() + "' already exists.");
+        }
+
         Course course = new Course();
         course.setName(createDto.getName());
         course.setSlug(createDto.getSlug());
@@ -54,7 +58,7 @@ public class CourseService {
 
     public Course updateCourse(Integer id, CourseDTO updateDto) {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException("Course not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
 
         course.setName(updateDto.getName());
         course.setSlug(updateDto.getSlug());
@@ -65,7 +69,7 @@ public class CourseService {
 
     public void deleteCourse(Integer id) {
         if (!courseRepository.existsById(id)) {
-            throw new CourseNotFoundException("Course not found with ID: " + id);
+            throw new ResourceNotFoundException("Course not found with id: " + id);
         }
         courseRepository.deleteById(id);
     }

@@ -1,9 +1,6 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.AuthResponse;
-import com.example.sms.dto.LoginRequest;
-import com.example.sms.dto.RegisterRequest;
-import com.example.sms.dto.RegisterResponse;
+import com.example.sms.dto.*;
 import com.example.sms.entity.ERole;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -66,7 +64,7 @@ public class AuthController {
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         roles.add(userRole);
 
@@ -90,7 +88,15 @@ public class AuthController {
             return ResponseEntity.status(404).body("User not found");
         }
 
-        return ResponseEntity.ok(user); // You might want to return a DTO instead of the full User entity
+        // Convert roles to a set of role names
+        Set<ERole> roleNames = user.getRoles()
+                .stream()
+                .map(Role::getName) // Assuming getName() returns something like "ROLE_USER"
+                .collect(Collectors.toSet());
+
+        // Map User to MeDTO
+        MeDTO meDTO = new MeDTO(user.getUsername(), user.getEmail(), roleNames);
+        return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity
     }
 
 }

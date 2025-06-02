@@ -1,9 +1,12 @@
 package com.example.sms.entity;
 
-import io.swagger.v3.core.util.Json;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "settings")
 public class Settings {
     @Id
@@ -13,19 +16,4 @@ public class Settings {
     @Lob
     private String options; // store JSON as a string
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOptions() {
-        return options;
-    }
-
-    public void setOptions(String options) {
-        this.options = options;
-    }
 }
