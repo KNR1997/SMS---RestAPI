@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { MappedPaginatorInfo, Student } from "../../types";
+import { Course, MappedPaginatorInfo, Subject, User } from "../../types";
 import {
   Table,
   TableBody,
@@ -11,22 +11,22 @@ import {
 import Pagination from "../ui/pagination";
 
 export type IProps = {
-  students: Student[];
+  subjects: Subject[];
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
 };
 
-export default function StudentList({
-  students,
+export default function SubjectList({
+  subjects,
   onPagination,
   paginatorInfo,
 }: IProps) {
   const navigate = useNavigate();
 
   const handleEdit = (id: number) => {
-    navigate(`/students/${id}/edit`);
+    navigate(`/users/${id}/edit`);
   };
 
   return (
@@ -52,13 +52,7 @@ export default function StudentList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Grade
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                StudentID
+                Code
               </TableCell>
               <TableCell
                 isHeader
@@ -71,22 +65,19 @@ export default function StudentList({
 
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {students.map((student) => (
-              <TableRow key={student.id}>
+            {subjects.map((subject) => (
+              <TableRow key={subject.id}>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {student.id}
+                  {subject.id}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {student.user.firstName} {student.user.lastName}
+                  {subject.name}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {student?.grade ? student.grade : "_"}
+                  {subject.code}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {student.studentId}
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <button onClick={() => handleEdit(student.id)}>
+                  <button onClick={() => handleEdit(subject.id)}>
                     <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                   </button>
                 </TableCell>

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,5 +21,17 @@ public class Student {
     private String studentId;
 
     private Date dateOfBirth;
+
+    private Grade grade;
+
+    private String guardianName;
+
+    private String contactNumber;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "student_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<Course> courses = new HashSet<>();
 
 }

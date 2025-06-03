@@ -1,10 +1,12 @@
 import {
+  CoursePaginator,
+  CourseQueryOptions,
   CreateStudent,
+  EnrollCourseData,
   QueryOptions,
   Student,
   StudentPaginator,
   StudentQueryOptions,
-  User,
 } from "../../types";
 import { API_ENDPOINTS } from "./api-endpoints";
 import { crudFactory } from "./crud-factory";
@@ -23,10 +25,30 @@ export const StudentClient = {
       }),
     });
   },
-  fetchUser: ({ id }: { id: string }) => {
-    return HttpClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`);
+  enrollToCourse: ({
+    studentId,
+    input,
+  }: {
+    studentId: number;
+    input: EnrollCourseData;
+  }) => {
+    return HttpClient.post<any>(
+      `${API_ENDPOINTS.STUDENTS}/${studentId}/courses`,
+      input
+    );
   },
-  removeUser: ({ id }: { id: string }) => {
-    return HttpClient.delete<any>(`${API_ENDPOINTS.USERS}/${id}`);
+  getMyCourses: ({
+    studentId,
+    name,
+    ...params
+  }: Partial<CourseQueryOptions & { studentId: number }>) => {
+    return HttpClient.get<CoursePaginator>(
+      `${API_ENDPOINTS.STUDENTS}/${studentId}/courses`,
+      {
+        searchJoin: "and",
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      }
+    );
   },
 };

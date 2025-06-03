@@ -1,14 +1,23 @@
 package com.example.sms.dto;
 
 import com.example.sms.entity.Grade;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class CreateStudentDTO {
+@AllArgsConstructor
+public class StudentPageDataDTO {
+    private Integer id;
 
-    private CreateUserDTO userDetails;
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private String username;
 
     private Date dateOfBirth;
 
@@ -17,4 +26,5 @@ public class CreateStudentDTO {
     private String guardianName;
 
     private String contactNumber;
+
 }

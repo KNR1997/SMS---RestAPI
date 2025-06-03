@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-    roles: [ERole.ROLE_ADMIN]
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
   },
   // {
   //   icon: <CalenderIcon />,
@@ -75,6 +75,33 @@ const navItems: NavItem[] = [
   //   roles: [ERole.ROLE_FINISH_GOOD_HEAD, ERole.ROLE_FINANCE_HEAD],
   // },
   {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Courses", path: "/courses", pro: false },
+      { name: "Create course", path: "/courses/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+    {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "Available courses", path: "/courses/available-courses", pro: false },
+      { name: "My course", path: "/courses/my-courses", pro: false },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
+  {
+    name: "Subjects",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Subjects", path: "/subjects", pro: false },
+      { name: "Create subject", path: "/subjects/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
     name: "Users",
     icon: <UserIcon />,
     subItems: [
@@ -83,7 +110,7 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-    {
+  {
     name: "Students",
     icon: <UserIcon />,
     subItems: [

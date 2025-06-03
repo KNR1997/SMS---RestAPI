@@ -5,7 +5,34 @@ export interface Invoice {
   value: number;
   fgsStatus: EStatus;
   financeStatus: EStatus;
-  createdAt: string
+  createdAt: string;
+}
+
+export interface Course {
+  id: number;
+  name: string;
+  slug: string;
+  code: string;
+  grade: EGrade;
+}
+
+export interface CreateCourse {
+  name: string;
+  slug: string;
+  code: string;
+}
+
+export interface Subject {
+  id: number;
+  name: string;
+  slug: string;
+  code: string;
+}
+
+export interface CreateSubject {
+  name: string;
+  slug: string;
+  code: string;
 }
 
 export interface InvoiceStatusAudit {
@@ -32,7 +59,17 @@ export enum ERole {
   ROLE_ADMIN = "ROLE_ADMIN",
   ROLE_TEACHER = "ROLE_TEACHER",
   ROLE_RECEPTIONIST = "ROLE_RECEPTIONIST",
-  ROLE_STUDENT = "ROLE_STUDENT"
+  ROLE_STUDENT = "ROLE_STUDENT",
+}
+
+export enum EGrade {
+  GRADE_5 = "GRADE_5",
+  GRADE_6 = "GRADE_6",
+  GRADE_7 = "GRADE_7",
+  GRADE_8 = "GRADE_8",
+  GRADE_9 = "GRADE_9",
+  GRADE_10 = "GRADE_10",
+  GRADE_11 = "GRADE_11",
 }
 
 export interface Role {
@@ -47,6 +84,8 @@ export interface User {
   email: string;
   username: string;
   roles: Role[];
+  grade: EGrade;
+  studentId: number;
 }
 
 export interface CreateUser {
@@ -57,17 +96,24 @@ export interface CreateUser {
   role: ERole;
 }
 
+export interface EnrollCourseData {
+  courseId: number,
+}
+
 export interface Student {
   id: number;
   user: User;
   studentId: string;
   dateOfBirth: string;
+  grade: EGrade;
 }
 
 export interface CreateStudent {
-  userDatails: CreateUser
-  studentId: string;
-  dateOfBirth: string;
+  userDetails: CreateUser;
+  dateOfBirth: Date;
+  grade: EGrade;
+  guardianName: string;
+  contactNumber: string;
 }
 
 export interface Request {
@@ -84,8 +130,8 @@ export interface CreateRequestInput {
 }
 
 export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc',
+  Asc = "asc",
+  Desc = "desc",
 }
 
 export interface QueryOptions {
@@ -134,7 +180,12 @@ export interface UserPaginator extends PaginatorInfo<User> {}
 
 export interface StudentPaginator extends PaginatorInfo<Student> {}
 
-export interface InvoiceStatusAuditPaginator extends PaginatorInfo<InvoiceStatusAudit> {}
+export interface SubjectPaginator extends PaginatorInfo<Subject> {}
+
+export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface InvoiceStatusAuditPaginator
+  extends PaginatorInfo<InvoiceStatusAudit> {}
 
 export interface InvoiceQueryOptions extends QueryOptions {
   companyName: string;
@@ -152,14 +203,21 @@ export interface StudentQueryOptions extends QueryOptions {
   username: string;
 }
 
+export interface SubjectQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface CourseQueryOptions extends QueryOptions {
+  name: string;
+  grade: EGrade;
+}
+
 export interface InvoiceStatusAuditQueryOptions extends QueryOptions {
   username: string;
 }
 
 export interface GetParams {
-  id: string;
   slug: string;
-  language: string;
 }
 
 export interface QueryOptions {

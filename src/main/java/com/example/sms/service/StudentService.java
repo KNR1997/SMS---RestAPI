@@ -1,8 +1,11 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.CreateStudentDTO;
+import com.example.sms.entity.Course;
 import com.example.sms.entity.Student;
 import com.example.sms.entity.User;
+import com.example.sms.exception.ResourceNotFoundException;
+import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.StudentRepository;
 import com.example.sms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,16 @@ public class StudentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CourseRepository courseRepository;
+
     public Page<Student> getAllStudents(Pageable pageable) {
         return studentRepository.findAll(pageable);
+    }
+
+    public Student getStudentById(Integer id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
     }
 
     public Student createStudent(CreateStudentDTO createStudentDTO) {
@@ -36,6 +47,9 @@ public class StudentService {
         student.setUser(newUser);
         student.setStudentId(generateStudentId());
         student.setDateOfBirth(createStudentDTO.getDateOfBirth());
+        student.setGrade(createStudentDTO.getGrade());
+        student.setGuardianName(createStudentDTO.getGuardianName());
+        student.setContactNumber(createStudentDTO.getContactNumber());
 
         return studentRepository.save(student);
     }
@@ -59,5 +73,32 @@ public class StudentService {
         String sequencePart = String.format("%03d", nextSequence);
 
         return "ST/" + year + "/" + sequencePart;
+    }
+
+    public void enrollStudentInCourse(Integer studentId, Integer courseId) {
+        // 1. Find the student
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
+
+        // 2. Find the course
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
+
+        // 3. Check if already enrolled
+        if (student.getCourses().contains(course)) {
+            throw new IllegalStateException("Student is already enrolled in this course");
+        }
+
+        // 4. Enroll the student
+        student.getCourses().add(course);
+        studentRepository.save(student); // @Transactional ensures this is persisted
+    }
+
+    public Page<Course> getEnrolledCourses(Integer studentId, Pageable pageable, String search) {
+        if (search != null && !search.isEmpty()) {
+            return studentRepository.findCoursesByStudentIdAndSearch(studentId, search, pageable);
+        } else {
+            return studentRepository.findCoursesByStudentId(studentId, pageable);
+        }
     }
 }

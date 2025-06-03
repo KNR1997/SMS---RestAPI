@@ -1,11 +1,14 @@
 package com.example.sms.dto;
 
 import com.example.sms.entity.ERole;
+import com.example.sms.entity.Grade;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
 public class MeDTO {
     private String userName;
 
@@ -14,9 +17,8 @@ public class MeDTO {
 
     private Set<ERole> roles;
 
-    public MeDTO(String userName, String email, Set<ERole> roles) {
-        this.userName = userName;
-        this.email = email;
-        this.roles = roles;
-    }
+    private Grade grade;
+
+    private  Integer studentId;
+
 }

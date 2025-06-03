@@ -11,4 +11,6 @@ public class SubjectDTO {
 
     private String slug;
 
+    private String code;
+
 }

@@ -34,6 +34,15 @@ import EditRequestPage from "./pages/Requests/edit";
 import Logs from "./pages/InvoiceStatusAudits";
 import Students from "./pages/Students";
 import CreateStudentPage from "./pages/Students/create";
+import Courses from "./pages/Courses";
+import CreateCoursePage from "./pages/Courses/create";
+import EditCoursePage from "./pages/Courses/edit";
+import Subjects from "./pages/Subjects";
+import EditSubjectPage from "./pages/Subjects/edit";
+import CreateSubjectPage from "./pages/Subjects/create";
+import EditStudentPage from "./pages/Students/edit";
+import AvailableCourses from "./pages/Courses/available-courses";
+import MyCourses from "./pages/Courses/my-courses";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -58,9 +67,9 @@ export default function App() {
                 {/* <Route index path="/" element={<Home />} /> */}
 
                 {/* Others Page */}
-                {/* <Route path="/profile" element={<UserProfiles />} />
+                <Route path="/profile" element={<UserProfiles />} />
                 <Route path="/calendar" element={<Calendar />} />
-                <Route path="/blank" element={<Blank />} /> */}
+                {/* <Route path="/blank" element={<Blank />} /> */}
 
                 {/* Forms */}
                 {/* <Route path="/form-elements" element={<FormElements />} /> */}
@@ -126,6 +135,50 @@ export default function App() {
                   }
                 />
 
+                <Route
+                  path="/courses"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Courses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/courses/create" element={<CreateCoursePage />} />
+                <Route path="/courses/:slug/edit" element={<EditCoursePage />} />
+
+                <Route
+                  path="/courses/available-courses"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_STUDENT]}>
+                      <AvailableCourses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/courses/my-courses"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_STUDENT]}>
+                      <MyCourses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/subjects"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Subjects />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/subjects/create"
+                  element={<CreateSubjectPage />}
+                />
+                <Route
+                  path="/subjects/:id/edit"
+                  element={<EditSubjectPage />}
+                />
+
                 {/* <Route path="/users" element={<Users />} /> */}
                 <Route
                   path="/users"
@@ -138,7 +191,7 @@ export default function App() {
                 <Route path="/users/create" element={<CreateUserPage />} />
                 <Route path="/users/:id/edit" element={<EditUserPage />} />
 
-                                <Route
+                <Route
                   path="/students"
                   element={
                     <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
@@ -146,7 +199,14 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/students/create" element={<CreateStudentPage />} />
+                <Route
+                  path="/students/create"
+                  element={<CreateStudentPage />}
+                />
+                <Route
+                  path="/students/:id/edit"
+                  element={<EditStudentPage />}
+                />
 
                 <Route
                   path="/logs"

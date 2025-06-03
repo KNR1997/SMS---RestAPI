@@ -1,10 +1,9 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.*;
-import com.example.sms.entity.ERole;
-import com.example.sms.entity.Role;
-import com.example.sms.entity.User;
+import com.example.sms.entity.*;
 import com.example.sms.repository.RoleRepository;
+import com.example.sms.repository.StudentRepository;
 import com.example.sms.repository.UserRepository;
 import com.example.sms.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +39,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
 
     @PostMapping("/login/")
@@ -88,6 +91,14 @@ public class AuthController {
             return ResponseEntity.status(404).body("User not found");
         }
 
+        Grade studentGrade = null;
+        Integer studentId = null;
+        Optional<Student> student = studentRepository.findByUser_Id(user.getId());
+        if (student.isPresent()) {
+            studentGrade = student.get().getGrade();
+            studentId = student.get().getId();
+        }
+
         // Convert roles to a set of role names
         Set<ERole> roleNames = user.getRoles()
                 .stream()
@@ -95,7 +106,12 @@ public class AuthController {
                 .collect(Collectors.toSet());
 
         // Map User to MeDTO
-        MeDTO meDTO = new MeDTO(user.getUsername(), user.getEmail(), roleNames);
+        MeDTO meDTO = new MeDTO(
+                user.getUsername(),
+                user.getEmail(),
+                roleNames,
+                studentGrade,
+                studentId);
         return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity
     }
 

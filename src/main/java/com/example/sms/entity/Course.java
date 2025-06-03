@@ -23,4 +23,6 @@ public class Course {
     @Column(unique = true)
     private String code;
 
+    private Grade grade;
+
 }

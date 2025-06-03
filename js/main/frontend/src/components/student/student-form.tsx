@@ -1,19 +1,24 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { ERole, User } from "../../types";
+import { EGrade, ERole, Student } from "../../types";
 import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
 } from "../../data/student";
+import SelectInput from "../form/select-input";
+import { gradeOptions } from "../../constants/role";
 
 type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
+  grade: EGrade;
+  guardianName: string;
+  contactNumber: string;
   username: string;
   password: string;
   dateOfBirth: Date;
@@ -23,6 +28,9 @@ const defaultValues = {
   firstName: "",
   lastName: "",
   email: "",
+  grade: "",
+  guardianName: "",
+  contactNumber: "",
   username: "",
   password: "",
 };
@@ -31,17 +39,21 @@ const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
   email: yup.string().required("Email is required"),
+  grade: yup.string().required("Grade is required"),
+  guardianName: yup.string().required("Guardian Name is required"),
+  contactNumber: yup.string().required("Contact Number is required"),
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
   dateOfBirth: yup.string().required("Birthday is required"),
 });
 
 interface Props {
-  initialValues?: User;
+  initialValues?: Student;
 }
 
 export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -71,8 +83,10 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         role: ERole.ROLE_STUDENT,
         password: values.password,
       },
-      studentId: "ST002",
-      dateOfBirth: "2025-06-02T19:21:09.818Z",
+      dateOfBirth: values.dateOfBirth,
+      grade: EGrade.GRADE_5,
+      guardianName: values.guardianName,
+      contactNumber: values.contactNumber,
     };
 
     if (!initialValues) {
@@ -117,12 +131,56 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         </div>
         <div>
           <Label>
+            Grade <span className="text-error-500">*</span>
+          </Label>
+          <Controller
+            name="grade"
+            control={control}
+            rules={{ required: "Grade is required" }}
+            render={({ field }) => (
+              <SelectInput
+                options={gradeOptions}
+                placeholder="Select Option"
+                value={field.value}
+                onChange={field.onChange}
+                className="dark:bg-dark-900"
+              />
+            )}
+          />
+          {errors.grade && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.grade.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Label>
             Email <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
             placeholder="user@example.com"
             {...register("email")}
             errorMessage={errors.email?.message!}
+          />
+        </div>
+        <div>
+          <Label>
+            Guardian Name <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            // placeholder="user@example.com"
+            {...register("guardianName")}
+            errorMessage={errors.guardianName?.message!}
+          />
+        </div>
+        <div>
+          <Label>
+            Contact Number <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            // placeholder="user@example.com"
+            {...register("contactNumber")}
+            errorMessage={errors.contactNumber?.message!}
           />
         </div>
         <div>
