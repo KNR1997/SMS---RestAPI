@@ -1,11 +1,9 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.CreateUserDTO;
+import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.PaginatedResponse;
-import com.example.sms.dto.UserDTO;
-import com.example.sms.dto.UserPageDataDTO;
-import com.example.sms.entity.ERole;
-import com.example.sms.entity.Role;
+import com.example.sms.dto.User.UserDetailDTO;
+import com.example.sms.dto.User.UserListDTO;
 import com.example.sms.entity.User;
 import com.example.sms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,7 +24,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<User>> getAllUsers(
+    public ResponseEntity<PaginatedResponse<UserListDTO>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -37,62 +33,30 @@ public class UserController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<User> userPage = userService.getAllUsers(pageable);
+        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable);
 
-        PaginatedResponse<User> response = new PaginatedResponse<>(userPage);
+        PaginatedResponse<UserListDTO> response = new PaginatedResponse<>(userPage);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDTO createUserDTO) {
-        User user = userService.createUser(createUserDTO);
+    public ResponseEntity<Void> createUser(@RequestBody UserCreateDTO userCreateDTO) {
+        User user = userService.createUser(userCreateDTO);
         URI location = URI.create("/users/" + user.getId()); // assuming course has getSlug()
-        return ResponseEntity.created(location).body(user);
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<UserDetailDTO> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
-
-        // Convert roles to a set of role names
-        Set<ERole> roleNames = user.getRoles()
-                .stream()
-                .map(Role::getName) // Assuming getName() returns something like "ROLE_USER"
-                .collect(Collectors.toSet());
-
-
-        UserPageDataDTO userPageDataDTO = new UserPageDataDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getUsername(),
-                roleNames
-        );
-
-        return ResponseEntity.ok(userPageDataDTO);
+        UserDetailDTO userDetailDTO = new UserDetailDTO(user);
+        return ResponseEntity.ok(userDetailDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserPageDataDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updateDto) {
-        User user = userService.updateUser(id, updateDto);
-
-        // Convert roles to a set of role names
-        Set<ERole> roleNames = user.getRoles()
-                .stream()
-                .map(Role::getName) // Assuming getName() returns something like "ROLE_USER"
-                .collect(Collectors.toSet());
-
-        UserPageDataDTO userPageDataDTO = new UserPageDataDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getUsername(),
-                roleNames
-        );
-
-        return ResponseEntity.ok(userPageDataDTO);
+    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody UserCreateDTO updateDto) {
+        userService.updateUser(id, updateDto);
+        return ResponseEntity.noContent().build();
     }
 
 }

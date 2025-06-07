@@ -1,14 +1,15 @@
-package com.example.sms.dto;
+package com.example.sms.dto.Student;
 
+import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.entity.Grade;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class CreateStudentDTO {
+public class StudentCreateDTO {
 
-    private CreateUserDTO userDetails;
+    private UserCreateDTO userDetails;
 
     private Date dateOfBirth;
 

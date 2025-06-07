@@ -16,10 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,19 +58,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
+        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setRole(adminRole);
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(userRole);
-
-        user.setRoles(roles);
         userRepository.save(user);
-
         return ResponseEntity.ok(new RegisterResponse(user));
     }
 
@@ -99,17 +94,11 @@ public class AuthController {
             studentId = student.get().getId();
         }
 
-        // Convert roles to a set of role names
-        Set<ERole> roleNames = user.getRoles()
-                .stream()
-                .map(Role::getName) // Assuming getName() returns something like "ROLE_USER"
-                .collect(Collectors.toSet());
-
         // Map User to MeDTO
         MeDTO meDTO = new MeDTO(
                 user.getUsername(),
                 user.getEmail(),
-                roleNames,
+                user.getRole().getName(),
                 studentGrade,
                 studentId);
         return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity

@@ -1,4 +1,4 @@
-package com.example.sms.dto;
+package com.example.sms.dto.User;
 
 import com.example.sms.entity.ERole;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO {
+public class UserCreateDTO {
     private String firstName;
 
     private String lastName;

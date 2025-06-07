@@ -1,0 +1,32 @@
+package com.example.sms.dto.Course;
+
+import com.example.sms.entity.Course;
+import com.example.sms.entity.Grade;
+import lombok.Data;
+
+@Data
+public class CourseDetailDTO {
+    private Integer id;
+
+    private String name;
+
+    private String slug;
+
+    private String code;
+
+    private Grade grade;
+
+    private Integer subjectId;
+
+    private Integer teacherId;
+
+    public CourseDetailDTO(Course course) {
+        this.id = course.getId();
+        this.name = course.getName();
+        this.slug = course.getSlug();
+        this.code = course.getCode();
+        this.grade = course.getGrade();
+        this.subjectId = course.getSubject().getId();
+        this.teacherId = course.getTeacher().getId();
+    }
+}

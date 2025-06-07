@@ -79,7 +79,7 @@ export const useUpdateCourseMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.COURSES);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
     },
   });
 };

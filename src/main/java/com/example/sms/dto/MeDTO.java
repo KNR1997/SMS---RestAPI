@@ -5,8 +5,6 @@ import com.example.sms.entity.Grade;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 public class MeDTO {
@@ -15,10 +13,10 @@ public class MeDTO {
 
     private String email;
 
-    private Set<ERole> roles;
+    private ERole erole;
 
     private Grade grade;
 
-    private  Integer studentId;
+    private Integer studentId;
 
 }

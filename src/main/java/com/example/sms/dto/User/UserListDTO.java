@@ -1,10 +1,11 @@
-package com.example.sms.dto;
+package com.example.sms.dto.User;
 
-import com.example.sms.entity.ERole;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserListDTO {
+    private Integer id;
+
     private String firstName;
 
     private String lastName;
@@ -12,9 +13,4 @@ public class UserDTO {
     private String email;
 
     private String username;
-
-    private ERole role;
-
-    private String password;
-
 }

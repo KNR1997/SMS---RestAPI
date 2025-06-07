@@ -1,7 +1,9 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.CourseDTO;
-import com.example.sms.dto.PaginatedResponse;
+import com.example.sms.dto.*;
+import com.example.sms.dto.Course.CourseCreateDTO;
+import com.example.sms.dto.Course.CourseDetailDTO;
+import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.service.CourseService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,7 +28,7 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<Course>> getAllCourses(
+    public ResponseEntity<PaginatedResponse<CourseListDTO>> getAllCourses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -37,31 +39,32 @@ public class CourseController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<Course> coursePage = courseService.getAllCourses(pageable, search, grade);
+        Page<CourseListDTO> coursePage = courseService.getCoursesPaginated(pageable, search, grade);
 
-        PaginatedResponse<Course> response = new PaginatedResponse<>(coursePage);
+        PaginatedResponse<CourseListDTO> response = new PaginatedResponse<>(coursePage);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<Course> getCourseBySlug(@PathVariable String slug) {
+    public ResponseEntity<CourseDetailDTO> getCourseBySlug(@PathVariable String slug) {
         Course course = courseService.getCourseBySlug(slug);
-        return ResponseEntity.ok(course);
+        CourseDetailDTO courseDetailDTO = new CourseDetailDTO(course);
+        return ResponseEntity.ok(courseDetailDTO);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody CourseDTO createDto) {
+    public ResponseEntity<Void> createCourse(@RequestBody CourseCreateDTO createDto) {
         Course course = courseService.createCourse(createDto);
         URI location = URI.create("/courses/" + course.getSlug()); // assuming course has getSlug()
-        return ResponseEntity.created(location).body(course);
+        return ResponseEntity.created(location).build();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Integer id, @RequestBody CourseDTO updateDto) {
-        Course response = courseService.updateCourse(id, updateDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> updateCourse(@PathVariable Integer id, @RequestBody CourseCreateDTO updateDto) {
+        courseService.updateCourse(id, updateDto);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -6,12 +6,16 @@ import * as yup from "yup";
 import Button from "../ui/button/Button";
 import { Subject } from "../../types";
 import { formatSlug } from "../../utils/use-slug";
-import { useCreateSubjectMutation, useUpdateSubjectMutation } from "../../data/subject";
+import {
+  useCreateSubjectMutation,
+  useUpdateSubjectMutation,
+} from "../../data/subject";
 
 type FormValues = {
   name: string;
   slug: string;
   code: string;
+  courses: any;
 };
 
 const defaultValues = {
@@ -22,15 +26,43 @@ const defaultValues = {
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  code: yup.string().required("Code is required"),
+  // code: yup.string().required("Code is required"),
 });
 
 interface Props {
   initialValues?: Subject;
 }
 
+// function SelectCourse({
+//   control,
+//   errors,
+// }: {
+//   control: Control<FormValues>;
+//   errors: FieldErrors;
+// }) {
+//   const { courses = [], loading } = useCoursesQuery({
+//     limit: 999,
+//   });
+
+//   return (
+//     <div className="mb-5">
+//       <Label>Course</Label>
+//       <SelectInput
+//         name="courses"
+//         control={control}
+//         getOptionLabel={(option: any) => option.name}
+//         getOptionValue={(option: any) => option.id}
+//         options={courses}
+//         isLoading={loading}
+//       />
+//       {/* <ValidationError message={t(errors.course?.message)} /> */}
+//     </div>
+//   );
+// }
+
 export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
   const {
+    control,
     register,
     handleSubmit,
     watch,
@@ -46,6 +78,8 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
+  // console.log('initialValues: ', initialValues)
+
   const { mutate: createSubject, isLoading: creating } =
     useCreateSubjectMutation();
   const { mutate: updateSubject, isLoading: updating } =
@@ -58,7 +92,8 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
     const input = {
       name: values.name,
       slug: formattedSlug,
-      code: values.code,
+      code: formattedSlug,
+      // courseId: values.courses.id,
     };
 
     if (!initialValues) {
@@ -99,9 +134,12 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
           <Input
             placeholder="Doe"
             {...register("code")}
+            value={formattedSlug}
             errorMessage={errors.code?.message!}
+            disabled
           />
         </div>
+        {/* <SelectCourse control={control} errors={errors} /> */}
 
         <Button disabled={creating || updating} size="sm">
           {initialValues ? "Update" : "Create"} Subject

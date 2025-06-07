@@ -33,7 +33,7 @@ export const StudentClient = {
     input: EnrollCourseData;
   }) => {
     return HttpClient.post<any>(
-      `${API_ENDPOINTS.STUDENTS}/${studentId}/courses`,
+      `${API_ENDPOINTS.STUDENTS}/${studentId}/enroll`,
       input
     );
   },
@@ -43,7 +43,7 @@ export const StudentClient = {
     ...params
   }: Partial<CourseQueryOptions & { studentId: number }>) => {
     return HttpClient.get<CoursePaginator>(
-      `${API_ENDPOINTS.STUDENTS}/${studentId}/courses`,
+      `${API_ENDPOINTS.STUDENTS}`,
       {
         searchJoin: "and",
         ...params,

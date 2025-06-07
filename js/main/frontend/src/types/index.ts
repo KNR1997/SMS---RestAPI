@@ -14,6 +14,8 @@ export interface Course {
   slug: string;
   code: string;
   grade: EGrade;
+  subjectId: number;
+  teacherId: number;
 }
 
 export interface CreateCourse {
@@ -50,6 +52,11 @@ export enum EStatus {
   COMPLETED = "COMPLETED",
 }
 
+export enum EPayment {
+  CASH = "CASH",
+  CARD = "CARD",
+}
+
 export enum ERequestType {
   FG_REQUEST = "FG_REQUEST",
   FINANCE_REQUEST = "FINANCE_REQUEST",
@@ -83,7 +90,7 @@ export interface User {
   lastName: string;
   email: string;
   username: string;
-  roles: Role[];
+  erole	: ERole;
   grade: EGrade;
   studentId: number;
 }
@@ -97,15 +104,31 @@ export interface CreateUser {
 }
 
 export interface EnrollCourseData {
-  courseId: number,
+  courses: number[],
 }
 
 export interface Student {
   id: number;
-  user: User;
+  firstName: string;
+  lastName: string;
   studentId: string;
   dateOfBirth: string;
   grade: EGrade;
+}
+
+export interface Payment {
+  id: number;
+  paymentType: EPayment;
+  studentId: string;
+  admission: number;
+  total: number;
+}
+
+export interface CreatePayment {
+  paymentType: EPayment;
+  studentId: string;
+  admission: number;
+  total: number;
 }
 
 export interface CreateStudent {
@@ -182,6 +205,8 @@ export interface StudentPaginator extends PaginatorInfo<Student> {}
 
 export interface SubjectPaginator extends PaginatorInfo<Subject> {}
 
+export interface PaymentPaginator extends PaginatorInfo<Payment> {}
+
 export interface CoursePaginator extends PaginatorInfo<Course> {}
 
 export interface InvoiceStatusAuditPaginator
@@ -201,6 +226,9 @@ export interface UserQueryOptions extends QueryOptions {
 
 export interface StudentQueryOptions extends QueryOptions {
   username: string;
+}
+
+export interface PaymentQueryOptions extends QueryOptions {
 }
 
 export interface SubjectQueryOptions extends QueryOptions {

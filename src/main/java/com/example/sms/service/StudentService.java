@@ -1,9 +1,14 @@
 package com.example.sms.service;
 
-import com.example.sms.dto.CreateStudentDTO;
+import com.example.sms.dto.Course.CourseListDTO;
+import com.example.sms.dto.EnrollCourseDTO;
+import com.example.sms.dto.Student.StudentCreateDTO;
+import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.Course;
+import com.example.sms.entity.Grade;
 import com.example.sms.entity.Student;
 import com.example.sms.entity.User;
+import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.StudentRepository;
@@ -14,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class StudentService {
@@ -30,8 +37,9 @@ public class StudentService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public Page<Student> getAllStudents(Pageable pageable) {
-        return studentRepository.findAll(pageable);
+    public Page<StudentListDTO> getStudentsPaginated(Pageable pageable) {
+        Page<Student> studentPage = studentRepository.findAll(pageable);
+        return studentPage.map(StudentListDTO::new);
     }
 
     public Student getStudentById(Integer id) {
@@ -39,18 +47,38 @@ public class StudentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
     }
 
-    public Student createStudent(CreateStudentDTO createStudentDTO) {
+    public Student createStudent(StudentCreateDTO studentCreateDTO) {
 
-        User newUser = userService.createUser(createStudentDTO.getUserDetails());
+        User newUser = userService.createUser(studentCreateDTO.getUserDetails());
 
         Student student = new Student();
         student.setUser(newUser);
         student.setStudentId(generateStudentId());
-        student.setDateOfBirth(createStudentDTO.getDateOfBirth());
-        student.setGrade(createStudentDTO.getGrade());
-        student.setGuardianName(createStudentDTO.getGuardianName());
-        student.setContactNumber(createStudentDTO.getContactNumber());
+        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
+        student.setGrade(studentCreateDTO.getGrade());
+        student.setGuardianName(studentCreateDTO.getGuardianName());
+        student.setContactNumber(studentCreateDTO.getContactNumber());
 
+        return studentRepository.save(student);
+    }
+
+    public Student updateStudent(Integer id, StudentCreateDTO studentCreateDTO) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + id));
+
+        User user = userRepository.findById(student.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        user.setFirstName(studentCreateDTO.getUserDetails().getFirstName());
+        user.setLastName(studentCreateDTO.getUserDetails().getLastName());
+        user.setEmail(studentCreateDTO.getUserDetails().getEmail());
+
+        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
+        student.setGrade(studentCreateDTO.getGrade());
+        student.setGuardianName(studentCreateDTO.getGuardianName());
+        student.setContactNumber(studentCreateDTO.getContactNumber());
+
+        userRepository.save(user);
         return studentRepository.save(student);
     }
 
@@ -75,22 +103,24 @@ public class StudentService {
         return "ST/" + year + "/" + sequencePart;
     }
 
-    public void enrollStudentInCourse(Integer studentId, Integer courseId) {
+    public void enrollStudentInCourse(Integer studentId, EnrollCourseDTO enrollCourseDTO) {
         // 1. Find the student
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
         // 2. Find the course
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
+        List<Course> coursesToEnroll  = courseRepository.findAllById(enrollCourseDTO.getCourses());
 
-        // 3. Check if already enrolled
-        if (student.getCourses().contains(course)) {
-            throw new IllegalStateException("Student is already enrolled in this course");
+        // 3. Filter out already enrolled courses
+        Set<Course> alreadyEnrolled = student.getCourses();
+        for (Course course : coursesToEnroll) {
+            if (alreadyEnrolled.contains(course)) {
+                continue; // skip if already enrolled
+            }
+            alreadyEnrolled.add(course); // enroll in new course
         }
 
-        // 4. Enroll the student
-        student.getCourses().add(course);
+        // 4. Save updated student
         studentRepository.save(student); // @Transactional ensures this is persisted
     }
 

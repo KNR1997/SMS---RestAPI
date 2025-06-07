@@ -67,9 +67,12 @@ export const useCreateStudentMutation = () => {
 };
 
 export const useUpdateStudentMutation = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   return useMutation(StudentClient.update, {
     onSuccess: async () => {
+      navigate("/students");
       toast.success("Successfully updated!");
     },
     // Always refetch after error or success:
@@ -96,7 +99,8 @@ export const useStudentEnrollCourseMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
     },
     onError: (error: any) => {
-      toast.error("Something going wrong!");
+      console.log('erroreeeeeeeeeee: ', error?.message)
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
     },
   });
 };

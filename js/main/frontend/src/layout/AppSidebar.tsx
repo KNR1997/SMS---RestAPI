@@ -14,6 +14,7 @@ import {
   PlugInIcon,
   TableIcon,
   FileIcon,
+  DollarLineIcon,
   UserCircleIcon,
   UserIcon,
 } from "../icons";
@@ -34,7 +35,8 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    path: "/",
+    // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
   },
   // {
@@ -83,11 +85,15 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-    {
+  {
     name: "Courses",
     icon: <FileIcon />,
     subItems: [
-      { name: "Available courses", path: "/courses/available-courses", pro: false },
+      // {
+      //   name: "Available courses",
+      //   path: "/courses/available-courses",
+      //   pro: false,
+      // },
       { name: "My course", path: "/courses/my-courses", pro: false },
     ],
     roles: [ERole.ROLE_STUDENT],
@@ -116,6 +122,16 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "All Students", path: "/students", pro: false },
       { name: "Create student", path: "/students/create", pro: false },
+      { name: "Entroll student", path: "/students/enroll", pro: false },
+      { name: "Payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+    {
+    name: "Payments",
+    icon: <DollarLineIcon />,
+    subItems: [
+      { name: "All Payments", path: "/payments", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN],
   },
@@ -177,7 +193,7 @@ const AppSidebar: React.FC = () => {
   const { user } = useAuth();
 
   const filteredItems = navItems.filter((item) =>
-    item.roles.some((role) => user?.roles.includes(role))
+    item.roles.some((role) => user?.erole == role)
   );
 
   const [openSubmenu, setOpenSubmenu] = useState<{

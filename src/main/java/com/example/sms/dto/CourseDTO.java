@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseDTO {
 
+    private Integer id;
+
     private String name;
 
     private String slug;

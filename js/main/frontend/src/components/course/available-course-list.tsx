@@ -43,16 +43,14 @@ export default function AvailableCourseList({
   };
 
   const handleEnrollToCourse = () => {
-    if (clickedCourse) {
-      const data = {
-        studentId: user.studentId,
-        input: {
-          courseId: clickedCourse,
-        },
-      };
-      enrollToCourse(data);
-    }
-    closeModal()
+    const data = {
+      studentId: user.studentId,
+      input: {
+        courseId: clickedCourse!,
+      },
+    };
+    enrollToCourse(data);
+    closeModal();
   };
 
   return (
@@ -116,9 +114,7 @@ export default function AvailableCourseList({
                     <button onClick={() => handleInfoClick(course.slug)}>
                       <InfoIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                     </button>
-                    <button
-                      onClick={() => handleEnrollButtonClick(course.id)}
-                    >
+                    <button onClick={() => handleEnrollButtonClick(course.id)}>
                       <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                     </button>
                   </TableCell>

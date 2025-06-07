@@ -25,8 +25,9 @@ export default function SubjectList({
 }: IProps) {
   const navigate = useNavigate();
 
-  const handleEdit = (id: number) => {
-    navigate(`/users/${id}/edit`);
+  const handleEdit = (slug: string) => {
+    console.log('slug: ', slug)
+    navigate(`/subjects/${slug}/edit`);
   };
 
   return (
@@ -77,7 +78,7 @@ export default function SubjectList({
                   {subject.code}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <button onClick={() => handleEdit(subject.id)}>
+                  <button onClick={() => handleEdit(subject.slug)}>
                     <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                   </button>
                 </TableCell>

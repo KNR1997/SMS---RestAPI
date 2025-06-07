@@ -9,9 +9,6 @@ export default function PrivateRoute({ children }: { children: JSX.Element }) {
 
   if (loading) return <Loader text="Loading..." />;
 
-  console.log('user: ', user)
-  console.log('token: ', token)
-
   if (!user || !token) {
     return <Navigate to="/signin" replace />;
   }

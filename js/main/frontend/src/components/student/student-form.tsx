@@ -11,6 +11,7 @@ import {
 } from "../../data/student";
 import SelectInput from "../form/select-input";
 import { gradeOptions } from "../../constants/role";
+import { useNavigate } from "react-router";
 
 type FormValues = {
   firstName: string;
@@ -52,6 +53,8 @@ interface Props {
 }
 
 export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
+  const navigate = useNavigate();
+
   const {
     control,
     register,
@@ -84,7 +87,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         password: values.password,
       },
       dateOfBirth: values.dateOfBirth,
-      grade: EGrade.GRADE_5,
+      grade: values.grade,
       guardianName: values.guardianName,
       contactNumber: values.contactNumber,
     };
@@ -94,6 +97,10 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
     } else {
       updateStudent({ id: initialValues.id, ...input });
     }
+  };
+
+  const handleCreateAndEnroll = () => {
+    navigate("students/enroll");
   };
 
   return (
@@ -204,9 +211,20 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
             errorMessage={errors.password?.message!}
           />
         </div>
-        <Button disabled={creating || updating} size="sm">
-          {initialValues ? "Update" : "Create"} Student
-        </Button>
+        <div className="flex gap-5">
+          <Button disabled={creating || updating} size="sm">
+            {initialValues ? "Update" : "Create"} Student
+          </Button>
+          {!initialValues && (
+            <Button
+              onClick={handleCreateAndEnroll}
+              disabled={creating || updating}
+              size="sm"
+            >
+              Create and Enroll
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );

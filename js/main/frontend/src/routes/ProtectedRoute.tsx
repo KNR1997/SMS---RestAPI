@@ -12,7 +12,7 @@ interface IProps {
 export default function ProtectedRoute({ roles, children }: IProps) {
   const { user } = useAuth();
 
-  const isAllowed = roles.some((role) => user?.roles.includes(role));
+  const isAllowed = roles.some((role) => user?.erole == role);
 
   if (!isAllowed) return <Navigate to="/notFound" />;
 

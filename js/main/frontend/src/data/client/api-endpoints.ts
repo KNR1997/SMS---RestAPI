@@ -4,5 +4,6 @@ export const API_ENDPOINTS = {
   STUDENTS: 'students',
   SUBJECTS: 'subjects',
   COURSES: 'courses',
-  INVOICE_STATUS_AUDITS: 'invoice-status-audits'
+  INVOICE_STATUS_AUDITS: 'invoice-status-audits',
+  PAYMENTS: 'payments',
 }

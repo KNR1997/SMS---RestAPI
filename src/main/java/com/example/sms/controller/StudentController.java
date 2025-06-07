@@ -1,6 +1,9 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.*;
+import com.example.sms.dto.Student.StudentCreateDTO;
+import com.example.sms.dto.Student.StudentDetailDTO;
+import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Student;
 import com.example.sms.service.StudentService;
@@ -14,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -26,7 +28,7 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<Student>> getAllStudents(
+    public ResponseEntity<PaginatedResponse<StudentListDTO>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -35,36 +37,30 @@ public class StudentController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<Student> studentPage = studentService.getAllStudents(pageable);
+        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(pageable);
 
-        PaginatedResponse<Student> response = new PaginatedResponse<>(studentPage);
+        PaginatedResponse<StudentListDTO> response = new PaginatedResponse<>(studentPage);
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDetailDTO> getStudentById(@PathVariable Integer id) {
+        Student student = studentService.getStudentById(id);
+        StudentDetailDTO userPageDataDTO = new StudentDetailDTO(student);
+        return ResponseEntity.ok(userPageDataDTO);
+    }
+
     @PostMapping
-    public ResponseEntity<Void> createStudent(@RequestBody CreateStudentDTO createStudentDTO) {
-        Student student = studentService.createStudent(createStudentDTO);
+    public ResponseEntity<Void> createStudent(@RequestBody StudentCreateDTO studentCreateDTO) {
+        Student student = studentService.createStudent(studentCreateDTO);
         URI location = URI.create("/students/" + student.getStudentId()); // assuming course has getSlug()
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getStudentById(@PathVariable Integer id) {
-        Student student = studentService.getStudentById(id);
-
-        StudentPageDataDTO userPageDataDTO = new StudentPageDataDTO(
-                student.getId(),
-                student.getUser().getFirstName(),
-                student.getUser().getLastName(),
-                student.getUser().getEmail(),
-                student.getUser().getUsername(),
-                student.getDateOfBirth(),
-                student.getGrade(),
-                student.getGuardianName(),
-                student.getContactNumber()
-        );
-
-        return ResponseEntity.ok(userPageDataDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateStudent(@PathVariable Integer id, @RequestBody StudentCreateDTO studentCreateDTO) {
+        studentService.updateStudent(id, studentCreateDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{studentId}/courses")
@@ -85,12 +81,12 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{studentId}/courses")
+    @PostMapping("/{studentId}/enroll")
     public ResponseEntity<Void> enrollCourse(
             @PathVariable Integer studentId,
             @RequestBody EnrollCourseDTO enrollCourseDTO) {
 
-        studentService.enrollStudentInCourse(studentId, enrollCourseDTO.courseId());
+        studentService.enrollStudentInCourse(studentId, enrollCourseDTO);
         return ResponseEntity.ok().build();
     }
 }

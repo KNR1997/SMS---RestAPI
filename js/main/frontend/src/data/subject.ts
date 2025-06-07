@@ -66,9 +66,12 @@ export const useCreateSubjectMutation = () => {
 };
 
 export const useUpdateSubjectMutation = () => {
+  const navigate = useNavigate();
+
   const queryClient = useQueryClient();
   return useMutation(SubjectClient.update, {
     onSuccess: async () => {
+      navigate("/subjects");
       toast.success("Successfully updated!");
     },
     // Always refetch after error or success:

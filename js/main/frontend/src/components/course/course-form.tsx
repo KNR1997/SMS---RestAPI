@@ -1,36 +1,42 @@
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { Course, EGrade } from "../../types";
+import { Course, EGrade, Subject, User } from "../../types";
 import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
 } from "../../data/course";
 import { formatSlug } from "../../utils/use-slug";
-import SelectInput from "../form/select-input";
 import { gradeOptions } from "../../constants/role";
+import { useSubjectsQuery } from "../../data/subject";
+import { useUsersQuery } from "../../data/user";
+import SelectInput from "../ui/select-input";
 
 type FormValues = {
   name: string;
   slug: string;
   code: string;
-  grade: EGrade;
+  grade: {label: EGrade, value: string};
+  subject: Subject;
+  teacher: User;
 };
 
 const defaultValues = {
   name: "",
   slug: "",
   code: "",
-  grade: "",
+  // grade: "",
 };
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   code: yup.string().required("Code is required"),
-  grade: yup.string().required("Grade is required"),
+  grade: yup.object().required("Grade is required"),
+  subject: yup.object().required("Subject is required"),
+  teacher: yup.object().required("Teacher is required"),
 });
 
 interface Props {
@@ -38,6 +44,9 @@ interface Props {
 }
 
 export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
+  const { subjects } = useSubjectsQuery({});
+  const { users } = useUsersQuery({});
+
   const {
     control,
     register,
@@ -49,6 +58,15 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
     defaultValues: initialValues
       ? {
           ...initialValues,
+          grade: initialValues?.grade
+            ? gradeOptions.find((grade) => grade.value === initialValues.grade)
+            : null,
+          subject: initialValues?.subjectId
+            ? subjects.find((subject) => subject.id === initialValues.subjectId)
+            : null,
+          teacher: initialValues?.teacherId
+            ? users.find((user) => user.id === initialValues.teacherId)
+            : null,
         }
       : defaultValues,
     //@ts-ignore
@@ -60,6 +78,8 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
   const { mutate: updateCourse, isLoading: updating } =
     useUpdateCourseMutation();
 
+  // if (creating || updating) return <Loader text="Loading..." />;
+
   const name = watch("name");
   const formattedSlug = formatSlug(name);
 
@@ -68,8 +88,12 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
       name: values.name,
       slug: formattedSlug,
       code: values.code,
-      grade: values.grade,
+      grade: values.grade.value,
+      subjectId: values.subject.id,
+      teacherId: values.teacher.id,
     };
+
+    // console.log("input: ", input);
 
     if (!initialValues) {
       createCourse(input);
@@ -77,6 +101,8 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
       updateCourse({ id: initialValues.id, ...input });
     }
   };
+
+  // console.log("intitial: ", initialValues);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,17 +117,6 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             errorMessage={errors.name?.message!}
           />
         </div>
-        {/* <div>
-          <Label>
-            Slug <span className="text-error-500">*</span>{" "}
-          </Label>
-          <Input
-            disabled
-            placeholder="John"
-            {...register("slug")}
-            errorMessage={errors.slug?.message!}
-          />
-        </div> */}
         <div>
           <Label>
             Code <span className="text-error-500">*</span>{" "}
@@ -116,23 +131,51 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
           <Label>
             Grade <span className="text-error-500">*</span>
           </Label>
-          <Controller
+          <SelectInput
             name="grade"
             control={control}
-            rules={{ required: "Grade is required" }}
-            render={({ field }) => (
-              <SelectInput
-                options={gradeOptions}
-                placeholder="Select Option"
-                value={field.value}
-                onChange={field.onChange}
-                className="dark:bg-dark-900"
-              />
-            )}
+            options={gradeOptions}
+            isClearable={true}
           />
           {errors.grade && (
             <p className="text-error-500 text-sm mt-1">
               {errors.grade.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Label>
+            Subject <span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            name="subject"
+            control={control}
+            getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.id}
+            options={subjects}
+            isClearable={true}
+          />
+          {errors.subject && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.subject.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Label>
+            Teacher <span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            name="teacher"
+            control={control}
+            getOptionLabel={(option: any) => option.firstName}
+            getOptionValue={(option: any) => option.id}
+            options={users}
+            isClearable={true}
+          />
+          {errors.teacher && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.teacher.message}
             </p>
           )}
         </div>

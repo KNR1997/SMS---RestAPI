@@ -43,6 +43,9 @@ import CreateSubjectPage from "./pages/Subjects/create";
 import EditStudentPage from "./pages/Students/edit";
 import AvailableCourses from "./pages/Courses/available-courses";
 import MyCourses from "./pages/Courses/my-courses";
+import StudentEnrollPage from "./pages/Students/enroll";
+import CreatePaymentPage from "./pages/Payments/create";
+import Payments from "./pages/Payments";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -144,16 +147,19 @@ export default function App() {
                   }
                 />
                 <Route path="/courses/create" element={<CreateCoursePage />} />
-                <Route path="/courses/:slug/edit" element={<EditCoursePage />} />
-
                 <Route
+                  path="/courses/:slug/edit"
+                  element={<EditCoursePage />}
+                />
+
+                {/* <Route
                   path="/courses/available-courses"
                   element={
                     <ProtectedRoute roles={[ERole.ROLE_STUDENT]}>
                       <AvailableCourses />
                     </ProtectedRoute>
                   }
-                />
+                /> */}
                 <Route
                   path="/courses/my-courses"
                   element={
@@ -175,7 +181,7 @@ export default function App() {
                   element={<CreateSubjectPage />}
                 />
                 <Route
-                  path="/subjects/:id/edit"
+                  path="/subjects/:slug/edit"
                   element={<EditSubjectPage />}
                 />
 
@@ -206,6 +212,23 @@ export default function App() {
                 <Route
                   path="/students/:id/edit"
                   element={<EditStudentPage />}
+                />
+                <Route
+                  path="/students/enroll"
+                  element={<StudentEnrollPage />}
+                />
+
+                <Route
+                  path="/payments"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Payments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/payments/create"
+                  element={<CreatePaymentPage />}
                 />
 
                 <Route
