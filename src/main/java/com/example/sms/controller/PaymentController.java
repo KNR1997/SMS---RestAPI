@@ -41,11 +41,11 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createPayment(@RequestBody PaymentCreateDTO paymentCreateDTO) {
-        Payment payment = paymentService.createPayment(paymentCreateDTO);
-        URI location = URI.create("/payments/" + payment.getId()); // assuming course has getSlug()
-        return ResponseEntity.created(location).build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> createPayment(@RequestBody PaymentCreateDTO paymentCreateDTO) {
+//        Payment payment = paymentService.createPayment(paymentCreateDTO);
+//        URI location = URI.create("/payments/" + payment.getId()); // assuming course has getSlug()
+//        return ResponseEntity.created(location).build();
+//    }
 
 }

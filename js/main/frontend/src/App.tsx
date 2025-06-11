@@ -46,6 +46,10 @@ import MyCourses from "./pages/Courses/my-courses";
 import StudentEnrollPage from "./pages/Students/enroll";
 import CreatePaymentPage from "./pages/Payments/create";
 import Payments from "./pages/Payments";
+import Guardians from "./pages/Guardians";
+import EditGuardianPage from "./pages/Guardians/edit";
+import Enrollments from "./pages/Enrollments";
+import ViewEnrollmentPage from "./pages/Enrollments/view";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -216,6 +220,32 @@ export default function App() {
                 <Route
                   path="/students/enroll"
                   element={<StudentEnrollPage />}
+                />
+
+                <Route
+                  path="/enrollments"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Enrollments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/enrollments/:id/view"
+                  element={<ViewEnrollmentPage />}
+                />
+
+                <Route
+                  path="/guardians"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Guardians />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/guardians/:id/edit"
+                  element={<EditGuardianPage />}
                 />
 
                 <Route

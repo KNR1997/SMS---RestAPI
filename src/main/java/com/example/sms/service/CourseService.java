@@ -68,6 +68,8 @@ public class CourseService {
         course.setGrade(createDto.getGrade());
         course.setSubject(subject);
         course.setTeacher(teacher);
+        course.setBatch(createDto.getBatch());
+        course.setFee(createDto.getFee());
 
         return courseRepository.save(course);
 
@@ -89,6 +91,8 @@ public class CourseService {
         course.setGrade(updateDto.getGrade());
         course.setSubject(subject);
         course.setTeacher(teacher);
+        course.setBatch(updateDto.getBatch());
+        course.setFee(updateDto.getFee());
 
         return courseRepository.save(course);
     }

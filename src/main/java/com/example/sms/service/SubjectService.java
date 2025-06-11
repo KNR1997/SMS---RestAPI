@@ -3,12 +3,14 @@ package com.example.sms.service;
 import com.example.sms.dto.Subject.SubjectCreateDTO;
 import com.example.sms.dto.Subject.SubjectListDTO;
 import com.example.sms.entity.Subject;
+import com.example.sms.exception.AppsException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -40,6 +42,14 @@ public class SubjectService {
     }
 
     public Subject createSubject(SubjectCreateDTO subjectCreateDTO) {
+        if (subjectRepository.existsBySlug(subjectCreateDTO.getSlug())) {
+            throw new AppsException("Subject with name already exists", HttpStatus.CONFLICT.value());
+        }
+
+        if (subjectRepository.existsByCode(subjectCreateDTO.getCode())) {
+            throw new AppsException("Subject with code already exists", HttpStatus.CONFLICT.value());
+        }
+
         // Create and save the new subject
         Subject subject = new Subject();
         subject.setName(subjectCreateDTO.getName());

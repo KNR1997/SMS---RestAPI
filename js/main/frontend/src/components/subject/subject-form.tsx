@@ -10,6 +10,7 @@ import {
   useCreateSubjectMutation,
   useUpdateSubjectMutation,
 } from "../../data/subject";
+import { generateSubjectCode } from "../../utils/use-code-generate";
 
 type FormValues = {
   name: string;
@@ -62,7 +63,6 @@ interface Props {
 
 export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
   const {
-    control,
     register,
     handleSubmit,
     watch,
@@ -87,12 +87,13 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
 
   const name = watch("name");
   const formattedSlug = formatSlug(name);
+  const subjectCode = generateSubjectCode(name);
 
   const onSubmit = async (values: FormValues) => {
     const input = {
       name: values.name,
       slug: formattedSlug,
-      code: formattedSlug,
+      code: subjectCode,
       // courseId: values.courses.id,
     };
 
@@ -134,7 +135,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
           <Input
             placeholder="Doe"
             {...register("code")}
-            value={formattedSlug}
+            value={subjectCode}
             errorMessage={errors.code?.message!}
             disabled
           />

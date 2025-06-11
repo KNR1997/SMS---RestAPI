@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentCreateDTO {
-    private int id;
+    private Integer id;
 
     private int studentId;
 

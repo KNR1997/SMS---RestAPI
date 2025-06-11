@@ -24,9 +24,9 @@ public class StudentDetailDTO {
 
     private Grade grade;
 
-    private String guardianName;
-
-    private String contactNumber;
+//    private String guardianName;
+//
+//    private String contactNumber;
 
     public StudentDetailDTO(Student student) {
         this.id = student.getId();
@@ -36,8 +36,8 @@ public class StudentDetailDTO {
         this.username = student.getUser().getUsername();
         this.dateOfBirth = student.getDateOfBirth();
         this.grade = student.getGrade();
-        this.guardianName = student.getGuardianName();
-        this.contactNumber = student.getContactNumber();
+//        this.guardianName = student.getGuardianName();
+//        this.contactNumber = student.getContactNumber();
     }
 
 }

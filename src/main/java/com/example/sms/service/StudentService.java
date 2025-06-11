@@ -1,26 +1,22 @@
 package com.example.sms.service;
 
-import com.example.sms.dto.Course.CourseListDTO;
-import com.example.sms.dto.EnrollCourseDTO;
+import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
-import com.example.sms.entity.Course;
-import com.example.sms.entity.Grade;
-import com.example.sms.entity.Student;
-import com.example.sms.entity.User;
-import com.example.sms.exception.BadRequestException;
+import com.example.sms.dto.request.StudentCourseEnrollmentRequest;
+import com.example.sms.entity.*;
 import com.example.sms.exception.ResourceNotFoundException;
-import com.example.sms.repository.CourseRepository;
-import com.example.sms.repository.StudentRepository;
-import com.example.sms.repository.UserRepository;
+import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -37,6 +33,24 @@ public class StudentService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private GuardianService guardianService;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private EnrollmentService enrollmentService;
+
+    @Autowired
+    private EnrollmentPaymentService enrollmentPaymentService;
+
+    @Autowired
+    private GuardianRepository guardianRepository;
+
     public Page<StudentListDTO> getStudentsPaginated(Pageable pageable) {
         Page<Student> studentPage = studentRepository.findAll(pageable);
         return studentPage.map(StudentListDTO::new);
@@ -47,6 +61,7 @@ public class StudentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
     }
 
+    @Transactional
     public Student createStudent(StudentCreateDTO studentCreateDTO) {
 
         User newUser = userService.createUser(studentCreateDTO.getUserDetails());
@@ -56,9 +71,20 @@ public class StudentService {
         student.setStudentId(generateStudentId());
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGrade(studentCreateDTO.getGrade());
-        student.setGuardianName(studentCreateDTO.getGuardianName());
-        student.setContactNumber(studentCreateDTO.getContactNumber());
 
+        Guardian guardian;
+        Integer guardianId = studentCreateDTO.getGuardianDetails().getId();
+
+        if (guardianId == null) {
+            // If no ID is provided, create a new guardian
+            guardian = guardianService.createGuardian(studentCreateDTO.getGuardianDetails());
+        } else {
+            // Otherwise, fetch existing guardian
+            guardian = guardianRepository.findById(guardianId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Guardian not found with ID: " + guardianId));
+        }
+
+        student.setGuardian(guardian);
         return studentRepository.save(student);
     }
 
@@ -75,8 +101,8 @@ public class StudentService {
 
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGrade(studentCreateDTO.getGrade());
-        student.setGuardianName(studentCreateDTO.getGuardianName());
-        student.setContactNumber(studentCreateDTO.getContactNumber());
+//        student.setGuardianName(studentCreateDTO.getGuardianName());
+//        student.setContactNumber(studentCreateDTO.getContactNumber());
 
         userRepository.save(user);
         return studentRepository.save(student);
@@ -103,32 +129,39 @@ public class StudentService {
         return "ST/" + year + "/" + sequencePart;
     }
 
-    public void enrollStudentInCourse(Integer studentId, EnrollCourseDTO enrollCourseDTO) {
-        // 1. Find the student
+    @Transactional
+    public void enrollStudentInCourses(Integer studentId, StudentCourseEnrollmentRequest request) {
+        // Get the student
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
-        // 2. Find the course
-        List<Course> coursesToEnroll  = courseRepository.findAllById(enrollCourseDTO.getCourses());
+        // Get the courses that going to enroll
+        List<Course> coursesToEnroll = courseRepository.findAllById(request.getCourseIds());
 
-        // 3. Filter out already enrolled courses
-        Set<Course> alreadyEnrolled = student.getCourses();
+        // Get all the existing enrollments for this student
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
+
+        // Get Courses list from that enrollments
+        Set<Course> alreadyEnrolledCourses = enrollments.stream()
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toSet());
+
+        // Filter out already enrolled courses and create new enrollments
         for (Course course : coursesToEnroll) {
-            if (alreadyEnrolled.contains(course)) {
+            if (alreadyEnrolledCourses.contains(course)) {
                 continue; // skip if already enrolled
             }
-            alreadyEnrolled.add(course); // enroll in new course
-        }
 
-        // 4. Save updated student
-        studentRepository.save(student); // @Transactional ensures this is persisted
-    }
-
-    public Page<Course> getEnrolledCourses(Integer studentId, Pageable pageable, String search) {
-        if (search != null && !search.isEmpty()) {
-            return studentRepository.findCoursesByStudentIdAndSearch(studentId, search, pageable);
-        } else {
-            return studentRepository.findCoursesByStudentId(studentId, pageable);
+            // Create new enrollment for courses not already enrolled
+            Enrollment enrollment = enrollmentService.createEnrollment(new EnrollmentCreateDTO(student, course));
         }
     }
+
+//    public Page<Course> getEnrolledCourses(Integer studentId, Pageable pageable, String search) {
+//        if (search != null && !search.isEmpty()) {
+//            return studentRepository.findCoursesByStudentIdAndSearch(studentId, search, pageable);
+//        } else {
+//            return studentRepository.findCoursesByStudentId(studentId, pageable);
+//        }
+//    }
 }

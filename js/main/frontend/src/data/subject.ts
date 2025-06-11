@@ -60,7 +60,7 @@ export const useCreateSubjectMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.SUBJECTS);
     },
     onError: (error: any) => {
-      toast.error("Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };

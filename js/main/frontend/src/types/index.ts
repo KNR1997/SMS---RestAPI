@@ -16,6 +16,27 @@ export interface Course {
   grade: EGrade;
   subjectId: number;
   teacherId: number;
+  fee: number;
+}
+
+export interface Enrollment {
+  id: number;
+  studentName: string;
+  courseName: string;
+  enrollmentDate: string;
+  status: string;
+}
+
+export interface EnrollmentPageData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  studentId: string;
+  dateOfBirth: string;
+  admissionPayed: boolean;
+  courseDetails: Course;
+  lastPaidMonth: number;
+  lastPaidMonthName: string
 }
 
 export interface CreateCourse {
@@ -79,6 +100,12 @@ export enum EGrade {
   GRADE_11 = "GRADE_11",
 }
 
+export enum EEnrollmentStatus {
+  ACTIVE = "ACTIVE",
+  LOCKED = "LOCKED",
+  DROPPED = "DROPPED",
+}
+
 export interface Role {
   id: number;
   name: string;
@@ -90,9 +117,10 @@ export interface User {
   lastName: string;
   email: string;
   username: string;
-  erole	: ERole;
+  erole: ERole;
   grade: EGrade;
   studentId: number;
+  role: ERole;
 }
 
 export interface CreateUser {
@@ -103,8 +131,25 @@ export interface CreateUser {
   role: ERole;
 }
 
+export interface Guardian {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationalIdentityNumber: string;
+  contactNumber: string;
+}
+
+export interface CreateGuardian {
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationalIdentityNumber: string;
+  contactNumber: string;
+}
+
 export interface EnrollCourseData {
-  courses: number[],
+  courseIds: number[];
 }
 
 export interface Student {
@@ -114,6 +159,7 @@ export interface Student {
   studentId: string;
   dateOfBirth: string;
   grade: EGrade;
+  admissionPayed: boolean;
 }
 
 export interface Payment {
@@ -133,10 +179,9 @@ export interface CreatePayment {
 
 export interface CreateStudent {
   userDetails: CreateUser;
+  guardianDetails: CreateGuardian;
   dateOfBirth: Date;
   grade: EGrade;
-  guardianName: string;
-  contactNumber: string;
 }
 
 export interface Request {
@@ -205,9 +250,13 @@ export interface StudentPaginator extends PaginatorInfo<Student> {}
 
 export interface SubjectPaginator extends PaginatorInfo<Subject> {}
 
+export interface GuardianPaginator extends PaginatorInfo<Guardian> {}
+
 export interface PaymentPaginator extends PaginatorInfo<Payment> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
 export interface InvoiceStatusAuditPaginator
   extends PaginatorInfo<InvoiceStatusAudit> {}
@@ -228,17 +277,20 @@ export interface StudentQueryOptions extends QueryOptions {
   username: string;
 }
 
-export interface PaymentQueryOptions extends QueryOptions {
-}
+export interface PaymentQueryOptions extends QueryOptions {}
 
 export interface SubjectQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface GuardianQueryOptions extends QueryOptions {}
+
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
   grade: EGrade;
 }
+
+export interface EnrollmentQueryOptions extends QueryOptions {}
 
 export interface InvoiceStatusAuditQueryOptions extends QueryOptions {
   username: string;

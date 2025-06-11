@@ -1,6 +1,7 @@
 package com.example.sms.service;
 
 
+import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.User.UserListDTO;
 import com.example.sms.entity.Role;
@@ -30,15 +31,7 @@ public class UserService {
     public Page<UserListDTO> getUsersPaginated(Pageable pageable) {
         Page<User> userPage = userRepository.findAll(pageable);
 
-        return userPage.map(user -> {
-            UserListDTO dto = new UserListDTO();
-            dto.setId(user.getId());
-            dto.setFirstName(user.getFirstName());
-            dto.setLastName(user.getLastName());
-            dto.setEmail(user.getEmail());
-            dto.setUsername(user.getUsername());
-            return dto;
-        });
+        return userPage.map(UserListDTO::new);
     }
 
     public User getUserById(Integer id) {

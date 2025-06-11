@@ -16,14 +16,15 @@ public class Payment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
-    private User student;
+    private Student student;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "payment_courses",
-            joinColumns = @JoinColumn(name = "payment_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private Set<Course> courses = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "payment_courses",
+//            joinColumns = @JoinColumn(name = "payment_id"),
+//            inverseJoinColumns = @JoinColumn(name = "course_id"))
+//    private Set<Course> courses = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
     private EPayment paymentType;
 
     private Double admission;

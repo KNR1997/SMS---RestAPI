@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/pagination";
+import Badge from "../ui/badge/Badge";
 
 export type IProps = {
   students: Student[];
@@ -24,6 +25,8 @@ export default function StudentList({
   paginatorInfo,
 }: IProps) {
   const navigate = useNavigate();
+
+  // console.log("students: ", students);
 
   const handleEdit = (id: number) => {
     navigate(`/students/${id}/edit`);
@@ -64,6 +67,12 @@ export default function StudentList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
+                Admission Payed
+              </TableCell>
+              <TableCell
+                isHeader
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
                 Actions
               </TableCell>
             </TableRow>
@@ -84,6 +93,15 @@ export default function StudentList({
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student.studentId}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {student.admissionPayed}
+                  <Badge
+                    size="sm"
+                    color={student.admissionPayed ? "success" : "warning"}
+                  >
+                    {student.admissionPayed ? "Yes" : "No"}
+                  </Badge>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <button onClick={() => handleEdit(student.id)}>

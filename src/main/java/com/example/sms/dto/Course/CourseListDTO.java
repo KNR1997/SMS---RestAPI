@@ -16,11 +16,14 @@ public class CourseListDTO {
 
     private Grade grade;
 
+    private Double fee;
+
     public CourseListDTO(Course course) {
         this.id = course.getId();
         this.name = course.getName();
         this.slug = course.getSlug();
         this.code = course.getCode();
         this.grade = course.getGrade();
+        this.fee = course.getFee();
     }
 }

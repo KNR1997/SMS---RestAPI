@@ -21,6 +21,7 @@ public class Course {
     @Column(unique = true)
     private String code;  // Todo -> MAT10RWB1, SIN, SCI10IPB2 (auto suggest)
 
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     private Integer batch;

@@ -20,6 +20,10 @@ public class CourseDetailDTO {
 
     private Integer teacherId;
 
+    private Integer batch;
+
+    private Double fee;
+
     public CourseDetailDTO(Course course) {
         this.id = course.getId();
         this.name = course.getName();
@@ -28,5 +32,7 @@ public class CourseDetailDTO {
         this.grade = course.getGrade();
         this.subjectId = course.getSubject().getId();
         this.teacherId = course.getTeacher().getId();
+        this.batch = course.getBatch();
+        this.fee = course.getFee();
     }
 }

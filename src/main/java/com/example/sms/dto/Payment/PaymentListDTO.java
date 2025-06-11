@@ -8,6 +8,8 @@ import lombok.Data;
 public class PaymentListDTO {
     private int id;
 
+    private String studentId;
+
     private EPayment paymentType;
 
     private Double admission;
@@ -16,6 +18,7 @@ public class PaymentListDTO {
 
     public PaymentListDTO(Payment payment) {
         this.id = payment.getId();
+        this.studentId = payment.getStudent().getStudentId();
         this.paymentType = payment.getPaymentType();
         this.admission = payment.getAdmission();
         this.total = payment.getTotal();

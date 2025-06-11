@@ -18,15 +18,15 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     // Find Student by User ID
     Optional<Student> findByUser_Id(Integer userId);
 
-    @Query("SELECT c FROM Student s JOIN s.courses c WHERE s.id = :studentId")
-    Page<Course> findCoursesByStudentId(
-            @Param("studentId") Integer studentId,
-            Pageable pageable);
-
-    // For search support (optional)
-    @Query("SELECT c FROM Student s JOIN s.courses c WHERE s.id = :studentId AND LOWER(c.name) LIKE LOWER(concat('%', :search, '%'))")
-    Page<Course> findCoursesByStudentIdAndSearch(
-            @Param("studentId") Integer studentId,
-            @Param("search") String search,
-            Pageable pageable);
+//    @Query("SELECT c FROM Student s JOIN s.courses c WHERE s.id = :studentId")
+//    Page<Course> findCoursesByStudentId(
+//            @Param("studentId") Integer studentId,
+//            Pageable pageable);
+//
+//    // For search support (optional)
+//    @Query("SELECT c FROM Student s JOIN s.courses c WHERE s.id = :studentId AND LOWER(c.name) LIKE LOWER(concat('%', :search, '%'))")
+//    Page<Course> findCoursesByStudentIdAndSearch(
+//            @Param("studentId") Integer studentId,
+//            @Param("search") String search,
+//            Pageable pageable);
 }

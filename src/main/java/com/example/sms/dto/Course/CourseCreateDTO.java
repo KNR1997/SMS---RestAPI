@@ -22,4 +22,8 @@ public class CourseCreateDTO {
     private Integer subjectId;
 
     private Integer teacherId;
+
+    private Integer batch;
+
+    private Double fee;
 }

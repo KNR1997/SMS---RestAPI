@@ -3,7 +3,7 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { Course, Student, User } from "../../types";
+import { Course, EPayment, Student, User } from "../../types";
 import {
   useStudentEnrollCourseMutation,
   useStudentsQuery,
@@ -11,17 +11,18 @@ import {
 import SelectInput from "../ui/select-input";
 import { useCoursesQuery } from "../../data/course";
 import Input from "../form/input/InputField";
+import { useEffect } from "react";
 
 type FormValues = {
-  student: User;
-  admission: string;
+  student: Student;
+  admission: number;
   courses: Course[];
-  totalPayment: string;
+  totalPayment: number;
 };
 
 const defaultValues = {
-  admission: "2000",
-  totalPayment: "4000",
+  admission: 2000,
+  totalPayment: 0,
 };
 
 const validationSchema = yup.object().shape({
@@ -39,6 +40,7 @@ export default function StudentEnrollForm({ initialValues }: Props) {
     control,
     register,
     watch,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -52,8 +54,23 @@ export default function StudentEnrollForm({ initialValues }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
+  const watchedCourses = watch("courses");
+  const admission = watch("admission");
+
+  useEffect(() => {
+    const coursesTotal = (watchedCourses || []).reduce(
+      (sum, course) => sum + (course?.fee || 0),
+      0
+    );
+    setValue("totalPayment", admission + coursesTotal);
+  }, [watchedCourses, admission, setValue]);
+
   const selectedStudent = watch("student");
   const studentGrade = selectedStudent?.grade;
+
+  useEffect(() => {
+    if (selectedStudent && selectedStudent?.admissionPayed) setValue("admission", 0);
+  }, [selectedStudent, setValue]);
 
   const { courses } = useCoursesQuery({
     grade: studentGrade,
@@ -64,7 +81,11 @@ export default function StudentEnrollForm({ initialValues }: Props) {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      courses: values.courses.map((course) => course.id),
+      studentId: values.student.id,
+      courseIds: values.courses.map((course) => course.id),
+      paymentType: EPayment.CASH,
+      admission: values.admission,
+      total: values.totalPayment,
     };
 
     enrollStudent({ studentId: values.student.id, input });
@@ -108,7 +129,7 @@ export default function StudentEnrollForm({ initialValues }: Props) {
           <SelectInput
             name="courses"
             control={control}
-            getOptionLabel={(option: any) => option.name}
+            getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
             getOptionValue={(option: any) => option.id}
             options={courses}
             isClearable={true}

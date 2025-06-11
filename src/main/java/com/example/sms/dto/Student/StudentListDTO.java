@@ -18,6 +18,8 @@ public class StudentListDTO {
 
     private String studentId;
 
+    private Boolean admissionPayed;
+
     public StudentListDTO(Student student) {
         this.id = student.getId();
         this.firstName = student.getUser().getFirstName();
@@ -25,5 +27,6 @@ public class StudentListDTO {
         this.email = student.getUser().getEmail();
         this.grade = student.getGrade();
         this.studentId = student.getStudentId();
+        this.admissionPayed = student.getAdmissionPayed();
     }
 }
