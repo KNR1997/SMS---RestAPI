@@ -1,10 +1,18 @@
 package com.example.sms.service;
 
-import com.example.sms.dto.SubjectDTO;
+import com.example.sms.dto.Subject.SubjectCreateDTO;
+import com.example.sms.dto.Subject.SubjectListDTO;
 import com.example.sms.entity.Subject;
+import com.example.sms.exception.AppsException;
+import com.example.sms.exception.ResourceNotFoundException;
+import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class SubjectService {
@@ -12,12 +20,54 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public Subject createSubject(SubjectDTO subjectDTO) {
-        Subject subject = new Subject();
+    @Autowired
+    private CourseRepository courseRepository;
 
-        subject.setName(subjectDTO.getName());
-        subject.setSlug(subjectDTO.getSlug());
+    public Page<SubjectListDTO> getSubjectsPaginated(Pageable pageable) {
+        Page<Subject> subjectPage = subjectRepository.findAll(pageable);
+
+        return subjectPage.map(subject -> {
+            SubjectListDTO dto = new SubjectListDTO();
+            dto.setId(subject.getId());
+            dto.setName(subject.getName());
+            dto.setSlug(subject.getSlug());
+            dto.setCode(subject.getCode());
+            return dto;
+        });
+    }
+
+    public Subject getSubjectBySlug(@PathVariable String slug) {
+        return subjectRepository.findBySlug(slug)
+                .orElseThrow(() -> new RuntimeException("Error: Subject is not found."));
+    }
+
+    public Subject createSubject(SubjectCreateDTO subjectCreateDTO) {
+        if (subjectRepository.existsBySlug(subjectCreateDTO.getSlug())) {
+            throw new AppsException("Subject with name already exists", HttpStatus.CONFLICT.value());
+        }
+
+        if (subjectRepository.existsByCode(subjectCreateDTO.getCode())) {
+            throw new AppsException("Subject with code already exists", HttpStatus.CONFLICT.value());
+        }
+
+        // Create and save the new subject
+        Subject subject = new Subject();
+        subject.setName(subjectCreateDTO.getName());
+        subject.setSlug(subjectCreateDTO.getSlug());
+        subject.setCode(subjectCreateDTO.getCode());
 
         return subjectRepository.save(subject);
     }
+
+    public Subject updateSubject(Integer id, SubjectCreateDTO updateDto) {
+        Subject subject = subjectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with ID: " + id));
+
+        subject.setName(updateDto.getName());
+        subject.setCode(updateDto.getCode());
+        subject.setSlug(updateDto.getSlug());
+
+        return subjectRepository.save(subject);
+    }
+
 }

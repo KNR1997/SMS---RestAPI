@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.GradeType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,5 +20,18 @@ public class Student {
     private String studentId;
 
     private Date dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    private GradeType gradeType;
+
+    private Boolean admissionPayed = false;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "guardian_id", nullable = true)
+    private Guardian guardian;
+
+    public String getStudentName() {
+        return user.getFirstName() + " "  + user.getLastName();
+    }
 
 }

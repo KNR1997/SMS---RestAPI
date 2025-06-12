@@ -5,7 +5,57 @@ export interface Invoice {
   value: number;
   fgsStatus: EStatus;
   financeStatus: EStatus;
-  createdAt: string
+  createdAt: string;
+}
+
+export interface Course {
+  id: number;
+  name: string;
+  slug: string;
+  code: string;
+  gradeType: EGrade;
+  subjectId: number;
+  teacherId: number;
+  fee: number;
+}
+
+export interface Enrollment {
+  id: number;
+  studentName: string;
+  courseName: string;
+  enrollmentDate: string;
+  status: string;
+}
+
+export interface EnrollmentPageData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  studentId: string;
+  dateOfBirth: string;
+  admissionPayed: boolean;
+  courseDetails: Course;
+  lastPaidMonth: number;
+  lastPaidMonthName: string
+}
+
+export interface CreateCourse {
+  name: string;
+  slug: string;
+  code: string;
+}
+
+export interface Subject {
+  id: number;
+  name: string;
+  slug: string;
+  code: string;
+}
+
+export interface CreateSubject {
+  name: string;
+  slug: string;
+  code: string;
 }
 
 export interface InvoiceStatusAudit {
@@ -23,6 +73,11 @@ export enum EStatus {
   COMPLETED = "COMPLETED",
 }
 
+export enum PaymentMethod {
+  CASH = "CASH",
+  CARD = "CARD",
+}
+
 export enum ERequestType {
   FG_REQUEST = "FG_REQUEST",
   FINANCE_REQUEST = "FINANCE_REQUEST",
@@ -32,12 +87,44 @@ export enum ERole {
   ROLE_ADMIN = "ROLE_ADMIN",
   ROLE_TEACHER = "ROLE_TEACHER",
   ROLE_RECEPTIONIST = "ROLE_RECEPTIONIST",
-  ROLE_STUDENT = "ROLE_STUDENT"
+  ROLE_STUDENT = "ROLE_STUDENT",
+}
+
+export enum EGrade {
+  GRADE_5 = "GRADE_5",
+  GRADE_6 = "GRADE_6",
+  GRADE_7 = "GRADE_7",
+  GRADE_8 = "GRADE_8",
+  GRADE_9 = "GRADE_9",
+  GRADE_10 = "GRADE_10",
+  GRADE_11 = "GRADE_11",
+}
+
+export enum EEnrollmentStatus {
+  ACTIVE = "ACTIVE",
+  LOCKED = "LOCKED",
+  DROPPED = "DROPPED",
 }
 
 export interface Role {
   id: number;
   name: string;
+}
+
+export enum PayerType {
+  STUDENT = "STUDENT",
+  TEACHER = "TEACHER",
+  MANAGER = "MANAGER",
+  INSTITUTE = "INSTITUTE",
+}
+
+export enum PaymentType {
+  ADMISSION_FEE = "ADMISSION_FEE",
+  COURSE_FEE = "COURSE_FEE",
+  EXAM_FEE = "EXAM_FEE",
+  HOSTEL_FEE = "HOSTEL_FEE",
+  SALARY = "SALARY",
+  OTHER = "OTHER",
 }
 
 export interface User {
@@ -46,7 +133,10 @@ export interface User {
   lastName: string;
   email: string;
   username: string;
-  roles: Role[];
+  erole: ERole;
+  gradeType: EGrade;
+  studentId: number;
+  role: ERole;
 }
 
 export interface CreateUser {
@@ -57,17 +147,69 @@ export interface CreateUser {
   role: ERole;
 }
 
+export interface Guardian {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationalIdentityNumber: string;
+  contactNumber: string;
+}
+
+export interface CreateGuardian {
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationalIdentityNumber: string;
+  contactNumber: string;
+}
+
+export interface EnrollCourseData {
+  courseIds: number[];
+}
+
 export interface Student {
   id: number;
-  user: User;
+  firstName: string;
+  lastName: string;
   studentId: string;
   dateOfBirth: string;
+  gradeType: EGrade;
+  admissionPayed: boolean;
+}
+
+export interface Payment {
+  id: number;
+  paymentType: PaymentMethod;
+  studentId: string;
+  admission: number;
+  total: number;
+}
+
+export interface CreatePayment {
+  studentId: number;
+  admission: number;
+  totalAmount: number;
+  paymentMethod: PaymentMethod;
+  coursePaymentList: CoursePayment[]
+}
+
+export interface CoursePayment {
+  courseId: number;
+  paymentMonths: number[];
+}
+
+export interface CreatePaymentItem {
+  paymentType: PaymentType;
+  amount: number;
+  description: string;
 }
 
 export interface CreateStudent {
-  userDatails: CreateUser
-  studentId: string;
-  dateOfBirth: string;
+  userDetails: CreateUser;
+  guardianDetails: CreateGuardian;
+  dateOfBirth: Date;
+  gradeType: EGrade;
 }
 
 export interface Request {
@@ -84,8 +226,8 @@ export interface CreateRequestInput {
 }
 
 export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc',
+  Asc = "asc",
+  Desc = "desc",
 }
 
 export interface QueryOptions {
@@ -134,7 +276,18 @@ export interface UserPaginator extends PaginatorInfo<User> {}
 
 export interface StudentPaginator extends PaginatorInfo<Student> {}
 
-export interface InvoiceStatusAuditPaginator extends PaginatorInfo<InvoiceStatusAudit> {}
+export interface SubjectPaginator extends PaginatorInfo<Subject> {}
+
+export interface GuardianPaginator extends PaginatorInfo<Guardian> {}
+
+export interface PaymentPaginator extends PaginatorInfo<Payment> {}
+
+export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
+
+export interface InvoiceStatusAuditPaginator
+  extends PaginatorInfo<InvoiceStatusAudit> {}
 
 export interface InvoiceQueryOptions extends QueryOptions {
   companyName: string;
@@ -152,14 +305,27 @@ export interface StudentQueryOptions extends QueryOptions {
   username: string;
 }
 
+export interface PaymentQueryOptions extends QueryOptions {}
+
+export interface SubjectQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface GuardianQueryOptions extends QueryOptions {}
+
+export interface CourseQueryOptions extends QueryOptions {
+  name: string;
+  gradeType: EGrade;
+}
+
+export interface EnrollmentQueryOptions extends QueryOptions {}
+
 export interface InvoiceStatusAuditQueryOptions extends QueryOptions {
   username: string;
 }
 
 export interface GetParams {
-  id: string;
   slug: string;
-  language: string;
 }
 
 export interface QueryOptions {

@@ -1,6 +1,6 @@
 package com.example.sms.dto;
 
-import com.example.sms.entity.ERole;
+import com.example.sms.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,6 +19,6 @@ public class UserPageDataDTO {
 
     private String username;
 
-    private Set<ERole> roles;
+    private Set<RoleType> roles;
 
 }

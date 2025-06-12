@@ -1,6 +1,6 @@
-package com.example.sms.entity;
+package com.example.sms.enums;
 
-public enum ERole {
+public enum RoleType {
     ROLE_ADMIN,
 
     ROLE_TEACHER,

@@ -1,10 +1,11 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.*;
-import com.example.sms.entity.ERole;
-import com.example.sms.entity.Role;
-import com.example.sms.entity.User;
+import com.example.sms.entity.*;
+import com.example.sms.enums.RoleType;
+import com.example.sms.enums.GradeType;
 import com.example.sms.repository.RoleRepository;
+import com.example.sms.repository.StudentRepository;
 import com.example.sms.repository.UserRepository;
 import com.example.sms.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,6 +39,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
 
     @PostMapping("/login/")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -58,19 +60,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
+        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setRole(adminRole);
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(userRole);
-
-        user.setRoles(roles);
         userRepository.save(user);
-
         return ResponseEntity.ok(new RegisterResponse(user));
     }
 
@@ -88,14 +88,21 @@ public class AuthController {
             return ResponseEntity.status(404).body("User not found");
         }
 
-        // Convert roles to a set of role names
-        Set<ERole> roleNames = user.getRoles()
-                .stream()
-                .map(Role::getName) // Assuming getName() returns something like "ROLE_USER"
-                .collect(Collectors.toSet());
+        GradeType studentGradeType = null;
+        Integer studentId = null;
+        Optional<Student> student = studentRepository.findByUser_Id(user.getId());
+        if (student.isPresent()) {
+            studentGradeType = student.get().getGradeType();
+            studentId = student.get().getId();
+        }
 
         // Map User to MeDTO
-        MeDTO meDTO = new MeDTO(user.getUsername(), user.getEmail(), roleNames);
+        MeDTO meDTO = new MeDTO(
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().getName(),
+                studentGradeType,
+                studentId);
         return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity
     }
 

@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +15,6 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ERole name;
+    private RoleType name;
 
 }

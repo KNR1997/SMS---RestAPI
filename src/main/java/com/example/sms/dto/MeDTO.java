@@ -1,22 +1,22 @@
 package com.example.sms.dto;
 
-import com.example.sms.entity.ERole;
+import com.example.sms.enums.RoleType;
+import com.example.sms.enums.GradeType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
+@AllArgsConstructor
 public class MeDTO {
     private String userName;
 
 
     private String email;
 
-    private Set<ERole> roles;
+    private RoleType erole;
 
-    public MeDTO(String userName, String email, Set<ERole> roles) {
-        this.userName = userName;
-        this.email = email;
-        this.roles = roles;
-    }
+    private GradeType gradeType;
+
+    private Integer studentId;
+
 }

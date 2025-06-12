@@ -1,8 +1,9 @@
 package com.example.sms.service;
 
 
-import com.example.sms.dto.CreateUserDTO;
-import com.example.sms.dto.UserDTO;
+import com.example.sms.dto.Course.CourseListDTO;
+import com.example.sms.dto.User.UserCreateDTO;
+import com.example.sms.dto.User.UserListDTO;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
 import com.example.sms.exception.BadRequestException;
@@ -14,9 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -30,8 +28,10 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserListDTO> getUsersPaginated(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        return userPage.map(UserListDTO::new);
     }
 
     public User getUserById(Integer id) {
@@ -39,47 +39,42 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    public User createUser(CreateUserDTO createUserDTO) {
-        if (userRepository.existsByEmail(createUserDTO.getEmail())) {
-            throw new BadRequestException("User with email '" + createUserDTO.getEmail() + "' already exists.");
+    public User createUser(UserCreateDTO userCreateDTO) {
+        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
+            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
         }
 
-        User user = new User();
-        user.setFirstName(createUserDTO.getFirstName());
-        user.setLastName(createUserDTO.getLastName());
-        user.setEmail(createUserDTO.getEmail());
-        user.setUsername(createUserDTO.getUsername());
-        user.setPassword(encoder.encode(createUserDTO.getPassword()));
+        Role role = roleRepository.findByName(userCreateDTO.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + userCreateDTO.getRole()));
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(createUserDTO.getRole())
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(userRole);
-        user.setRoles(roles);
+        User user = new User();
+        user.setFirstName(userCreateDTO.getFirstName());
+        user.setLastName(userCreateDTO.getLastName());
+        user.setEmail(userCreateDTO.getEmail());
+        user.setUsername(userCreateDTO.getUsername());
+        user.setRole(role);
+        user.setPassword(encoder.encode(userCreateDTO.getPassword()));
 
         return userRepository.save(user);
     }
 
-    public User updateUser(Integer id, UserDTO updateDto) {
+    public User updateUser(Integer id, UserCreateDTO updateDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
+
+        Role role = roleRepository.findByName(updateDto.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + updateDto.getRole()));
 
         user.setFirstName(updateDto.getFirstName());
         user.setLastName(updateDto.getLastName());
         user.setEmail(updateDto.getEmail());
         user.setUsername(updateDto.getUsername());
+        user.setRole(role);
 
         // Only update password if a new one is provided (optional, but recommended)
         if (updateDto.getPassword() != null && !updateDto.getPassword().isEmpty()) {
             user.setPassword(encoder.encode(updateDto.getPassword()));
         }
-
-        // Update role
-        Set<Role> roles = new HashSet<>();
-        Role newRole = roleRepository.findByName(updateDto.getRole())
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(newRole);
-        user.setRoles(roles);
 
         return userRepository.save(user);
     }

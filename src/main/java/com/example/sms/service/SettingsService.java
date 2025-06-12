@@ -1,6 +1,6 @@
 package com.example.sms.service;
 
-import com.example.sms.entity.ERole;
+import com.example.sms.enums.RoleType;
 import com.example.sms.entity.Role;
 import com.example.sms.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +14,27 @@ public class SettingsService {
 
     public void initRole() {
 
-        if (!roleRepository.existsByName(ERole.ROLE_ADMIN)) {
+        if (!roleRepository.existsByName(RoleType.ROLE_ADMIN)) {
             Role adminRole = new Role();
-            adminRole.setName(ERole.ROLE_ADMIN);
+            adminRole.setName(RoleType.ROLE_ADMIN);
             roleRepository.save(adminRole);
         }
 
-        if (!roleRepository.existsByName(ERole.ROLE_TEACHER)) {
+        if (!roleRepository.existsByName(RoleType.ROLE_TEACHER)) {
             Role fgRole = new Role();
-            fgRole.setName(ERole.ROLE_TEACHER);
+            fgRole.setName(RoleType.ROLE_TEACHER);
             roleRepository.save(fgRole);
         }
 
-        if (!roleRepository.existsByName(ERole.ROLE_RECEPTIONIST)) {
+        if (!roleRepository.existsByName(RoleType.ROLE_RECEPTIONIST)) {
             Role fgHeadRole = new Role();
-            fgHeadRole.setName(ERole.ROLE_RECEPTIONIST);
+            fgHeadRole.setName(RoleType.ROLE_RECEPTIONIST);
             roleRepository.save(fgHeadRole);
         }
 
-        if (!roleRepository.existsByName(ERole.ROLE_STUDENT)) {
+        if (!roleRepository.existsByName(RoleType.ROLE_STUDENT)) {
             Role fgHeadRole = new Role();
-            fgHeadRole.setName(ERole.ROLE_STUDENT);
+            fgHeadRole.setName(RoleType.ROLE_STUDENT);
             roleRepository.save(fgHeadRole);
         }
     }

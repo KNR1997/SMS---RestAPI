@@ -1,6 +1,16 @@
 package com.example.sms.dto;
 
+import com.example.sms.enums.GradeType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CourseDTO {
+
+    private Integer id;
 
     private String name;
 
@@ -8,27 +18,6 @@ public class CourseDTO {
 
     private String code;
 
-    public String getName() {
-        return name;
-    }
+    private GradeType gradeType;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 }

@@ -14,8 +14,10 @@ import {
   PlugInIcon,
   TableIcon,
   FileIcon,
+  DollarLineIcon,
   UserCircleIcon,
   UserIcon,
+  PaperPlaneIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -34,8 +36,9 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-    roles: [ERole.ROLE_ADMIN]
+    path: "/",
+    // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
   },
   // {
   //   icon: <CalenderIcon />,
@@ -75,6 +78,37 @@ const navItems: NavItem[] = [
   //   roles: [ERole.ROLE_FINISH_GOOD_HEAD, ERole.ROLE_FINANCE_HEAD],
   // },
   {
+    name: "Subjects",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Subjects", path: "/subjects", pro: false },
+      { name: "Create subject", path: "/subjects/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Courses", path: "/courses", pro: false },
+      { name: "Create course", path: "/courses/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      // {
+      //   name: "Available courses",
+      //   path: "/courses/available-courses",
+      //   pro: false,
+      // },
+      { name: "My course", path: "/courses/my-courses", pro: false },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
+  {
     name: "Users",
     icon: <UserIcon />,
     subItems: [
@@ -83,12 +117,45 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-    {
+  {
     name: "Students",
     icon: <UserIcon />,
     subItems: [
       { name: "All Students", path: "/students", pro: false },
       { name: "Create student", path: "/students/create", pro: false },
+      // { name: "Entroll student", path: "/students/enroll", pro: false },
+      // { name: "Payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Guardians",
+    icon: <UserCircleIcon />,
+    subItems: [
+      { name: "All Guardians", path: "/guardians", pro: false },
+      // { name: "Create student", path: "/students/create", pro: false },
+      // { name: "Entroll student", path: "/students/enroll", pro: false },
+      // { name: "Payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Enrollments",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      { name: "All Enrollments", path: "/enrollments", pro: false },
+      { name: "Create enrollment", path: "/enrollments/create", pro: false },
+      // { name: "Entroll student", path: "/students/enroll", pro: false },
+      // { name: "Payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Payments",
+    icon: <DollarLineIcon />,
+    subItems: [
+      { name: "All Payments", path: "/payments", pro: false },
+      { name: "Create payment", path: "/payments/create", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN],
   },
@@ -150,7 +217,7 @@ const AppSidebar: React.FC = () => {
   const { user } = useAuth();
 
   const filteredItems = navItems.filter((item) =>
-    item.roles.some((role) => user?.roles.includes(role))
+    item.roles.some((role) => user?.erole == role)
   );
 
   const [openSubmenu, setOpenSubmenu] = useState<{
