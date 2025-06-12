@@ -1,7 +1,7 @@
 package com.example.sms.dto.Course;
 
 import com.example.sms.entity.Course;
-import com.example.sms.entity.Grade;
+import com.example.sms.enums.GradeType;
 import lombok.Data;
 
 @Data
@@ -14,7 +14,7 @@ public class CourseDetailDTO {
 
     private String code;
 
-    private Grade grade;
+    private GradeType gradeType;
 
     private Integer subjectId;
 
@@ -29,7 +29,7 @@ public class CourseDetailDTO {
         this.name = course.getName();
         this.slug = course.getSlug();
         this.code = course.getCode();
-        this.grade = course.getGrade();
+        this.gradeType = course.getGradeType();
         this.subjectId = course.getSubject().getId();
         this.teacherId = course.getTeacher().getId();
         this.batch = course.getBatch();

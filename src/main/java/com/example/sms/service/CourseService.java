@@ -3,7 +3,7 @@ package com.example.sms.service;
 import com.example.sms.dto.Course.CourseCreateDTO;
 import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.entity.Course;
-import com.example.sms.entity.Grade;
+import com.example.sms.enums.GradeType;
 import com.example.sms.entity.Subject;
 import com.example.sms.entity.User;
 import com.example.sms.exception.BadRequestException;
@@ -33,8 +33,8 @@ public class CourseService {
 
         if (grade != null && !grade.isEmpty()) {
             try {
-                Grade gradeEnum = Grade.valueOf(grade.toUpperCase()); // Convert string to enum safely
-                coursePage = courseRepository.findByGrade(gradeEnum, pageable);
+                GradeType gradeTypeEnum = GradeType.valueOf(grade.toUpperCase()); // Convert string to enum safely
+                coursePage = courseRepository.findByGradeType(gradeTypeEnum, pageable);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid grade value: " + grade);
             }
@@ -48,6 +48,11 @@ public class CourseService {
     public Course getCourseBySlug(String slug) {
         return courseRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with slug: " + slug));
+    }
+
+    public Course getCourseById(Integer id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
     }
 
     public Course createCourse(CourseCreateDTO createDto) {
@@ -65,7 +70,7 @@ public class CourseService {
         course.setName(createDto.getName());
         course.setSlug(createDto.getSlug());
         course.setCode(createDto.getCode());
-        course.setGrade(createDto.getGrade());
+        course.setGradeType(createDto.getGradeType());
         course.setSubject(subject);
         course.setTeacher(teacher);
         course.setBatch(createDto.getBatch());
@@ -88,7 +93,7 @@ public class CourseService {
         course.setName(updateDto.getName());
         course.setSlug(updateDto.getSlug());
         course.setCode(updateDto.getCode());
-        course.setGrade(updateDto.getGrade());
+        course.setGradeType(updateDto.getGradeType());
         course.setSubject(subject);
         course.setTeacher(teacher);
         course.setBatch(updateDto.getBatch());

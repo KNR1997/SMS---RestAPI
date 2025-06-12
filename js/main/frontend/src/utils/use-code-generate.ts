@@ -8,7 +8,7 @@ export function generateSubjectCode(inputString: string): string {
   return firstThreeCharacters.toUpperCase();
 }
 
-function generateGradeCode(grade: EGrade): string {
+function generateGradeCode(gradeType: EGrade): string {
   const gradeMap: Record<EGrade, string> = {
     [EGrade.GRADE_5]: "G5",
     [EGrade.GRADE_6]: "G6",
@@ -18,17 +18,17 @@ function generateGradeCode(grade: EGrade): string {
     [EGrade.GRADE_10]: "G10",
     [EGrade.GRADE_11]: "G11",
   };
-  return gradeMap[grade] ?? "G";
+  return gradeMap[gradeType] ?? "G";
 }
 
 export function generateCourseCode(
-  grade: EGrade,
+  gradeType: EGrade,
   subject: string,
   teacherFirstName: string,
   teacherLastName: string,
   batch: number
 ): string {
-  if (!grade || !subject || !teacherFirstName || !teacherLastName) return "";
+  if (!gradeType || !subject || !teacherFirstName || !teacherLastName) return "";
 
   const safeSlice = (value: string, length = 3) =>
     (value || "").substring(0, length).toUpperCase();
@@ -36,19 +36,19 @@ export function generateCourseCode(
   const subjectFirstThree = safeSlice(subject);
   const teacherFirstNameFirstThree = safeSlice(teacherFirstName);
   const teacherLastNameFirstThree = safeSlice(teacherLastName);
-  const gradeCode = generateGradeCode(grade);
+  const gradeCode = generateGradeCode(gradeType);
 
   return `${subjectFirstThree}${gradeCode}B${batch}${teacherFirstNameFirstThree}${teacherLastNameFirstThree}`;
 }
 
 export function generateCourseName(
-  grade: EGrade,
+  gradeType: EGrade,
   subject: string,
   teacherFirstName: string,
   teacherLastName: string,
   batch: number
 ): string {
-  if (!grade || !subject || !teacherFirstName || !teacherLastName) return "";
+  if (!gradeType || !subject || !teacherFirstName || !teacherLastName) return "";
 
-  return `${grade}-${subject}-Batch${batch}-${teacherFirstName}-${teacherLastName}`;
+  return `${gradeType}-${subject}-Batch${batch}-${teacherFirstName}-${teacherLastName}`;
 }

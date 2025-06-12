@@ -13,7 +13,7 @@ export interface Course {
   name: string;
   slug: string;
   code: string;
-  grade: EGrade;
+  gradeType: EGrade;
   subjectId: number;
   teacherId: number;
   fee: number;
@@ -73,7 +73,7 @@ export enum EStatus {
   COMPLETED = "COMPLETED",
 }
 
-export enum EPayment {
+export enum PaymentMethod {
   CASH = "CASH",
   CARD = "CARD",
 }
@@ -111,6 +111,22 @@ export interface Role {
   name: string;
 }
 
+export enum PayerType {
+  STUDENT = "STUDENT",
+  TEACHER = "TEACHER",
+  MANAGER = "MANAGER",
+  INSTITUTE = "INSTITUTE",
+}
+
+export enum PaymentType {
+  ADMISSION_FEE = "ADMISSION_FEE",
+  COURSE_FEE = "COURSE_FEE",
+  EXAM_FEE = "EXAM_FEE",
+  HOSTEL_FEE = "HOSTEL_FEE",
+  SALARY = "SALARY",
+  OTHER = "OTHER",
+}
+
 export interface User {
   id: number;
   firstName: string;
@@ -118,7 +134,7 @@ export interface User {
   email: string;
   username: string;
   erole: ERole;
-  grade: EGrade;
+  gradeType: EGrade;
   studentId: number;
   role: ERole;
 }
@@ -158,30 +174,42 @@ export interface Student {
   lastName: string;
   studentId: string;
   dateOfBirth: string;
-  grade: EGrade;
+  gradeType: EGrade;
   admissionPayed: boolean;
 }
 
 export interface Payment {
   id: number;
-  paymentType: EPayment;
+  paymentType: PaymentMethod;
   studentId: string;
   admission: number;
   total: number;
 }
 
 export interface CreatePayment {
-  paymentType: EPayment;
-  studentId: string;
+  studentId: number;
   admission: number;
-  total: number;
+  totalAmount: number;
+  paymentMethod: PaymentMethod;
+  coursePaymentList: CoursePayment[]
+}
+
+export interface CoursePayment {
+  courseId: number;
+  paymentMonths: number[];
+}
+
+export interface CreatePaymentItem {
+  paymentType: PaymentType;
+  amount: number;
+  description: string;
 }
 
 export interface CreateStudent {
   userDetails: CreateUser;
   guardianDetails: CreateGuardian;
   dateOfBirth: Date;
-  grade: EGrade;
+  gradeType: EGrade;
 }
 
 export interface Request {
@@ -287,7 +315,7 @@ export interface GuardianQueryOptions extends QueryOptions {}
 
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
-  grade: EGrade;
+  gradeType: EGrade;
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {}

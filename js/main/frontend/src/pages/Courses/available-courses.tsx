@@ -15,7 +15,7 @@ export default function AvailableCourses() {
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const { courses, loading, error, paginatorInfo } = useCoursesQuery({
-    grade: user.grade,
+    gradeType: user.gradeType,
     page,
     orderBy,
     sortedBy,

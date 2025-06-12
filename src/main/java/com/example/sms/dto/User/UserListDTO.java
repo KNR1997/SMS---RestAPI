@@ -1,7 +1,6 @@
 package com.example.sms.dto.User;
 
-import com.example.sms.entity.ERole;
-import com.example.sms.entity.Role;
+import com.example.sms.enums.RoleType;
 import com.example.sms.entity.User;
 import lombok.Data;
 
@@ -17,7 +16,7 @@ public class UserListDTO {
 
     private String username;
 
-    private ERole role;
+    private RoleType role;
 
     public UserListDTO(User user) {
         this.id = user.getId();

@@ -20,7 +20,7 @@ type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
-  grade: EGrade;
+  gradeType: EGrade;
   username: string;
   password: string;
   dateOfBirth: Date;
@@ -37,7 +37,7 @@ const defaultValues = {
   firstName: "",
   lastName: "",
   email: "",
-  grade: "",
+  gradeType: "",
   username: "",
   password: "",
 
@@ -51,7 +51,7 @@ const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
   email: yup.string().required("Email is required"),
-  grade: yup.string().required("Grade is required"),
+  gradeType: yup.string().required("Grade is required"),
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
   dateOfBirth: yup.string().required("Birthday is required"),
@@ -119,7 +119,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const onSubmit = async (values: FormValues) => {
     const input = {
       dateOfBirth: values.dateOfBirth,
-      grade: values.grade,
+      gradeType: values.gradeType,
       userDetails: {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -209,7 +209,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Grade <span className="text-error-500">*</span>
               </Label>
               <Controller
-                name="grade"
+                name="gradeType"
                 control={control}
                 rules={{ required: "Grade is required" }}
                 render={({ field }) => (
@@ -222,9 +222,9 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                   />
                 )}
               />
-              {errors.grade && (
+              {errors.gradeType && (
                 <p className="text-error-500 text-sm mt-1">
-                  {errors.grade.message}
+                  {errors.gradeType.message}
                 </p>
               )}
             </div>

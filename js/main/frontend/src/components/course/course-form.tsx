@@ -22,7 +22,7 @@ type FormValues = {
   name: string;
   slug: string;
   code: string;
-  grade: { label: string; value: EGrade };
+  gradeType: { label: string; value: EGrade };
   subject: Subject;
   teacher: User;
   batch: number;
@@ -33,14 +33,14 @@ const defaultValues = {
   name: "",
   slug: "",
   code: "",
-  // grade: "",
+  // gradeType: "",
   batch: 1,
 };
 
 const validationSchema = yup.object().shape({
   // name: yup.string().required("Name is required"),
   // code: yup.string().required("Code is required"),
-  grade: yup.object().required("Grade is required"),
+  gradeType: yup.object().required("Grade is required"),
   subject: yup.object().required("Subject is required"),
   teacher: yup.object().required("Teacher is required"),
 });
@@ -64,8 +64,8 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
     defaultValues: initialValues
       ? {
           ...initialValues,
-          grade: initialValues?.grade
-            ? gradeOptions.find((grade) => grade.value === initialValues.grade)
+          gradeType: initialValues?.gradeType
+            ? gradeOptions.find((gradeType) => gradeType.value === initialValues.gradeType)
             : null,
           subject: initialValues?.subjectId
             ? subjects.find((subject) => subject.id === initialValues.subjectId)
@@ -86,21 +86,21 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
 
   // if (creating || updating) return <Loader text="Loading..." />;
 
-  const grade = watch("grade");
+  const gradeType = watch("gradeType");
   const subject = watch("subject");
   const teacher = watch("teacher");
   const batch = watch("batch");
 
   // const formattedSlug = formatSlug(name);
   const courseName = generateCourseName(
-    grade?.value,
+    gradeType?.value,
     subject?.name,
     teacher?.firstName,
     teacher?.lastName,
     batch
   );
   const courseCode = generateCourseCode(
-    grade?.value,
+    gradeType?.value,
     subject?.code,
     teacher?.firstName,
     teacher?.lastName,
@@ -112,7 +112,7 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
       name: courseName,
       slug: courseName,
       code: courseCode,
-      grade: values.grade.value,
+      gradeType: values.gradeType.value,
       subjectId: values.subject.id,
       teacherId: values.teacher.id,
       batch: values.batch,
@@ -138,14 +138,14 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             Grade <span className="text-error-500">*</span>
           </Label>
           <SelectInput
-            name="grade"
+            name="gradeType"
             control={control}
             options={gradeOptions}
             isClearable={true}
           />
-          {errors.grade && (
+          {errors.gradeType && (
             <p className="text-error-500 text-sm mt-1">
-              {errors.grade.message}
+              {errors.gradeType.message}
             </p>
           )}
         </div>

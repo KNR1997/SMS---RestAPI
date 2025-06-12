@@ -1,6 +1,6 @@
 package com.example.sms.dto.Student;
 
-import com.example.sms.entity.Grade;
+import com.example.sms.enums.GradeType;
 import com.example.sms.entity.Student;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class StudentListDTO {
 
     private String email;
 
-    private Grade grade;
+    private GradeType gradeType;
 
     private String studentId;
 
@@ -25,7 +25,7 @@ public class StudentListDTO {
         this.firstName = student.getUser().getFirstName();
         this.lastName = student.getUser().getLastName();
         this.email = student.getUser().getEmail();
-        this.grade = student.getGrade();
+        this.gradeType = student.getGradeType();
         this.studentId = student.getStudentId();
         this.admissionPayed = student.getAdmissionPayed();
     }

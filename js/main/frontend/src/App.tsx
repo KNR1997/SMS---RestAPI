@@ -50,6 +50,7 @@ import Guardians from "./pages/Guardians";
 import EditGuardianPage from "./pages/Guardians/edit";
 import Enrollments from "./pages/Enrollments";
 import ViewEnrollmentPage from "./pages/Enrollments/view";
+import CreateEnrollPage from "./pages/Enrollments/create";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -217,10 +218,10 @@ export default function App() {
                   path="/students/:id/edit"
                   element={<EditStudentPage />}
                 />
-                <Route
+                {/* <Route
                   path="/students/enroll"
                   element={<StudentEnrollPage />}
-                />
+                /> */}
 
                 <Route
                   path="/enrollments"
@@ -229,6 +230,10 @@ export default function App() {
                       <Enrollments />
                     </ProtectedRoute>
                   }
+                />
+                <Route
+                  path="/enrollments/create"
+                  element={<CreateEnrollPage />}
                 />
                 <Route
                   path="/enrollments/:id/view"

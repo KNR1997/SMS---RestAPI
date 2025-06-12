@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.GradeType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Course {
     private String code;  // Todo -> MAT10RWB1, SIN, SCI10IPB2 (auto suggest)
 
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private GradeType gradeType;
 
     private Integer batch;
 

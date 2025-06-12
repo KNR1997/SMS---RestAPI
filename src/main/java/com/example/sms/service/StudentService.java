@@ -3,6 +3,7 @@ package com.example.sms.service;
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
+import com.example.sms.dto.Student.StudentUpdateDTO;
 import com.example.sms.dto.request.StudentCourseEnrollmentRequest;
 import com.example.sms.entity.*;
 import com.example.sms.exception.ResourceNotFoundException;
@@ -70,7 +71,7 @@ public class StudentService {
         student.setUser(newUser);
         student.setStudentId(generateStudentId());
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
-        student.setGrade(studentCreateDTO.getGrade());
+        student.setGradeType(studentCreateDTO.getGradeType());
 
         Guardian guardian;
         Integer guardianId = studentCreateDTO.getGuardianDetails().getId();
@@ -100,11 +101,15 @@ public class StudentService {
         user.setEmail(studentCreateDTO.getUserDetails().getEmail());
 
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
-        student.setGrade(studentCreateDTO.getGrade());
+        student.setGradeType(studentCreateDTO.getGradeType());
 //        student.setGuardianName(studentCreateDTO.getGuardianName());
 //        student.setContactNumber(studentCreateDTO.getContactNumber());
 
         userRepository.save(user);
+        return studentRepository.save(student);
+    }
+
+    public Student saveStudent(Student student) {
         return studentRepository.save(student);
     }
 

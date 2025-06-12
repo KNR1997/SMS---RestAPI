@@ -2,6 +2,8 @@ package com.example.sms.controller;
 
 import com.example.sms.dto.*;
 import com.example.sms.entity.*;
+import com.example.sms.enums.RoleType;
+import com.example.sms.enums.GradeType;
 import com.example.sms.repository.RoleRepository;
 import com.example.sms.repository.StudentRepository;
 import com.example.sms.repository.UserRepository;
@@ -58,7 +60,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
-        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
 
@@ -86,11 +88,11 @@ public class AuthController {
             return ResponseEntity.status(404).body("User not found");
         }
 
-        Grade studentGrade = null;
+        GradeType studentGradeType = null;
         Integer studentId = null;
         Optional<Student> student = studentRepository.findByUser_Id(user.getId());
         if (student.isPresent()) {
-            studentGrade = student.get().getGrade();
+            studentGradeType = student.get().getGradeType();
             studentId = student.get().getId();
         }
 
@@ -99,7 +101,7 @@ public class AuthController {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().getName(),
-                studentGrade,
+                studentGradeType,
                 studentId);
         return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity
     }

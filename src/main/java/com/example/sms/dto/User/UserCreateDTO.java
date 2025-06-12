@@ -1,6 +1,6 @@
 package com.example.sms.dto.User;
 
-import com.example.sms.entity.ERole;
+import com.example.sms.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class UserCreateDTO {
 
     private String username;
 
-    private ERole role;
+    private RoleType role;
 
     private String password;
 }

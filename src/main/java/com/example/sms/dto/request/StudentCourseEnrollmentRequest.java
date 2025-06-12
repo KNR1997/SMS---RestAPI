@@ -1,6 +1,6 @@
 package com.example.sms.dto.request;
 
-import com.example.sms.entity.EPayment;
+import com.example.sms.enums.PaymentMethod;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class StudentCourseEnrollmentRequest {
 
     private Double admission;
 
-    private EPayment paymentType;
+    private PaymentMethod paymentMethod;
 
     private Double total;
 }

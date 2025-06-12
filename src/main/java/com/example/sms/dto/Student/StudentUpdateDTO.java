@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class StudentCreateDTO {
+public class StudentUpdateDTO {
 
     private UserCreateDTO userDetails;
 
@@ -17,5 +17,7 @@ public class StudentCreateDTO {
     private Date dateOfBirth;
 
     private GradeType gradeType;
+
+    private Boolean  admissionPayed;
 
 }

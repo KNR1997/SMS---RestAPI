@@ -3,12 +3,10 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../../components/ui/loader/loader";
 import ErrorMessage from "../../components/ui/error-message";
 import { useEnrollmentQuery } from "../../data/enrollment";
-import CreateOrUpdateEnrollmentForm from "../../components/enrollment/enrollment-form";
+import EnrollmentDetails from "../../components/enrollment/enrollment-details";
 
 export default function ViewEnrollmentPage() {
   const { id } = useParams();
-
-  console.log("slug: ", id);
 
   const { enrollment, loading, error } = useEnrollmentQuery({
     slug: id!,
@@ -21,7 +19,7 @@ export default function ViewEnrollmentPage() {
     <>
       <PageBreadcrumb pageTitle="Enrollment Details"  />
       {enrollment && (
-        <CreateOrUpdateEnrollmentForm initialValues={enrollment} />
+        <EnrollmentDetails initialValues={enrollment} />
       )}
     </>
   );

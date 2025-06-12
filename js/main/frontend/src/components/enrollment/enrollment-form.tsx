@@ -1,124 +1,179 @@
-import { Enrollment, EnrollmentPageData } from "../../types";
-import Badge from "../ui/badge/Badge";
+import { useForm } from "react-hook-form";
+import Label from "../form/Label";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Button from "../ui/button/Button";
+import { Course, EPayment, Student, User } from "../../types";
+import {
+  useStudentEnrollCourseMutation,
+  useStudentsQuery,
+} from "../../data/student";
+import SelectInput from "../ui/select-input";
+import { useCoursesQuery } from "../../data/course";
+import Input from "../form/input/InputField";
+import { useEffect } from "react";
+
+type FormValues = {
+  student: Student;
+  admission: number;
+  courses: Course[];
+  totalPayment: number;
+};
+
+const defaultValues = {
+  admission: 2000,
+  totalPayment: 0,
+};
+
+const validationSchema = yup.object().shape({
+  student: yup.object().required("Student is required"),
+});
 
 interface Props {
-  initialValues?: EnrollmentPageData;
+  initialValues?: Student;
 }
 
-export default function CreateOrUpdateEnrollmentForm({ initialValues }: Props) {
-  console.log("initialValues: ", initialValues);
+export default function EnrollForm({ initialValues }: Props) {
+  const { students } = useStudentsQuery({});
+
+  const {
+    control,
+    register,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    // @ts-ignore
+    defaultValues: initialValues
+      ? {
+          ...initialValues,
+        }
+      : defaultValues,
+    //@ts-ignore
+    resolver: yupResolver(validationSchema),
+  });
+
+  const watchedCourses = watch("courses");
+  const admission = watch("admission");
+
+  useEffect(() => {
+    const coursesTotal = (watchedCourses || []).reduce(
+      (sum, course) => sum + (course?.fee || 0),
+      0
+    );
+    setValue("totalPayment", admission + coursesTotal);
+  }, [watchedCourses, admission, setValue]);
+
+  const selectedStudent = watch("student");
+  const studentGradeType = selectedStudent?.gradeType;
+
+  useEffect(() => {
+    if (selectedStudent && selectedStudent?.admissionPayed) setValue("admission", 0);
+  }, [selectedStudent, setValue]);
+
+  const { courses } = useCoursesQuery({
+    gradeType: studentGradeType,
+  });
+
+  const { mutate: enrollStudent, isLoading: creating } =
+    useStudentEnrollCourseMutation();
+
+  const onSubmit = async (values: FormValues) => {
+    const input = {
+      studentId: values.student.id,
+      courseIds: values.courses.map((course) => course.id),
+      paymentType: EPayment.CASH,
+      admission: values.admission,
+      total: values.totalPayment,
+    };
+
+    enrollStudent({ studentId: values.student.id, input });
+  };
+
   return (
-    <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-6">
         <div>
-          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-            Course Information
-          </h4>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-                        <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Last Payed Month
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.lastPaidMonthName}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Course Name
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.courseDetails.name}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Course Code
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.courseDetails.code}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Grade
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.courseDetails.grade}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Batch
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.courseDetails.batch}
-              </p>
-            </div>
-          </div>
+          <Label>
+            Student <span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            name="student"
+            control={control}
+            getOptionLabel={(option: any) => option.firstName}
+            getOptionValue={(option: any) => option.id}
+            options={students}
+            isClearable={true}
+          />
+          {errors.student && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.student.message}
+            </p>
+          )}
         </div>
-
         <div>
-          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-            Student Information
-          </h4>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                First Name
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.firstName}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Last Name
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.lastName}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                StudentID
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.studentId}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Birthday
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {initialValues?.dateOfBirth}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Admission Payed
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                <Badge
-                  size="sm"
-                  color={initialValues?.admissionPayed ? "success" : "error"}
-                >
-                  {initialValues?.admissionPayed ? "Yes" : "No"}
-                </Badge>
-              </p>
-            </div>
-          </div>
+          <Label>
+            Admission <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            {...register("admission")}
+            errorMessage={errors.admission?.message!}
+            disabled
+          />
         </div>
+        <div>
+          <Label>
+            Courses <span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            name="courses"
+            control={control}
+            getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
+            getOptionValue={(option: any) => option.id}
+            options={courses}
+            isClearable={true}
+            isMulti
+          />
+          {errors.courses && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.courses.message}
+            </p>
+          )}
+        </div>
+        {/* <div>
+          <Label>
+            More Courses
+          </Label>
+          <SelectInput
+            name="courses"
+            control={control}
+            getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.id}
+            options={courses}
+            isClearable={true}
+            isMulti
+          />
+          {errors.courses && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.courses.message}
+            </p>
+          )}
+        </div> */}
+        <div>
+          <Label>
+            Total Payment <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            {...register("totalPayment")}
+            errorMessage={errors.totalPayment?.message!}
+            disabled
+          />
+        </div>
+        <Button disabled={creating} size="sm">
+          Enroll Student
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -108,7 +108,7 @@ export default function AvailableCourseList({
                     {course.code}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {course.grade}
+                    {course.gradeType}
                   </TableCell>
                   <TableCell className="flex px-4 py-3 gap-2 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <button onClick={() => handleInfoClick(course.slug)}>

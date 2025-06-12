@@ -53,7 +53,7 @@ export const useCreateStudentMutation = () => {
 
   return useMutation(StudentClient.create, {
     onSuccess: async () => {
-      // navigate("/students");
+      navigate("/students");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:
@@ -91,7 +91,7 @@ export const useStudentEnrollCourseMutation = () => {
 
   return useMutation(StudentClient.enrollToCourse, {
     onSuccess: async () => {
-      navigate("/courses/my-courses");
+      navigate("/enrollments");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:

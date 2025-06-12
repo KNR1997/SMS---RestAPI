@@ -4,7 +4,7 @@ import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Enrollment;
-import com.example.sms.entity.EnrollmentStatus;
+import com.example.sms.enums.EnrollmentStatusType;
 import com.example.sms.entity.Student;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EnrollmentService {
@@ -50,7 +52,7 @@ public class EnrollmentService {
         enrollment.setStudent(student);
         enrollment.setCourse(course);
         enrollment.setEnrollmentDateToToday();
-        enrollment.setStatus(EnrollmentStatus.LOCKED);
+        enrollment.setStatus(EnrollmentStatusType.LOCKED);
         enrollment.setCurrentMonthToNow();
 
         return enrollmentRepository.save(enrollment);
@@ -59,5 +61,13 @@ public class EnrollmentService {
     public Enrollment getEnrollmentById(Integer id) {
         return enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found with id: " + id));
+    }
+
+    public Enrollment getEnrollmentsByStudentAndCourse(Student student, Course course) {
+        return enrollmentRepository.findByStudentAndCourse(student, course);
+    }
+
+    public Enrollment saveEnrollment(Enrollment enrollment) {
+        return enrollmentRepository.save(enrollment);
     }
 }

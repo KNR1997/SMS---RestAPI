@@ -3,24 +3,25 @@ import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import Button from "../ui/button/Button";
 import SelectInput from "../ui/select-input";
-import { Subject } from "../../types";
+import {
+  Course,
+  PaymentMethod,
+  Student,
+} from "../../types";
+import { useCreatePaymentMutation } from "../../data/payment";
+import { useStudentsQuery } from "../../data/student";
+import { useCoursesQuery } from "../../data/course";
 
 type FormValues = {
-  student: string;
+  student: Student;
   admission: string;
-  subjects: any;
+  courses: Course[];
   totalPayment: string;
 };
 
 const defaultValues = {
   admission: "2000",
-  subjects: [
-        {
-        label: 'Maths (Rs. 2000)',
-        value: 'Maths'
-    }
-  ],
-  totalPayment: "4000"
+  totalPayment: "4000",
 };
 
 export default function CreatePaymentForm() {
@@ -34,24 +35,55 @@ export default function CreatePaymentForm() {
     defaultValues: defaultValues,
   });
 
-  const studentSubjects = [
-    {
-        label: 'Maths',
-        value: 'Maths'
-    }
-  ]
+  const { students } = useStudentsQuery({});
+
+  const { mutate: createPayment, isLoading: creating } =
+    useCreatePaymentMutation();
+
+  const selectedStudent = watch("student");
+  const studentGradeType = selectedStudent?.gradeType;
+
+  const { courses } = useCoursesQuery({
+    gradeType: studentGradeType,
+  });
+
+  const onSubmit = async (values: FormValues) => {
+    const input = {
+      studentId: values.student.id,
+      admission: values.admission,
+      totalAmount: values.totalPayment,
+      paymentMethod: PaymentMethod.CASH,
+      coursePaymentList: courses.map((course) => ({
+        courseId: course.id,
+        paymentMonths: [6, 7],
+      })),
+    };
+
+    console.log("form values: ", input);
+
+    createPayment({ ...input });
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
         <div>
           <Label>
-            Student <span className="text-error-500">*</span>{" "}
+            Student <span className="text-error-500">*</span>
           </Label>
-          <Input
-            placeholder="John"
-            {...register("student")}
-            errorMessage={errors.student?.message!}
+          <SelectInput
+            name="student"
+            control={control}
+            getOptionLabel={(option: any) => option.firstName}
+            getOptionValue={(option: any) => option.id}
+            options={students}
+            isClearable={true}
           />
+          {errors.student && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.student.message}
+            </p>
+          )}
         </div>
         <div>
           <Label>
@@ -63,27 +95,45 @@ export default function CreatePaymentForm() {
             disabled
           />
         </div>
-                <div>
+        <div>
           <Label>
-            Subject <span className="text-error-500">*</span>
+            Courses <span className="text-error-500">*</span>
           </Label>
           <SelectInput
-            name="subjects"
+            name="courses"
             control={control}
-            getOptionLabel={(option: any) => option.label}
-            getOptionValue={(option: any) => option.value}
-            options={studentSubjects}
+            getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
+            getOptionValue={(option: any) => option.id}
+            options={courses}
             isClearable={true}
             isMulti
-            disabled
           />
-          {errors.subjects && (
+          {errors.courses && (
             <p className="text-error-500 text-sm mt-1">
-              {errors.subjects.message}
+              {errors.courses.message}
             </p>
           )}
         </div>
-                <div>
+        {/* <div>
+          <Label>
+            More Courses
+          </Label>
+          <SelectInput
+            name="courses"
+            control={control}
+            getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.id}
+            options={courses}
+            isClearable={true}
+            isMulti
+          />
+          {errors.courses && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.courses.message}
+            </p>
+          )}
+        </div> */}
+        <div>
           <Label>
             Total Payment <span className="text-error-500">*</span>{" "}
           </Label>
@@ -93,8 +143,10 @@ export default function CreatePaymentForm() {
             disabled
           />
         </div>
+        <Button disabled={creating} size="sm">
+          Enroll Student
+        </Button>
       </div>
-      <Button className="mt-5" size="sm">Pay</Button>
     </form>
   );
 }

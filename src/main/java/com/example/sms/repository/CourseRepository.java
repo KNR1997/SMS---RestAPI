@@ -1,7 +1,7 @@
 package com.example.sms.repository;
 
 import com.example.sms.entity.Course;
-import com.example.sms.entity.Grade;
+import com.example.sms.enums.GradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
 
     boolean existsBySlug(String slug);
 
-    Page<Course> findByGrade(Grade grade, Pageable pageable);
+    Page<Course> findByGradeType(GradeType gradeType, Pageable pageable);
 
 }

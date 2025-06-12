@@ -1,7 +1,7 @@
 package com.example.sms.dto;
 
-import com.example.sms.entity.ERole;
-import com.example.sms.entity.Grade;
+import com.example.sms.enums.RoleType;
+import com.example.sms.enums.GradeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,9 +13,9 @@ public class MeDTO {
 
     private String email;
 
-    private ERole erole;
+    private RoleType erole;
 
-    private Grade grade;
+    private GradeType gradeType;
 
     private Integer studentId;
 

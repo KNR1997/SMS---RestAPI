@@ -66,14 +66,14 @@ export default function StudentEnrollForm({ initialValues }: Props) {
   }, [watchedCourses, admission, setValue]);
 
   const selectedStudent = watch("student");
-  const studentGrade = selectedStudent?.grade;
+  const studentGradeType = selectedStudent?.gradeType;
 
   useEffect(() => {
     if (selectedStudent && selectedStudent?.admissionPayed) setValue("admission", 0);
   }, [selectedStudent, setValue]);
 
   const { courses } = useCoursesQuery({
-    grade: studentGrade,
+    gradeType: studentGradeType,
   });
 
   const { mutate: enrollStudent, isLoading: creating } =

@@ -17,6 +17,7 @@ import {
   DollarLineIcon,
   UserCircleIcon,
   UserIcon,
+  PaperPlaneIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -77,6 +78,15 @@ const navItems: NavItem[] = [
   //   roles: [ERole.ROLE_FINISH_GOOD_HEAD, ERole.ROLE_FINANCE_HEAD],
   // },
   {
+    name: "Subjects",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Subjects", path: "/subjects", pro: false },
+      { name: "Create subject", path: "/subjects/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
     name: "Courses",
     icon: <FileIcon />,
     subItems: [
@@ -99,15 +109,6 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_STUDENT],
   },
   {
-    name: "Subjects",
-    icon: <FileIcon />,
-    subItems: [
-      { name: "All Subjects", path: "/subjects", pro: false },
-      { name: "Create subject", path: "/subjects/create", pro: false },
-    ],
-    roles: [ERole.ROLE_ADMIN],
-  },
-  {
     name: "Users",
     icon: <UserIcon />,
     subItems: [
@@ -122,17 +123,6 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "All Students", path: "/students", pro: false },
       { name: "Create student", path: "/students/create", pro: false },
-      { name: "Entroll student", path: "/students/enroll", pro: false },
-      // { name: "Payment", path: "/payments/create", pro: false },
-    ],
-    roles: [ERole.ROLE_ADMIN],
-  },
-    {
-    name: "Enrollments",
-    icon: <UserIcon />,
-    subItems: [
-      { name: "All Enrollments", path: "/enrollments", pro: false },
-      // { name: "Create student", path: "/students/create", pro: false },
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
@@ -140,7 +130,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Guardians",
-    icon: <UserIcon />,
+    icon: <UserCircleIcon />,
     subItems: [
       { name: "All Guardians", path: "/guardians", pro: false },
       // { name: "Create student", path: "/students/create", pro: false },
@@ -150,9 +140,23 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_ADMIN],
   },
   {
+    name: "Enrollments",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      { name: "All Enrollments", path: "/enrollments", pro: false },
+      { name: "Create enrollment", path: "/enrollments/create", pro: false },
+      // { name: "Entroll student", path: "/students/enroll", pro: false },
+      // { name: "Payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
     name: "Payments",
     icon: <DollarLineIcon />,
-    subItems: [{ name: "All Payments", path: "/payments", pro: false }],
+    subItems: [
+      { name: "All Payments", path: "/payments", pro: false },
+      { name: "Create payment", path: "/payments/create", pro: false },
+    ],
     roles: [ERole.ROLE_ADMIN],
   },
   // {

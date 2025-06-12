@@ -89,7 +89,7 @@ export default function CourseList({
                   {course.code}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {course.grade}
+                  {course.gradeType}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   Rs. {course.fee}

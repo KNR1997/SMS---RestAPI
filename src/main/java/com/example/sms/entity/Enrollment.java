@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.EnrollmentStatusType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Enrollment {
     private LocalDate enrollmentDate;
 
     @Enumerated(EnumType.STRING)
-    private EnrollmentStatus status = EnrollmentStatus.LOCKED;
+    private EnrollmentStatusType status = EnrollmentStatusType.LOCKED;
 
     private Integer currentMonth = 1;
 

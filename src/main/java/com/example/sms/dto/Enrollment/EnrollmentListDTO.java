@@ -1,7 +1,7 @@
 package com.example.sms.dto.Enrollment;
 
 import com.example.sms.entity.Enrollment;
-import com.example.sms.entity.EnrollmentStatus;
+import com.example.sms.enums.EnrollmentStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class EnrollmentListDTO {
 
     private LocalDate enrollmentDate;
 
-    private EnrollmentStatus status;
+    private EnrollmentStatusType status;
 
     public EnrollmentListDTO(Enrollment enrollment) {
         this.id = enrollment.getId();

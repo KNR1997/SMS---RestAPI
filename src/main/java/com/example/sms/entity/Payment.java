@@ -1,10 +1,12 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.PayerType;
+import com.example.sms.enums.PaymentMethod;
+import com.example.sms.enums.PaymentStatusType;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -14,20 +16,26 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @Enumerated(EnumType.STRING)
+    private PayerType payerType;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "payment_courses",
-//            joinColumns = @JoinColumn(name = "payment_id"),
-//            inverseJoinColumns = @JoinColumn(name = "course_id"))
-//    private Set<Course> courses = new HashSet<>();
+    private Integer payerId;
 
     @Enumerated(EnumType.STRING)
-    private EPayment paymentType;
+    private PayerType payeeType;
 
-    private Double admission;
+    private Integer payeeId;
 
-    private Double total;
+    private Double totalAmount;
+
+    private LocalDateTime paymentDate;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    private String referenceNumber;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatusType status;
+
 }

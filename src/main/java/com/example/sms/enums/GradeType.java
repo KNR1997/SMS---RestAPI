@@ -1,6 +1,6 @@
-package com.example.sms.entity;
+package com.example.sms.enums;
 
-public enum Grade {
+public enum GradeType {
     GRADE_5,
     GRADE_6,
     GRADE_7,

@@ -1,6 +1,6 @@
 package com.example.sms.dto.Payment;
 
-import com.example.sms.entity.EPayment;
+import com.example.sms.enums.PaymentMethod;
 import com.example.sms.entity.Payment;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ public class PaymentListDTO {
 
     private String studentId;
 
-    private EPayment paymentType;
+    private PaymentMethod paymentMethod;
 
     private Double admission;
 
@@ -18,9 +18,6 @@ public class PaymentListDTO {
 
     public PaymentListDTO(Payment payment) {
         this.id = payment.getId();
-        this.studentId = payment.getStudent().getStudentId();
-        this.paymentType = payment.getPaymentType();
-        this.admission = payment.getAdmission();
-        this.total = payment.getTotal();
+        this.paymentMethod = payment.getPaymentMethod();
     }
 }
