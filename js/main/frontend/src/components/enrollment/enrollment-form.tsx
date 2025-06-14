@@ -3,15 +3,15 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { Course, EPayment, Student, User } from "../../types";
+import { Course, PaymentMethod, Student } from "../../types";
 import {
-  useStudentEnrollCourseMutation,
   useStudentsQuery,
 } from "../../data/student";
 import SelectInput from "../ui/select-input";
 import { useCoursesQuery } from "../../data/course";
 import Input from "../form/input/InputField";
 import { useEffect } from "react";
+import { useStudentEnrollCourseMutation } from "../../data/student-enrollment";
 
 type FormValues = {
   student: Student;
@@ -83,7 +83,7 @@ export default function EnrollForm({ initialValues }: Props) {
     const input = {
       studentId: values.student.id,
       courseIds: values.courses.map((course) => course.id),
-      paymentType: EPayment.CASH,
+      paymentType: PaymentMethod.CASH,
       admission: values.admission,
       total: values.totalPayment,
     };

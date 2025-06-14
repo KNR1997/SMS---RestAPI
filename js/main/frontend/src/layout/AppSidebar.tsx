@@ -49,6 +49,7 @@ const navItems: NavItem[] = [
   //   icon: <UserCircleIcon />,
   //   name: "User Profile",
   //   path: "/profile",
+  //   roles: [ERole.ROLE_STUDENT]
   // },
   // {
   //   name: "Forms",
@@ -95,19 +96,19 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  {
-    name: "Courses",
-    icon: <FileIcon />,
-    subItems: [
-      // {
-      //   name: "Available courses",
-      //   path: "/courses/available-courses",
-      //   pro: false,
-      // },
-      { name: "My course", path: "/courses/my-courses", pro: false },
-    ],
-    roles: [ERole.ROLE_STUDENT],
-  },
+  // {
+  //   name: "Courses",
+  //   icon: <FileIcon />,
+  //   subItems: [
+  //     // {
+  //     //   name: "Available courses",
+  //     //   path: "/courses/available-courses",
+  //     //   pro: false,
+  //     // },
+  //     { name: "My course", path: "/courses/my-courses", pro: false },
+  //   ],
+  //   roles: [ERole.ROLE_STUDENT],
+  // },
   {
     name: "Users",
     icon: <UserIcon />,
@@ -150,6 +151,30 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
+    {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      {
+        name: "My Courses",
+        path: "/student/courses",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
+  {
+    name: "Enrollments",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      {
+        name: "My Enrollments",
+        path: "/student/enrollments",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
   {
     name: "Payments",
     icon: <DollarLineIcon />,
@@ -159,25 +184,15 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  // {
-  //   name: "Logs",
-  //   icon: <FileIcon />,
-  //   subItems: [{ name: "All logs", path: "/logs", pro: false }],
-  //   roles: [
-  //     ERole.ROLE_FINISH_GOOD_HEAD,
-  //     ERole.ROLE_FINANCE_HEAD,
-  //     ERole.ROLE_FINANCE,
-  //     ERole.ROLE_FINISH_GOOD,
-  //   ],
-  // },
-  // {
-  //   name: "Pages",
-  //   icon: <PageIcon />,
-  //   subItems: [
-  //     { name: "Blank Page", path: "/blank", pro: false },
-  //     { name: "404 Error", path: "/error-404", pro: false },
-  //   ],
-  // },
+    {
+    name: "Halls",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Halls", path: "/halls", pro: false },
+      { name: "Create hall", path: "/halls/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
 ];
 
 const othersItems: NavItem[] = [

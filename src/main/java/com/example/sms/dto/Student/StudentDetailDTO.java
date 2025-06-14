@@ -1,7 +1,8 @@
 package com.example.sms.dto.Student;
 
-import com.example.sms.enums.GradeType;
+import com.example.sms.dto.Guardian.GuardianDetailDTO;
 import com.example.sms.entity.Student;
+import com.example.sms.enums.GradeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -24,9 +25,7 @@ public class StudentDetailDTO {
 
     private GradeType gradeType;
 
-//    private String guardianName;
-//
-//    private String contactNumber;
+    private GuardianDetailDTO guardianPageData;
 
     public StudentDetailDTO(Student student) {
         this.id = student.getId();
@@ -36,8 +35,7 @@ public class StudentDetailDTO {
         this.username = student.getUser().getUsername();
         this.dateOfBirth = student.getDateOfBirth();
         this.gradeType = student.getGradeType();
-//        this.guardianName = student.getGuardianName();
-//        this.contactNumber = student.getContactNumber();
+        this.guardianPageData = new GuardianDetailDTO(student.getGuardian());
     }
 
 }

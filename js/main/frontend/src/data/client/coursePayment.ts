@@ -4,7 +4,6 @@ import {
   PaymentPaginator,
   PaymentQueryOptions,
   QueryOptions,
-  StudentPaginator,
 } from "../../types";
 import { API_ENDPOINTS } from "./api-endpoints";
 import { crudFactory } from "./crud-factory";

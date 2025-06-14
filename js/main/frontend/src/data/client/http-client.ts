@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ERole } from "../../types";
 
 const Axios = axios.create({
   baseURL: "/api/",
@@ -55,32 +56,19 @@ function formatBooleanSearchParam(key: string, value: boolean) {
 
 interface SearchParamOptions {
   name: string;
-  categories: string;
-  generics: string;
   code: string;
   type: string;
   first_name: string;
-  shop_id: string;
   is_approved: boolean;
-  tracking_number: string;
-  notice: string;
   notify_type: string;
-  faq_title: string;
   is_active: boolean;
   title: string;
   status: string;
   user_id: string;
-  target: string;
-  refund_reason: string;
-  shops: string;
   "users.id": string;
-  product_type: string;
-  is_read: boolean;
-  order_status: string;
-  fgsStatus: string;
-  financeStatus: string;
   companyName: string;
   username: string;
+  role: ERole;
 }
 
 export class HttpClient {

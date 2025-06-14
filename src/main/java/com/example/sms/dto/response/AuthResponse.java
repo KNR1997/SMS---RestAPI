@@ -1,4 +1,4 @@
-package com.example.sms.dto;
+package com.example.sms.dto.response;
 
 public class AuthResponse {
     private String token;

@@ -4,7 +4,9 @@ import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.User.UserDetailDTO;
 import com.example.sms.dto.User.UserListDTO;
+import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
+import com.example.sms.enums.RoleType;
 import com.example.sms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,12 +30,13 @@ public class UserController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "desc") String direction
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) RoleType role
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable);
+        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable, role);
 
         PaginatedResponse<UserListDTO> response = new PaginatedResponse<>(userPage);
         return ResponseEntity.ok(response);

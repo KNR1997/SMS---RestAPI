@@ -1,6 +1,10 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.*;
+import com.example.sms.dto.request.LoginRequest;
+import com.example.sms.dto.request.RegisterRequest;
+import com.example.sms.dto.response.AuthResponse;
+import com.example.sms.dto.response.RegisterResponse;
 import com.example.sms.entity.*;
 import com.example.sms.enums.RoleType;
 import com.example.sms.enums.GradeType;

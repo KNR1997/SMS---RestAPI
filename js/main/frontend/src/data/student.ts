@@ -85,26 +85,6 @@ export const useUpdateStudentMutation = () => {
   });
 };
 
-export const useStudentEnrollCourseMutation = () => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  return useMutation(StudentClient.enrollToCourse, {
-    onSuccess: async () => {
-      navigate("/enrollments");
-      toast.success("Successfully created!");
-    },
-    // Always refetch after error or success:
-    onSettled: () => {
-      queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
-    },
-    onError: (error: any) => {
-      console.log('erroreeeeeeeeeee: ', error?.message)
-      toast.error(error?.response?.data?.message ?? "Something going wrong!");
-    },
-  });
-};
-
 export const useMyCoursesQuery = (
   params: Partial<StudentQueryOptions & { studentId: number }>
 ) => {

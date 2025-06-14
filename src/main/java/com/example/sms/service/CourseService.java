@@ -2,19 +2,20 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Course.CourseCreateDTO;
 import com.example.sms.dto.Course.CourseListDTO;
-import com.example.sms.entity.Course;
+import com.example.sms.entity.*;
 import com.example.sms.enums.GradeType;
-import com.example.sms.entity.Subject;
-import com.example.sms.entity.User;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
-import com.example.sms.repository.CourseRepository;
-import com.example.sms.repository.SubjectRepository;
-import com.example.sms.repository.UserRepository;
+import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -28,20 +29,41 @@ public class CourseService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<CourseListDTO> getCoursesPaginated(Pageable pageable, String search, String grade) {
-        Page<Course> coursePage;
+    @Autowired
+    private StudentRepository studentRepository;
 
-        if (grade != null && !grade.isEmpty()) {
-            try {
-                GradeType gradeTypeEnum = GradeType.valueOf(grade.toUpperCase()); // Convert string to enum safely
-                coursePage = courseRepository.findByGradeType(gradeTypeEnum, pageable);
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid grade value: " + grade);
-            }
-        } else {
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    public Page<CourseListDTO> getCoursesPaginated(
+            Pageable pageable,
+            String search,
+            String grade,
+            User currentUser
+    ) {
+        Page<Course> coursePage =null;
+        GradeType gradeType;
+
+        if (currentUser.isAdmin()) {
+            // Admin sees all courses
             coursePage = courseRepository.findAll(pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
+            // Student sees only enrolled courses
+            Student student = studentRepository.findByUser(currentUser)
+                    .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
+            Page<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId(), pageable);
+
+            // Convert enrollments to a page of courses
+            List<Course> courses = enrollments
+                    .stream()
+                    .map(Enrollment::getCourse)
+                    .toList();
+
+            coursePage = new PageImpl<>(courses, pageable, enrollments.getTotalElements());
         }
 
+        assert coursePage != null;
         return coursePage.map(CourseListDTO::new);
     }
 

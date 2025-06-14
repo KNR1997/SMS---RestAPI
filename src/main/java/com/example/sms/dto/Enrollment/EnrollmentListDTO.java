@@ -19,6 +19,8 @@ public class EnrollmentListDTO {
 
     private String courseName;
 
+    private String courseCode;
+
     private LocalDate enrollmentDate;
 
     private EnrollmentStatusType status;
@@ -27,6 +29,7 @@ public class EnrollmentListDTO {
         this.id = enrollment.getId();
         this.studentName = enrollment.getStudent().getUser().getFirstName();
         this.courseName = enrollment.getCourse().getName();
+        this.courseCode = enrollment.getCourse().getCode();
         this.enrollmentDate = enrollment.getEnrollmentDate();
         this.status = enrollment.getStatus();
     }

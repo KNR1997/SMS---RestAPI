@@ -1,0 +1,15 @@
+package com.example.sms.dto.Exam;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+public class ExamUpdateDTO {
+
+    private Integer id;
+
+    private Integer capacity;
+
+}

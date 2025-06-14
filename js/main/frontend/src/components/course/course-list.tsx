@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Course, MappedPaginatorInfo } from "../../types";
+import { Course, MappedPaginatorInfo } from "@types";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import Pagination from "../ui/pagination";
+} from "@components/ui/table";
+import Pagination from "@components/ui/pagination";
 
 export type IProps = {
   courses: Course[];
@@ -16,12 +16,14 @@ export type IProps = {
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
+  showActions?: boolean;
 };
 
 export default function CourseList({
   courses,
   onPagination,
   paginatorInfo,
+  showActions = true,
 }: IProps) {
   const navigate = useNavigate();
 
@@ -66,12 +68,17 @@ export default function CourseList({
               >
                 Fee
               </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Actions
-              </TableCell>
+              <TableRow>
+                {/* ... other headers */}
+                {showActions && (
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Actions
+                  </TableCell>
+                )}
+              </TableRow>
             </TableRow>
           </TableHeader>
 
@@ -94,11 +101,16 @@ export default function CourseList({
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   Rs. {course.fee}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <button onClick={() => handleEdit(course.slug)}>
-                    <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                  </button>
-                </TableCell>
+                <TableRow key={course.id}>
+                  {/* ... other cells */}
+                  {showActions && (
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <button onClick={() => handleEdit(course.slug)}>
+                        <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                      </button>
+                    </TableCell>
+                  )}
+                </TableRow>
               </TableRow>
             ))}
           </TableBody>

@@ -1,11 +1,11 @@
 package com.example.sms.service;
 
 
-import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.User.UserListDTO;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.RoleRepository;
@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -28,8 +30,16 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public Page<UserListDTO> getUsersPaginated(Pageable pageable) {
-        Page<User> userPage = userRepository.findAll(pageable);
+    public Page<UserListDTO> getUsersPaginated(Pageable pageable, RoleType roleType) {
+        Page<User> userPage = null;
+
+        if (roleType != null) {
+            Role role = roleRepository.findByName(roleType)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+            userPage = userRepository.findByRole(pageable, role);
+        } else {
+            userPage = userRepository.findAll(pageable);
+        }
 
         return userPage.map(UserListDTO::new);
     }

@@ -4,17 +4,17 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { EGrade, ERole, Student } from "../../types";
+import { EGrade, ERole, StudentPageData } from "@types";
 import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
-} from "../../data/student";
+} from "@data/student";
 import SelectInput from "../form/select-input";
 import { gradeOptions } from "../../constants/role";
 import { useNavigate } from "react-router";
 import Card from "../common/card";
 import { useEffect, useState } from "react";
-import { useGuardianByIDNumberQuery } from "../../data/guardian";
+import { useGuardianByIDNumberQuery } from "@data/guardian";
 
 type FormValues = {
   firstName: string;
@@ -63,7 +63,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-  initialValues?: Student;
+  initialValues?: StudentPageData;
 }
 
 export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
@@ -72,7 +72,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const [guardianFound, setGuardianFound] = useState<boolean>(false);
   const [triggerSearch, setTriggerSearch] = useState(false);
 
-  console.log('guardianSearchInput: ', guardianSearchInput)
+  // console.log('guardianSearchInput: ', guardianSearchInput)
 
   // This hook must be declared at the top level of the component
   const { guardian } = useGuardianByIDNumberQuery({ id: guardianSearchInput });
@@ -105,6 +105,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
     defaultValues: initialValues
       ? {
           ...initialValues,
+          guardianFirstName: initialValues.guardianPageData.firstName,
+          guardianLastName: initialValues.guardianPageData.lastName,
+          guardianEmail: initialValues.guardianPageData.email,
+          guardianIdNumber: initialValues.guardianPageData.id,
+          guardianContactNumber: initialValues.guardianPageData.contactNumber,
         }
       : defaultValues,
     //@ts-ignore

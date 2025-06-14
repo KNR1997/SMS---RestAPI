@@ -1,6 +1,6 @@
 package com.example.sms.exception;
 
-import com.example.sms.dto.ErrorResponse;
+import com.example.sms.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

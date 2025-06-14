@@ -1,10 +1,13 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.EnrollmentPayment.EnrollmentPaymentCreateDTO;
+import com.example.sms.entity.Enrollment;
 import com.example.sms.entity.EnrollmentPayment;
 import com.example.sms.repository.EnrollmentPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EnrollmentPaymentService {
@@ -22,5 +25,9 @@ public class EnrollmentPaymentService {
         enrollmentPayment.setPayment(createDTO.getPayment());
 
         return enrollmentPaymentRepository.save(enrollmentPayment);
+    }
+
+    public List<EnrollmentPayment> getAllByEnrollment(Enrollment enrollment) {
+        return enrollmentPaymentRepository.findByEnrollmentId(enrollment.getId());
     }
 }
