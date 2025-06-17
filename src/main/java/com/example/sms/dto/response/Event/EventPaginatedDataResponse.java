@@ -1,19 +1,21 @@
 package com.example.sms.dto.response.Event;
 
 import com.example.sms.entity.Event;
+import com.example.sms.entity.Hall;
+import com.example.sms.enums.EventStatusType;
 import com.example.sms.enums.EventType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class EventPaginatedDataResponse {
+
+    private Integer id;
 
     private String code;
 
@@ -21,15 +23,22 @@ public class EventPaginatedDataResponse {
 
     private LocalDate date;
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
-    public EventPaginatedDataResponse(Event event) {
+    private List<Hall> halls;
+
+    private EventStatusType status;
+
+    public EventPaginatedDataResponse(Event event, List<Hall> halls) {
+        this.id = event.getId();
         this.code = event.getCode();
         this.eventType = event.getEventType();
         this.date = event.getDate();
         this.startTime = event.getStartTime();
         this.endTime = event.getEndTime();
+        this.halls = halls;
+        this.status = event.getStatus();
     }
 }

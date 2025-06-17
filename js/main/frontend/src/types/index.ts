@@ -77,6 +77,17 @@ export interface InvoiceStatusAudit {
   updatedAt: string;
 }
 
+export interface Exam {
+  id: number;
+  courseId: number;
+  course: Course;
+  courseName: string;
+}
+
+export interface CreateExam {
+  courseId: number;
+}
+
 export enum EStatus {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
@@ -280,6 +291,12 @@ export enum EventType {
   EXAM = "EXAM",
 }
 
+export enum EventStatusType {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
+
 export interface Event {
   id: number;
   code: string;
@@ -288,15 +305,17 @@ export interface Event {
   startTime: number;
   endTime: number;
   reference: number;
+  halls: Hall[];
+  status: EventStatusType;
 }
 
 export interface CreateEvent {
   code: string;
   eventType: EventType;
-  date: number;
-  startTime: number;
-  endTime: number;
-  reference: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  reference: string;
 }
 
 export enum SortOrder {
@@ -358,6 +377,8 @@ export interface PaymentPaginator extends PaginatorInfo<Payment> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
 
+export interface ExamPaginator extends PaginatorInfo<Exam> {}
+
 export interface HallPaginator extends PaginatorInfo<Hall> {}
 
 export interface EventPaginator extends PaginatorInfo<Event> {}
@@ -395,6 +416,10 @@ export interface GuardianQueryOptions extends QueryOptions {}
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
   gradeType: EGrade;
+}
+
+export interface ExamQueryOptions extends QueryOptions {
+  name: string;
 }
 
 export interface HallQueryOptions extends QueryOptions {

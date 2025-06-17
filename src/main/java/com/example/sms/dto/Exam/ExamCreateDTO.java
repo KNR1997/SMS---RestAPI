@@ -7,6 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ExamCreateDTO {
 
+    private Integer courseId;
+
     private Integer capacity;
 
 }

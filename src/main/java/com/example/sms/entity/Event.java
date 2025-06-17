@@ -1,11 +1,12 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.EventStatusType;
 import com.example.sms.enums.EventType;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -22,9 +23,12 @@ public class Event {
 
     private LocalDate date;
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
     private String reference;
+
+    @Enumerated(EnumType.STRING)
+    private EventStatusType status = EventStatusType.PENDING;
 }

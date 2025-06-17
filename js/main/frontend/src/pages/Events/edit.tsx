@@ -5,7 +5,7 @@ import ErrorMessage from "../../components/ui/error-message";
 import CreateOrUpdateEventForm from "@components/event/event-form";
 import { useEventQuery } from "@data/event";
 
-export default function EditHallPage() {
+export default function EditEventPage() {
   const { id } = useParams();
 
   const { event, loading, error } = useEventQuery({

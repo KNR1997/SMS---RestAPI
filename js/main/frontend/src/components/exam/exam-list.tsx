@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Event, EventType, Hall, MappedPaginatorInfo } from "@types";
+import { Exam, MappedPaginatorInfo } from "@types";
 import {
   Table,
   TableBody,
@@ -9,10 +9,9 @@ import {
   TableRow,
 } from "@components/ui/table";
 import Pagination from "@components/ui/pagination";
-import Badge from "@components/ui/badge/Badge";
 
 export type IProps = {
-  events: Event[];
+  exams: Exam[];
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
@@ -20,8 +19,8 @@ export type IProps = {
   showActions?: boolean;
 };
 
-export default function EventList({
-  events,
+export default function ExamList({
+  exams,
   onPagination,
   paginatorInfo,
   showActions = true,
@@ -29,8 +28,10 @@ export default function EventList({
   const navigate = useNavigate();
 
   const handleEdit = (id: number) => {
-    navigate(`/events/${id}/edit`);
+    navigate(`/exams/${id}/edit`);
   };
+
+  console.log('exams: ', exams)
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -39,47 +40,17 @@ export default function EventList({
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              {/* <TableCell
+              <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Id
-              </TableCell> */}
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Code
               </TableCell>
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Type
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Date
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Start time
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                End time
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Status
+                Course
               </TableCell>
               <TableRow>
                 {/* ... other headers */}
@@ -97,41 +68,19 @@ export default function EventList({
 
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {events.map((event) => (
-              <TableRow key={event.id}>
-                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.id}
-                </TableCell> */}
+            {exams.map((exam) => (
+              <TableRow key={exam.id}>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.code}
+                  {exam.id}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <Badge
-                    size="sm"
-                    color={
-                      event.eventType == EventType.EXAM ? "warning" : "success"
-                    }
-                  >
-                    {event.eventType}
-                  </Badge>
+                  {exam.courseName}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.date}
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.startTime}
-                </TableCell>{" "}
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.endTime}
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.status}
-                </TableCell>
-                <TableRow key={event.id}>
+                <TableRow key={exam.id}>
                   {/* ... other cells */}
                   {showActions && (
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      <button onClick={() => handleEdit(event.id)}>
+                      <button onClick={() => handleEdit(exam.id)}>
                         <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                       </button>
                     </TableCell>

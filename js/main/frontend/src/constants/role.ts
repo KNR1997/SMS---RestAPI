@@ -1,4 +1,4 @@
-import { EGrade, ERole } from "../types";
+import { EGrade, ERole, EventType } from "../types";
 
 export const roleOptions = [
   { value: ERole.ROLE_ADMIN, label: "Admin" },
@@ -15,4 +15,9 @@ export const gradeOptions = [
   { value: EGrade.GRADE_9, label: "Grade 9" },
   { value: EGrade.GRADE_10, label: "Grade 10" },
   { value: EGrade.GRADE_11, label: "Grade 11" },
+];
+
+export const eventTypeOptions = [
+  { value: EventType.COURSE, label: "Class" },
+  { value: EventType.EXAM, label: "Exam" },
 ];

@@ -1,9 +1,7 @@
 package com.example.sms.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.sms.enums.ExamStatusType;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -14,5 +12,12 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id", nullable = true)
+    private Course course;
+
     private Integer capacity;
+
+    @Enumerated(EnumType.STRING)
+    private ExamStatusType status = ExamStatusType.PENDING;
 }

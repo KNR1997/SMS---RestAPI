@@ -1,17 +1,15 @@
 import { useForm } from "react-hook-form";
-import Label from "../form/Label";
+import Label from "@components/form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "../ui/button/Button";
-import { Course, PaymentMethod, Student } from "../../types";
-import {
-  useStudentsQuery,
-} from "../../data/student";
-import SelectInput from "../ui/select-input";
-import { useCoursesQuery } from "../../data/course";
-import Input from "../form/input/InputField";
+import Button from "@components/ui/button/Button";
+import { Course, PaymentMethod, Student } from "@types";
+import { useStudentsQuery } from "@data/student";
+import SelectInput from "@components/ui/select-input";
+import { useCoursesQuery } from "@data/course";
+import Input from "@components/form/input/InputField";
 import { useEffect } from "react";
-import { useStudentEnrollCourseMutation } from "../../data/student-enrollment";
+import { useStudentEnrollCourseMutation } from "@data/student-enrollment";
 
 type FormValues = {
   student: Student;
@@ -69,7 +67,8 @@ export default function EnrollForm({ initialValues }: Props) {
   const studentGradeType = selectedStudent?.gradeType;
 
   useEffect(() => {
-    if (selectedStudent && selectedStudent?.admissionPayed) setValue("admission", 0);
+    if (selectedStudent && selectedStudent?.admissionPayed)
+      setValue("admission", 0);
   }, [selectedStudent, setValue]);
 
   const { courses } = useCoursesQuery({

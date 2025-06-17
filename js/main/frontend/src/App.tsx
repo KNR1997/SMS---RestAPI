@@ -43,6 +43,12 @@ import StudentCourses from "./pages/Student/Courses";
 import Halls from "./pages/Halls";
 import CreateHallPage from "./pages/Halls/create";
 import EditHallPage from "./pages/Halls/edit";
+import Events from "./pages/Events";
+import CreateEventPage from "./pages/Events/create";
+import EditEventPage from "./pages/Events/edit";
+import EventsCalendar from "./pages/Events/calendar";
+import Exams from "./pages/Exams";
+import CreateExamPage from "./pages/Exams/create";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -222,10 +228,29 @@ export default function App() {
                   }
                 />
                 <Route path="/halls/create" element={<CreateHallPage />} />
+                <Route path="/halls/:id/edit" element={<EditHallPage />} />
+
                 <Route
-                  path="/halls/:id/edit"
-                  element={<EditHallPage />}
+                  path="/events"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Events />
+                    </ProtectedRoute>
+                  }
                 />
+                <Route path="/events-calendar" element={<EventsCalendar />} />
+                <Route path="/events/create" element={<CreateEventPage />} />
+                <Route path="/events/:id/edit" element={<EditEventPage />} />
+
+                <Route
+                  path="/exams"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Exams />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/exams/create" element={<CreateExamPage />} />
               </Route>
 
               {/* Auth Layout */}

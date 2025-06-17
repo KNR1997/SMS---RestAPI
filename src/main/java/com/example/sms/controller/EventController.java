@@ -5,7 +5,6 @@ import com.example.sms.dto.Event.EventUpdateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.response.Event.EventPageDataResponse;
 import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
-import com.example.sms.entity.Event;
 import com.example.sms.service.EventService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<EventPaginatedDataResponse>> getHallsPaginated(
+    public ResponseEntity<PaginatedResponse<EventPaginatedDataResponse>> getEventsPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -37,27 +36,26 @@ public class EventController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<Event> hallPage = eventService.getPaginated(pageable, search);
+        Page<EventPaginatedDataResponse> eventPage = eventService.getPaginated(pageable, search);
 
-        PaginatedResponse<EventPaginatedDataResponse> response = new PaginatedResponse<>(hallPage.map(EventPaginatedDataResponse::new));
+        PaginatedResponse<EventPaginatedDataResponse> response = new PaginatedResponse<>(eventPage);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventPageDataResponse> getHallById(@PathVariable Integer id) {
-        Event event = eventService.getById(id);
-        EventPageDataResponse hallPageDataResponse = new EventPageDataResponse(event);
-        return ResponseEntity.ok(hallPageDataResponse);
+    public ResponseEntity<EventPageDataResponse> getEventById(@PathVariable Integer id) {
+        EventPageDataResponse eventPageDataResponse = eventService.getEventPageData(id);
+        return ResponseEntity.ok(eventPageDataResponse);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createHall(@RequestBody EventCreateDTO createDto) {
+    public ResponseEntity<Void> createEvent(@RequestBody EventCreateDTO createDto) {
         eventService.create(createDto);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateHall(@PathVariable Integer id, @RequestBody EventUpdateDTO updateDto) {
+    public ResponseEntity<Void> updateEvent(@PathVariable Integer id, @RequestBody EventUpdateDTO updateDto) {
         eventService.update(id, updateDto);
         return ResponseEntity.noContent().build();
     }
