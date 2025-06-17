@@ -1,11 +1,9 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.*;
+import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentDetailDTO;
 import com.example.sms.dto.Student.StudentListDTO;
-import com.example.sms.dto.request.StudentCourseEnrollmentRequest;
-import com.example.sms.entity.Course;
 import com.example.sms.entity.Student;
 import com.example.sms.service.StudentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -64,30 +62,4 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping("/{studentId}/courses")
-//    public ResponseEntity<PaginatedResponse<Course>> getEnrolledCourses(
-//            @PathVariable Integer studentId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size,
-//            @RequestParam(defaultValue = "id") String sort,
-//            @RequestParam(defaultValue = "desc") String direction,
-//            @RequestParam(required = false) String search
-//    ) {
-//        Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
-//        Pageable pageable = PageRequest.of(page, size, sortOrder);
-//
-//        Page<Course> coursePage = studentService.getEnrolledCourses(studentId, pageable, search);
-//
-//        PaginatedResponse<Course> response = new PaginatedResponse<>(coursePage);
-//        return ResponseEntity.ok(response);
-//    }
-
-    @PostMapping("/{studentId}/enroll")
-    public ResponseEntity<Void> enrollCourses(
-            @PathVariable Integer studentId,
-            @RequestBody StudentCourseEnrollmentRequest request) {
-
-        studentService.enrollStudentInCourses(studentId, request);
-        return ResponseEntity.ok().build();
-    }
 }

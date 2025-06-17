@@ -8,8 +8,6 @@ import CreateOrUpdateCourseForm from "../../components/course/course-form";
 export default function EditCoursePage() {
   const { slug } = useParams();
 
-  console.log('slug: ', slug)
-
   const {course, loading, error} = useCourseQuery({
     slug: slug!
   })

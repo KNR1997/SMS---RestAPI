@@ -3,18 +3,7 @@ import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import UserProfiles from "./pages/UserProfiles";
-import Videos from "./pages/UiElements/Videos";
-import Images from "./pages/UiElements/Images";
-import Alerts from "./pages/UiElements/Alerts";
-import Badges from "./pages/UiElements/Badges";
-import Avatars from "./pages/UiElements/Avatars";
-import Buttons from "./pages/UiElements/Buttons";
-import LineChart from "./pages/Charts/LineChart";
-import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
-import BasicTables from "./pages/Tables/BasicTables";
-import FormElements from "./pages/Forms/FormElements";
-import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
@@ -41,9 +30,7 @@ import Subjects from "./pages/Subjects";
 import EditSubjectPage from "./pages/Subjects/edit";
 import CreateSubjectPage from "./pages/Subjects/create";
 import EditStudentPage from "./pages/Students/edit";
-import AvailableCourses from "./pages/Courses/available-courses";
 import MyCourses from "./pages/Courses/my-courses";
-import StudentEnrollPage from "./pages/Students/enroll";
 import CreatePaymentPage from "./pages/Payments/create";
 import Payments from "./pages/Payments";
 import Guardians from "./pages/Guardians";
@@ -51,6 +38,17 @@ import EditGuardianPage from "./pages/Guardians/edit";
 import Enrollments from "./pages/Enrollments";
 import ViewEnrollmentPage from "./pages/Enrollments/view";
 import CreateEnrollPage from "./pages/Enrollments/create";
+import StudentEnrollments from "./pages/Student/Enrollments";
+import StudentCourses from "./pages/Student/Courses";
+import Halls from "./pages/Halls";
+import CreateHallPage from "./pages/Halls/create";
+import EditHallPage from "./pages/Halls/edit";
+import Events from "./pages/Events";
+import CreateEventPage from "./pages/Events/create";
+import EditEventPage from "./pages/Events/edit";
+import EventsCalendar from "./pages/Events/calendar";
+import Exams from "./pages/Exams";
+import CreateExamPage from "./pages/Exams/create";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -81,67 +79,6 @@ export default function App() {
 
                 {/* Forms */}
                 {/* <Route path="/form-elements" element={<FormElements />} /> */}
-
-                {/* Tables */}
-                {/* <Route path="/basic-tables" element={<BasicTables />} /> */}
-
-                <Route
-                  path="/invoices"
-                  element={
-                    <ProtectedRoute
-                      roles={[
-                        ERole.ROLE_FINANCE_HEAD,
-                        ERole.ROLE_FINANCE,
-                        ERole.ROLE_FINISH_GOOD,
-                        ERole.ROLE_FINISH_GOOD_HEAD,
-                      ]}
-                    >
-                      <Invoices />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/invoices/:id/edit"
-                  element={
-                    <ProtectedRoute
-                      roles={[
-                        ERole.ROLE_FINANCE_HEAD,
-                        ERole.ROLE_FINANCE,
-                        ERole.ROLE_FINISH_GOOD,
-                        ERole.ROLE_FINISH_GOOD_HEAD,
-                      ]}
-                    >
-                      <EditInvoicePage />
-                    </ProtectedRoute>
-                  }
-                />
-
-                <Route
-                  path="/requests"
-                  element={
-                    <ProtectedRoute
-                      roles={[
-                        ERole.ROLE_FINANCE_HEAD,
-                        ERole.ROLE_FINISH_GOOD_HEAD,
-                      ]}
-                    >
-                      <Requests />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/requests/:id/edit"
-                  element={
-                    <ProtectedRoute
-                      roles={[
-                        ERole.ROLE_FINANCE_HEAD,
-                        ERole.ROLE_FINISH_GOOD_HEAD,
-                      ]}
-                    >
-                      <EditRequestPage />
-                    </ProtectedRoute>
-                  }
-                />
 
                 <Route
                   path="/courses"
@@ -232,6 +169,22 @@ export default function App() {
                   }
                 />
                 <Route
+                  path="/student/courses"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_STUDENT]}>
+                      <StudentCourses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/student/enrollments"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_STUDENT]}>
+                      <StudentEnrollments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/enrollments/create"
                   element={<CreateEnrollPage />}
                 />
@@ -267,32 +220,37 @@ export default function App() {
                 />
 
                 <Route
-                  path="/logs"
+                  path="/halls"
                   element={
-                    <ProtectedRoute
-                      roles={[
-                        ERole.ROLE_FINANCE,
-                        ERole.ROLE_FINANCE_HEAD,
-                        ERole.ROLE_FINISH_GOOD,
-                        ERole.ROLE_FINISH_GOOD_HEAD,
-                      ]}
-                    >
-                      <Logs />
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Halls />
                     </ProtectedRoute>
                   }
                 />
+                <Route path="/halls/create" element={<CreateHallPage />} />
+                <Route path="/halls/:id/edit" element={<EditHallPage />} />
 
-                {/* Ui Elements */}
-                {/* <Route path="/alerts" element={<Alerts />} />
-                <Route path="/avatars" element={<Avatars />} />
-                <Route path="/badge" element={<Badges />} />
-                <Route path="/buttons" element={<Buttons />} />
-                <Route path="/images" element={<Images />} />
-                <Route path="/videos" element={<Videos />} /> */}
+                <Route
+                  path="/events"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Events />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/events-calendar" element={<EventsCalendar />} />
+                <Route path="/events/create" element={<CreateEventPage />} />
+                <Route path="/events/:id/edit" element={<EditEventPage />} />
 
-                {/* Charts */}
-                {/* <Route path="/line-chart" element={<LineChart />} />
-                <Route path="/bar-chart" element={<BarChart />} /> */}
+                <Route
+                  path="/exams"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <Exams />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/exams/create" element={<CreateExamPage />} />
               </Route>
 
               {/* Auth Layout */}

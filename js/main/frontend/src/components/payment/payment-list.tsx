@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Course, MappedPaginatorInfo, Payment } from "../../types";
+import { MappedPaginatorInfo, Payment } from "../../types";
 import {
   Table,
   TableBody,
@@ -46,25 +46,31 @@ export default function PaymentList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Student ID
+                Payer
               </TableCell>
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Payment Type
+                Payment Method
               </TableCell>
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Admission
+                Amount
               </TableCell>
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Total
+                Status
+              </TableCell>
+              <TableCell
+                isHeader
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
+                Date
               </TableCell>
               <TableCell
                 isHeader
@@ -83,16 +89,19 @@ export default function PaymentList({
                   {payment.id}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {payment.studentId}
+                  {payment.payerType}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {payment.paymentType}
+                  {payment.paymentMethod}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {payment.admission}
+                  Rs. {payment.totalAmount}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {payment.total}
+                  {payment.status}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {payment.paymentDate}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <button onClick={() => handleEdit(payment.id)}>

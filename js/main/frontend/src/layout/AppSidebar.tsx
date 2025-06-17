@@ -18,6 +18,8 @@ import {
   UserCircleIcon,
   UserIcon,
   PaperPlaneIcon,
+  GroupIcon,
+  BoxIconLine,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -44,11 +46,13 @@ const navItems: NavItem[] = [
   //   icon: <CalenderIcon />,
   //   name: "Calendar",
   //   path: "/calendar",
+  //   roles: [ERole.ROLE_ADMIN],
   // },
   // {
   //   icon: <UserCircleIcon />,
   //   name: "User Profile",
   //   path: "/profile",
+  //   roles: [ERole.ROLE_STUDENT]
   // },
   // {
   //   name: "Forms",
@@ -88,26 +92,26 @@ const navItems: NavItem[] = [
   },
   {
     name: "Courses",
-    icon: <FileIcon />,
+    icon: <BoxIconLine />,
     subItems: [
       { name: "All Courses", path: "/courses", pro: false },
       { name: "Create course", path: "/courses/create", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  {
-    name: "Courses",
-    icon: <FileIcon />,
-    subItems: [
-      // {
-      //   name: "Available courses",
-      //   path: "/courses/available-courses",
-      //   pro: false,
-      // },
-      { name: "My course", path: "/courses/my-courses", pro: false },
-    ],
-    roles: [ERole.ROLE_STUDENT],
-  },
+  // {
+  //   name: "Courses",
+  //   icon: <FileIcon />,
+  //   subItems: [
+  //     // {
+  //     //   name: "Available courses",
+  //     //   path: "/courses/available-courses",
+  //     //   pro: false,
+  //     // },
+  //     { name: "My course", path: "/courses/my-courses", pro: false },
+  //   ],
+  //   roles: [ERole.ROLE_STUDENT],
+  // },
   {
     name: "Users",
     icon: <UserIcon />,
@@ -119,7 +123,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Students",
-    icon: <UserIcon />,
+    icon: <GroupIcon />,
     subItems: [
       { name: "All Students", path: "/students", pro: false },
       { name: "Create student", path: "/students/create", pro: false },
@@ -151,6 +155,30 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_ADMIN],
   },
   {
+    name: "Courses",
+    icon: <FileIcon />,
+    subItems: [
+      {
+        name: "My Courses",
+        path: "/student/courses",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
+  {
+    name: "Enrollments",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      {
+        name: "My Enrollments",
+        path: "/student/enrollments",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_STUDENT],
+  },
+  {
     name: "Payments",
     icon: <DollarLineIcon />,
     subItems: [
@@ -159,25 +187,34 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  // {
-  //   name: "Logs",
-  //   icon: <FileIcon />,
-  //   subItems: [{ name: "All logs", path: "/logs", pro: false }],
-  //   roles: [
-  //     ERole.ROLE_FINISH_GOOD_HEAD,
-  //     ERole.ROLE_FINANCE_HEAD,
-  //     ERole.ROLE_FINANCE,
-  //     ERole.ROLE_FINISH_GOOD,
-  //   ],
-  // },
-  // {
-  //   name: "Pages",
-  //   icon: <PageIcon />,
-  //   subItems: [
-  //     { name: "Blank Page", path: "/blank", pro: false },
-  //     { name: "404 Error", path: "/error-404", pro: false },
-  //   ],
-  // },
+  {
+    name: "Halls",
+    icon: <FileIcon />,
+    subItems: [
+      { name: "All Halls", path: "/halls", pro: false },
+      { name: "Create hall", path: "/halls/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+    {
+    name: "Exams",
+    icon: <CalenderIcon />,
+    subItems: [
+      { name: "All Exams", path: "/exams", pro: false },
+      { name: "Create exam", path: "/exams/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Events",
+    icon: <CalenderIcon />,
+    subItems: [
+      { name: "Calendar", path: "/events-calendar", pro: false },
+      { name: "All Events", path: "/events", pro: false },
+      { name: "Create event", path: "/events/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
 ];
 
 const othersItems: NavItem[] = [

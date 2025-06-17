@@ -49,18 +49,18 @@ export const useEnrollmentQuery = ({ slug }: GetParams) => {
   };
 };
 
-export const useCreateCourseMutation = () => {
+export const useInvokeEnrollmentMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  return useMutation(CourseClient.create, {
+  return useMutation(EnrollmentClient.invoke, {
     onSuccess: async () => {
-      navigate("/courses");
+      navigate("/enrollments");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:
     onSettled: () => {
-      queryClient.invalidateQueries(API_ENDPOINTS.COURSES);
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
     },
     onError: (error: any) => {
       toast.error("Something going wrong!");

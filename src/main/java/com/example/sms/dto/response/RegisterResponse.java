@@ -1,4 +1,4 @@
-package com.example.sms.dto;
+package com.example.sms.dto.response;
 
 import com.example.sms.entity.User;
 

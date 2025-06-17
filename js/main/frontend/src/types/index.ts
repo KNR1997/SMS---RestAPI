@@ -23,8 +23,16 @@ export interface Enrollment {
   id: number;
   studentName: string;
   courseName: string;
+  courseCode: string;
   enrollmentDate: string;
   status: string;
+}
+
+export interface EnrollmentPayment {
+  monthNumber: number;
+  monthName: string;
+  amount: number;
+  paymentDate: string;
 }
 
 export interface EnrollmentPageData {
@@ -37,6 +45,7 @@ export interface EnrollmentPageData {
   courseDetails: Course;
   lastPaidMonth: number;
   lastPaidMonthName: string
+  enrollmentPayments: EnrollmentPayment[];
 }
 
 export interface CreateCourse {
@@ -66,6 +75,17 @@ export interface InvoiceStatusAudit {
   newValue: string;
   updatedBy: string;
   updatedAt: string;
+}
+
+export interface Exam {
+  id: number;
+  courseId: number;
+  course: Course;
+  courseName: string;
+}
+
+export interface CreateExam {
+  courseId: number;
 }
 
 export enum EStatus {
@@ -127,6 +147,13 @@ export enum PaymentType {
   OTHER = "OTHER",
 }
 
+export enum PaymentStatusType {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  REFUNDED = "REFUNDED",
+}
+
 export interface User {
   id: number;
   firstName: string;
@@ -148,6 +175,15 @@ export interface CreateUser {
 }
 
 export interface Guardian {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationalIdentityNumber: string;
+  contactNumber: string;
+}
+
+export interface GuardianPageData {
   id: number;
   firstName: string;
   lastName: string;
@@ -178,12 +214,24 @@ export interface Student {
   admissionPayed: boolean;
 }
 
+export interface StudentPageData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  studentId: string;
+  dateOfBirth: string;
+  gradeType: EGrade;
+  admissionPayed: boolean;
+  guardianPageData: GuardianPageData;
+}
+
 export interface Payment {
   id: number;
-  paymentType: PaymentMethod;
-  studentId: string;
-  admission: number;
-  total: number;
+  payerType: PayerType;
+  totalAmount: number;
+  paymentDate: string;
+  paymentMethod: PaymentMethod;
+  status: PaymentStatusType;
 }
 
 export interface CreatePayment {
@@ -223,6 +271,51 @@ export interface Request {
 export interface CreateRequestInput {
   invoiceId: number;
   requestType: string;
+}
+
+export interface Hall {
+  id: number;
+  name: string;
+  examCapacity: number;
+  lectureCapacity: number;
+}
+
+export interface CreateHall {
+  name: string;
+  examCapacity: number;
+  lectureCapacity: number;
+}
+
+export enum EventType {
+  COURSE = "COURSE",
+  EXAM = "EXAM",
+}
+
+export enum EventStatusType {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
+
+export interface Event {
+  id: number;
+  code: string;
+  eventType: EventType;
+  date: number;
+  startTime: number;
+  endTime: number;
+  reference: number;
+  halls: Hall[];
+  status: EventStatusType;
+}
+
+export interface CreateEvent {
+  code: string;
+  eventType: EventType;
+  date: string;
+  startTime: string;
+  endTime: string;
+  reference: string;
 }
 
 export enum SortOrder {
@@ -284,6 +377,12 @@ export interface PaymentPaginator extends PaginatorInfo<Payment> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
 
+export interface ExamPaginator extends PaginatorInfo<Exam> {}
+
+export interface HallPaginator extends PaginatorInfo<Hall> {}
+
+export interface EventPaginator extends PaginatorInfo<Event> {}
+
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
 export interface InvoiceStatusAuditPaginator
@@ -299,6 +398,7 @@ export interface InvoiceQueryOptions extends QueryOptions {
 
 export interface UserQueryOptions extends QueryOptions {
   username: string;
+  role: ERole;
 }
 
 export interface StudentQueryOptions extends QueryOptions {
@@ -316,6 +416,18 @@ export interface GuardianQueryOptions extends QueryOptions {}
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
   gradeType: EGrade;
+}
+
+export interface ExamQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface HallQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface EventQueryOptions extends QueryOptions {
+  code: string;
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {}

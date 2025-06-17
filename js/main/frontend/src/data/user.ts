@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetParams, User, UserPaginator, UserQueryOptions } from "../types";
+import { User, UserPaginator, UserQueryOptions } from "../types";
 import { API_ENDPOINTS } from "./client/api-endpoints";
 import { UserClient } from "./client/user";
 import { mapPaginatorData } from "../utils/data-mappers";

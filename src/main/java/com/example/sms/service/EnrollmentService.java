@@ -2,10 +2,9 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
-import com.example.sms.entity.Course;
-import com.example.sms.entity.Enrollment;
+import com.example.sms.entity.*;
 import com.example.sms.enums.EnrollmentStatusType;
-import com.example.sms.entity.Student;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.EnrollmentRepository;
@@ -29,8 +28,26 @@ public class EnrollmentService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public Page<EnrollmentListDTO> getEnrollmentsPaginated(Pageable pageable, String search, String grade) {
-        Page<Enrollment> enrollmentPage = enrollmentRepository.findAll(pageable);
+    @Autowired
+    private EnrollmentPaymentService enrollmentPaymentService;
+
+    @Autowired
+    private StudentService studentService;
+
+    public Page<EnrollmentListDTO> getEnrollmentsPaginated(
+            Pageable pageable,
+            String search,
+            String grade,
+            User currentUser
+    ) {
+        Page<Enrollment> enrollmentPage = null;
+        if (currentUser.isAdmin()) {
+            enrollmentPage = enrollmentRepository.findAll(pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
+            Student student = studentService.getStudentByUser(currentUser);
+            enrollmentPage = enrollmentRepository.findByStudentId(student.getId(), pageable);
+        }
+        assert enrollmentPage != null;
         return enrollmentPage.map(EnrollmentListDTO::new);
     }
 
@@ -70,4 +87,18 @@ public class EnrollmentService {
     public Enrollment saveEnrollment(Enrollment enrollment) {
         return enrollmentRepository.save(enrollment);
     }
+
+    public Enrollment invokeEnrollment(Enrollment enrollment) {
+        List<EnrollmentPayment> enrollments = enrollmentPaymentService.getAllByEnrollment(enrollment);
+
+        for (EnrollmentPayment enrollmentPayment : enrollments) {
+            if (enrollmentPayment.getMonthNumber() > enrollment.getCurrentMonth()) {
+                enrollment.setStatus(EnrollmentStatusType.ACTIVE);
+                return saveEnrollment(enrollment);
+            }
+        }
+
+        return enrollment;
+    }
+
 }

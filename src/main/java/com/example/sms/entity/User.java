@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,10 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    public boolean isAdmin() {
+        RoleType roleType =  role.getName();
+        return roleType.equals(RoleType.ROLE_ADMIN);
+    }
 
 }

@@ -5,7 +5,9 @@ import com.example.sms.dto.Course.CourseCreateDTO;
 import com.example.sms.dto.Course.CourseDetailDTO;
 import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.entity.Course;
+import com.example.sms.entity.User;
 import com.example.sms.service.CourseService;
+import com.example.sms.service.CurrentUserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,9 @@ import java.net.URI;
 public class CourseController {
 
     @Autowired
+    private CurrentUserService currentUserService;
+
+    @Autowired
     private CourseService courseService;
 
     @GetMapping
@@ -38,8 +43,14 @@ public class CourseController {
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
+        User currentUser = currentUserService.getCurrentUser();
 
-        Page<CourseListDTO> coursePage = courseService.getCoursesPaginated(pageable, search, grade);
+        Page<CourseListDTO> coursePage = courseService.getCoursesPaginated(
+                pageable,
+                search,
+                grade,
+                currentUser
+        );
 
         PaginatedResponse<CourseListDTO> response = new PaginatedResponse<>(coursePage);
         return ResponseEntity.ok(response);

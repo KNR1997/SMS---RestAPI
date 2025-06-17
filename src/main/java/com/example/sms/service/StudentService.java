@@ -3,7 +3,6 @@ package com.example.sms.service;
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
-import com.example.sms.dto.Student.StudentUpdateDTO;
 import com.example.sms.dto.request.StudentCourseEnrollmentRequest;
 import com.example.sms.entity.*;
 import com.example.sms.exception.ResourceNotFoundException;
@@ -44,9 +43,6 @@ public class StudentService {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    private EnrollmentService enrollmentService;
-
-    @Autowired
     private EnrollmentPaymentService enrollmentPaymentService;
 
     @Autowired
@@ -60,6 +56,11 @@ public class StudentService {
     public Student getStudentById(Integer id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+    }
+
+    public Student getStudentByUser(User user) {
+        return studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
     }
 
     @Transactional
@@ -134,39 +135,5 @@ public class StudentService {
         return "ST/" + year + "/" + sequencePart;
     }
 
-    @Transactional
-    public void enrollStudentInCourses(Integer studentId, StudentCourseEnrollmentRequest request) {
-        // Get the student
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
-        // Get the courses that going to enroll
-        List<Course> coursesToEnroll = courseRepository.findAllById(request.getCourseIds());
-
-        // Get all the existing enrollments for this student
-        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
-
-        // Get Courses list from that enrollments
-        Set<Course> alreadyEnrolledCourses = enrollments.stream()
-                .map(Enrollment::getCourse)
-                .collect(Collectors.toSet());
-
-        // Filter out already enrolled courses and create new enrollments
-        for (Course course : coursesToEnroll) {
-            if (alreadyEnrolledCourses.contains(course)) {
-                continue; // skip if already enrolled
-            }
-
-            // Create new enrollment for courses not already enrolled
-            Enrollment enrollment = enrollmentService.createEnrollment(new EnrollmentCreateDTO(student, course));
-        }
-    }
-
-//    public Page<Course> getEnrolledCourses(Integer studentId, Pageable pageable, String search) {
-//        if (search != null && !search.isEmpty()) {
-//            return studentRepository.findCoursesByStudentIdAndSearch(studentId, search, pageable);
-//        } else {
-//            return studentRepository.findCoursesByStudentId(studentId, pageable);
-//        }
-//    }
 }

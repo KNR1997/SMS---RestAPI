@@ -4,7 +4,7 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { Course, EGrade, Subject, User } from "../../types";
+import { Course, EGrade, ERole, Subject, User } from "../../types";
 import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
@@ -51,7 +51,9 @@ interface Props {
 
 export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
   const { subjects } = useSubjectsQuery({});
-  const { users } = useUsersQuery({});
+  const { users } = useUsersQuery({
+    role: ERole.ROLE_TEACHER,
+  });
 
   const {
     control,
@@ -119,7 +121,7 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
       fee: values.fee,
     };
 
-    console.log("input: ", input);
+    // console.log("input: ", input);
 
     if (!initialValues) {
       createCourse(input);

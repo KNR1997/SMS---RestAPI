@@ -10,10 +10,6 @@ public class Guardian {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
     private String firstName;
 
     private String lastName;

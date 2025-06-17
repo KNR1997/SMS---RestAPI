@@ -1,11 +1,15 @@
 package com.example.sms.dto.Enrollment;
 
 import com.example.sms.dto.Course.CourseDetailDTO;
+import com.example.sms.dto.EnrollmentPayment.EnrollmentPaymentDetailDTO;
 import com.example.sms.entity.Enrollment;
+import com.example.sms.entity.EnrollmentPayment;
 import lombok.Data;
 
 import java.text.DateFormatSymbols;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class EnrollmentDetailDTO {
@@ -26,7 +30,9 @@ public class EnrollmentDetailDTO {
 
     private CourseDetailDTO courseDetails;
 
-    public EnrollmentDetailDTO(Enrollment enrollment) {
+    private List<EnrollmentPaymentDetailDTO> enrollmentPayments;
+
+    public EnrollmentDetailDTO(Enrollment enrollment, List<EnrollmentPayment> enrollmentPayments) {
         this.id = enrollment.getId();
         this.firstName = enrollment.getStudent().getUser().getFirstName();
         this.lastName = enrollment.getStudent().getUser().getLastName();
@@ -35,6 +41,15 @@ public class EnrollmentDetailDTO {
         this.admissionPayed = enrollment.getStudent().getAdmissionPayed();
         this.lastPaidMonth = enrollment.getLastPaidMonth();
         this.courseDetails = new CourseDetailDTO(enrollment.getCourse());
+
+        // Map the EnrollmentPayment entities to DTOs
+        this.enrollmentPayments = enrollmentPayments.stream()
+                .map(EnrollmentPaymentDetailDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public EnrollmentDetailDTO(Enrollment enrollment) {
+        this.id = enrollment.getId();
     }
 
     public String getLastPaidMonthName() {
