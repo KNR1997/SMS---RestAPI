@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class EventCreateDTO {
 
+    private Integer courseId;
+
     private String code;
 
     private EventType eventType;

@@ -4,11 +4,13 @@ import com.example.sms.dto.Event.EventCreateDTO;
 import com.example.sms.dto.Event.EventUpdateDTO;
 import com.example.sms.dto.response.Event.EventPageDataResponse;
 import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
+import com.example.sms.entity.Course;
 import com.example.sms.entity.Event;
 import com.example.sms.entity.EventHallAssignment;
 import com.example.sms.entity.Hall;
 import com.example.sms.enums.EventStatusType;
 import com.example.sms.exception.ResourceNotFoundException;
+import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.EventHallAssignmentRepository;
 import com.example.sms.repository.EventRepository;
 import com.example.sms.repository.HallRepository;
@@ -34,6 +36,9 @@ public class EventService {
 
     @Autowired
     private HallRepository hallRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Page<EventPaginatedDataResponse> getPaginated(Pageable pageable, String search) {
         Page<Event> events = eventRepository.findAll(pageable);
@@ -66,8 +71,12 @@ public class EventService {
 
     @Transactional
     public Event create(EventCreateDTO createDTO) {
+        Course course = courseRepository.findById(createDTO.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
         Event event = new Event();
         event.setCode(createDTO.getCode());
+        event.setCourse(course);
         event.setEventType(createDTO.getEventType());
         event.setDate(createDTO.getDate());
         event.setStartTime(createDTO.getStartTime());

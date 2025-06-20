@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Event, EventType, Hall, MappedPaginatorInfo } from "@types";
+import {
+  Event,
+  EventStatusType,
+  EventType,
+  Hall,
+  MappedPaginatorInfo,
+} from "@types";
 import {
   Table,
   TableBody,
@@ -125,7 +131,18 @@ export default function EventList({
                   {event.endTime}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.status}
+                  <Badge
+                    size="sm"
+                    color={
+                      event.status === EventStatusType.COMPLETED
+                        ? "success"
+                        : event.status === EventStatusType.PENDING
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {event.status}
+                  </Badge>
                 </TableCell>
                 <TableRow key={event.id}>
                   {/* ... other cells */}

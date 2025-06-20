@@ -1,5 +1,6 @@
 package com.example.sms.dto.response.Event;
 
+import com.example.sms.entity.Course;
 import com.example.sms.entity.Event;
 import com.example.sms.entity.Hall;
 import com.example.sms.enums.EventStatusType;
@@ -32,6 +33,8 @@ public class EventPageDataResponse {
 
     private EventStatusType status;
 
+    private Course course;
+
     public EventPageDataResponse(Event event, List<Hall> halls) {
         this.id = event.getId();
         this.code = event.getCode();
@@ -42,5 +45,6 @@ public class EventPageDataResponse {
         this.reference = event.getReference();
         this.halls = halls;
         this.status = event.getStatus();
+        this.course = event.getCourse();
     }
 }
