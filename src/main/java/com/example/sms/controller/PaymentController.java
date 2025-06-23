@@ -1,8 +1,9 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.PaginatedResponse;
+import com.example.sms.dto.Payment.PaymentDetailDTO;
 import com.example.sms.dto.Payment.PaymentListDTO;
+import com.example.sms.entity.Payment;
 import com.example.sms.service.PaymentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,11 @@ public class PaymentController {
 
         PaginatedResponse<PaymentListDTO> response = new PaginatedResponse<>(coursePage);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PaymentDetailDTO> getPaymentById(@PathVariable Integer id) {
+        Payment payment = paymentService.getById(id);
+        return ResponseEntity.ok(new PaymentDetailDTO(payment));
     }
 }

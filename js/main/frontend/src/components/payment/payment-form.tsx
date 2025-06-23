@@ -5,18 +5,26 @@ import Button from "../ui/button/Button";
 import SelectInput from "../ui/select-input";
 import {
   Course,
+  EEnrollmentStatus,
+  Enrollment,
   PaymentMethod,
   Student,
 } from "../../types";
 import { useCreatePaymentMutation } from "../../data/payment";
 import { useStudentsQuery } from "../../data/student";
 import { useCoursesQuery } from "../../data/course";
+import { useEffect } from "react";
+import { useEnrollmentsQuery } from "@data/enrollment";
+import Card from "@components/common/card";
+import Badge from "@components/ui/badge/Badge";
+import { monthOptions } from "../../constants/role";
 
 type FormValues = {
   student: Student;
   admission: string;
   courses: Course[];
   totalPayment: string;
+  months: {label: string, value: string}[]
 };
 
 const defaultValues = {
@@ -27,6 +35,7 @@ const defaultValues = {
 export default function CreatePaymentForm() {
   const {
     control,
+    setValue,
     register,
     handleSubmit,
     watch,
@@ -43,6 +52,24 @@ export default function CreatePaymentForm() {
   const selectedStudent = watch("student");
   const studentGradeType = selectedStudent?.gradeType;
 
+  const { enrollments } = useEnrollmentsQuery({
+    studentId: selectedStudent?.id,
+  });
+
+  console.log("enrollments: ", enrollments);
+
+  useEffect(() => {
+    if (selectedStudent) {
+      if (selectedStudent.admissionPayed) {
+        setValue("admission", "0");
+      } else {
+        setValue("admission", "2000");
+      }
+    } else {
+      setValue("admission", "2000");
+    }
+  }, [selectedStudent, setValue]);
+
   const { courses } = useCoursesQuery({
     gradeType: studentGradeType,
   });
@@ -53,9 +80,9 @@ export default function CreatePaymentForm() {
       admission: values.admission,
       totalAmount: values.totalPayment,
       paymentMethod: PaymentMethod.CASH,
-      coursePaymentList: courses.map((course) => ({
+      coursePaymentList: values.courses.map((course) => ({
         courseId: course.id,
-        paymentMonths: [6, 7],
+        paymentMonths: values.months.map((month) => month.value),
       })),
     };
 
@@ -65,56 +92,76 @@ export default function CreatePaymentForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-6">
-        <div>
-          <Label>
-            Student <span className="text-error-500">*</span>
-          </Label>
-          <SelectInput
-            name="student"
-            control={control}
-            getOptionLabel={(option: any) => option.firstName}
-            getOptionValue={(option: any) => option.id}
-            options={students}
-            isClearable={true}
-          />
-          {errors.student && (
-            <p className="text-error-500 text-sm mt-1">
-              {errors.student.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <Label>
-            Admission <span className="text-error-500">*</span>{" "}
-          </Label>
-          <Input
-            {...register("admission")}
-            errorMessage={errors.admission?.message!}
-            disabled
-          />
-        </div>
-        <div>
-          <Label>
-            Courses <span className="text-error-500">*</span>
-          </Label>
-          <SelectInput
-            name="courses"
-            control={control}
-            getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
-            getOptionValue={(option: any) => option.id}
-            options={courses}
-            isClearable={true}
-            isMulti
-          />
-          {errors.courses && (
-            <p className="text-error-500 text-sm mt-1">
-              {errors.courses.message}
-            </p>
-          )}
-        </div>
-        {/* <div>
+    <div className="grid grid-cols-2 gap-5  ">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-6">
+          <div>
+            <Label>
+              Student <span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="student"
+              control={control}
+              getOptionLabel={(option: any) => option.firstName}
+              getOptionValue={(option: any) => option.id}
+              options={students}
+              isClearable={true}
+            />
+            {errors.student && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.student.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <Label>
+              Admission <span className="text-error-500">*</span>{" "}
+            </Label>
+            <Input
+              {...register("admission")}
+              errorMessage={errors.admission?.message!}
+              disabled
+            />
+          </div>
+          <div>
+            <Label>
+              Courses <span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="courses"
+              control={control}
+              getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
+              getOptionValue={(option: any) => option.id}
+              options={courses}
+              isClearable={true}
+              isMulti
+            />
+            {errors.courses && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.courses.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <Label>
+              Paying Months <span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="months"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.value}
+              options={monthOptions}
+              isClearable={true}
+              isMulti
+            />
+            {errors.months && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.months.message}
+              </p>
+            )}
+          </div>
+          {/* <div>
           <Label>
             More Courses
           </Label>
@@ -133,20 +180,53 @@ export default function CreatePaymentForm() {
             </p>
           )}
         </div> */}
-        <div>
-          <Label>
-            Total Payment <span className="text-error-500">*</span>{" "}
-          </Label>
-          <Input
-            {...register("totalPayment")}
-            errorMessage={errors.totalPayment?.message!}
-            disabled
-          />
+          <div>
+            <Label>
+              Total Payment <span className="text-error-500">*</span>{" "}
+            </Label>
+            <Input
+              {...register("totalPayment")}
+              errorMessage={errors.totalPayment?.message!}
+              disabled
+            />
+          </div>
+          <Button disabled={creating} size="sm">
+            Enroll Student
+          </Button>
         </div>
-        <Button disabled={creating} size="sm">
-          Enroll Student
-        </Button>
+      </form>
+      <div className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+          Student Enrollments
+        </h4>
+        {enrollments.map((enrollment: Enrollment) => (
+          <Card
+            key={enrollment.id}
+            className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6"
+          >
+            <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
+              {enrollment.courseName}
+            </p>
+            <div className="flex gap-5">
+              <Badge
+                size="sm"
+                color={
+                  enrollment.status == EEnrollmentStatus.ACTIVE
+                    ? "success"
+                    : enrollment.status === EEnrollmentStatus.LOCKED
+                    ? "warning"
+                    : "error"
+                }
+              >
+                {enrollment.status}
+              </Badge>
+              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                {enrollment.lastPaidMonthName}
+              </p>
+            </div>
+          </Card>
+        ))}
       </div>
-    </form>
+    </div>
   );
 }

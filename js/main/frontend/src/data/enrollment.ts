@@ -1,10 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Course,
-  CoursePaginator,
-  CourseQueryOptions,
   Enrollment,
   EnrollmentPaginator,
+  EnrollmentQueryOptions,
   GetParams,
 } from "../types";
 import { API_ENDPOINTS } from "./client/api-endpoints";
@@ -15,7 +13,7 @@ import { CourseClient } from "./client/course";
 import { EnrollmentClient } from "./client/enrollment";
 
 export const useEnrollmentsQuery = (
-  params: Partial<CourseQueryOptions>,
+  params: Partial<EnrollmentQueryOptions>,
   options: any = {}
 ) => {
   const { data, error, isLoading } = useQuery<EnrollmentPaginator, Error>(
@@ -56,7 +54,7 @@ export const useInvokeEnrollmentMutation = () => {
   return useMutation(EnrollmentClient.invoke, {
     onSuccess: async () => {
       navigate("/enrollments");
-      toast.success("Successfully created!");
+      toast.success("Successfully invoked!");
     },
     // Always refetch after error or success:
     onSettled: () => {

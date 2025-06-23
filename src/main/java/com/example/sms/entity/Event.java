@@ -17,6 +17,10 @@ public class Event {
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "exam_id", nullable = true)
+    private Exam exam;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = true)
     private Course course;
 

@@ -94,11 +94,13 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
   const filterEvents = () => {
     let filteredEvents = events;
 
+    console.log("filteredEvents: ");
+
     if (selectedHalls && selectedHalls.length > 0) {
       const selectedHallIds = selectedHalls.map((hall) => hall.id ?? hall); // handle IDs or objects
 
       filteredEvents = filteredEvents.filter((event) => {
-        const eventHallIds = event.halls.map((hall) => hall.id);
+        const eventHallIds = event?.halls.map((hall) => hall.id);
         return selectedHallIds.some((id) => eventHallIds.includes(id));
       });
     }
@@ -127,9 +129,6 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
       reference: values.reference,
       hallIds: values.halls.map((hall) => hall.id),
     };
-
-    console.log('input: ', input)
-
     if (!initialValues) {
       createEvent(input);
     } else {
@@ -261,7 +260,10 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
           Scheduled Events
         </h4>
         {filterEvents().map((event) => (
-          <Card className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+          <Card
+            key={event.id}
+            className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6"
+          >
             <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
               {event.code}
             </p>

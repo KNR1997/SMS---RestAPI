@@ -27,4 +27,7 @@ export const UserClient = {
   removeUser: ({ id }: { id: string }) => {
     return HttpClient.delete<any>(`${API_ENDPOINTS.USERS}/${id}`);
   },
+  me: () => {
+    return HttpClient.get<any>(API_ENDPOINTS.ME);
+  },
 };

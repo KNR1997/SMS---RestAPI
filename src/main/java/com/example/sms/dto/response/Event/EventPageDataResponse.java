@@ -45,6 +45,6 @@ public class EventPageDataResponse {
         this.reference = event.getReference();
         this.halls = halls;
         this.status = event.getStatus();
-        this.course = event.getCourse();
+//        this.course = event.getCourse();
     }
 }

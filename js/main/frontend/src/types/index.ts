@@ -26,6 +26,8 @@ export interface Enrollment {
   courseCode: string;
   enrollmentDate: string;
   status: string;
+  lastPaidMonth: number;
+  lastPaidMonthName: string;
 }
 
 export interface EnrollmentPayment {
@@ -82,10 +84,30 @@ export interface Exam {
   courseId: number;
   course: Course;
   courseName: string;
+  status: ExamStatusType;
+}
+
+export interface ExamPageData {
+  id: number;
+  course: Course;
+  capacity: number;
+  status: ExamStatusType;
+  eventType: EventType;
+  date: string;
+  startTime: string;
+  endTime: string;
+  reference: string;
+  code: string;
 }
 
 export interface CreateExam {
   courseId: number;
+}
+
+export enum ExamStatusType {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED"
 }
 
 export enum EStatus {
@@ -228,10 +250,12 @@ export interface StudentPageData {
 export interface Payment {
   id: number;
   payerType: PayerType;
+  payeeType: PayerType;
   totalAmount: number;
   paymentDate: string;
   paymentMethod: PaymentMethod;
   status: PaymentStatusType;
+  referenceNumber: string;
 }
 
 export interface CreatePayment {
@@ -416,6 +440,10 @@ export interface GuardianQueryOptions extends QueryOptions {}
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
   gradeType: EGrade;
+}
+
+export interface EnrollmentQueryOptions extends QueryOptions {
+  studentId: number;
 }
 
 export interface ExamQueryOptions extends QueryOptions {

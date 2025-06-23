@@ -11,4 +11,5 @@ export const API_ENDPOINTS = {
   ENROLLMENTS: 'enrollments',
   INVOICE_STATUS_AUDITS: 'invoice-status-audits',
   PAYMENTS: 'payments',
+  ME: 'auth/me',
 }

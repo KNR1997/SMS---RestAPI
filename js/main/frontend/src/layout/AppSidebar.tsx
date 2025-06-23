@@ -99,19 +99,20 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  // {
-  //   name: "Courses",
-  //   icon: <FileIcon />,
-  //   subItems: [
-  //     // {
-  //     //   name: "Available courses",
-  //     //   path: "/courses/available-courses",
-  //     //   pro: false,
-  //     // },
-  //     { name: "My course", path: "/courses/my-courses", pro: false },
-  //   ],
-  //   roles: [ERole.ROLE_STUDENT],
-  // },
+  {
+    name: "My Courses",
+    icon: <BoxIconLine />,
+    path: '/courses',
+    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    roles: [ERole.ROLE_TEACHER],
+  },
+    {
+    name: "My Students",
+    icon: <BoxIconLine />,
+    path: '/students',
+    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    roles: [ERole.ROLE_TEACHER],
+  },
   {
     name: "Users",
     icon: <UserIcon />,
@@ -130,7 +131,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Guardians",
@@ -141,7 +142,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Enrollments",
@@ -152,7 +153,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Courses",
@@ -196,7 +197,7 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-    {
+  {
     name: "Exams",
     icon: <CalenderIcon />,
     subItems: [
@@ -214,6 +215,15 @@ const navItems: NavItem[] = [
       { name: "Create event", path: "/events/create", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Events",
+    icon: <CalenderIcon />,
+    path: "/student/calendar",
+    // subItems: [
+    //   { name: "Events", path: "/events-calendar", pro: false },
+    // ],
+    roles: [ERole.ROLE_STUDENT, ERole.ROLE_TEACHER],
   },
 ];
 
@@ -409,7 +419,7 @@ const AppSidebar: React.FC = () => {
                       }`}
                     >
                       {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
+                      {/* <span className="flex items-center gap-1 ml-auto">
                         {subItem.new && (
                           <span
                             className={`ml-auto ${
@@ -432,7 +442,7 @@ const AppSidebar: React.FC = () => {
                             pro
                           </span>
                         )}
-                      </span>
+                      </span> */}
                     </Link>
                   </li>
                 ))}

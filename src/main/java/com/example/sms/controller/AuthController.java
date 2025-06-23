@@ -102,6 +102,8 @@ public class AuthController {
 
         // Map User to MeDTO
         MeDTO meDTO = new MeDTO(
+                user.getFirstName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().getName(),

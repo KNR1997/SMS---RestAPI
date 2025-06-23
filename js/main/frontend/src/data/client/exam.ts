@@ -1,8 +1,10 @@
 import {
   CreateExam,
   Exam,
+  ExamPageData,
   ExamPaginator,
   ExamQueryOptions,
+  GetParams,
   QueryOptions,
 } from "@types";
 import { API_ENDPOINTS } from "./api-endpoints";
@@ -21,5 +23,8 @@ export const ExamClient = {
         name,
       }),
     });
+  },
+  pageData: ({ slug }: GetParams) => {
+    return HttpClient.get<ExamPageData>(`${API_ENDPOINTS.EXAMS}/${slug}`);
   },
 };

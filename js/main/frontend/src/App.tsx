@@ -49,6 +49,9 @@ import EditEventPage from "./pages/Events/edit";
 import EventsCalendar from "./pages/Events/calendar";
 import Exams from "./pages/Exams";
 import CreateExamPage from "./pages/Exams/create";
+import StudentCalendar from "./pages/Student/calendar";
+import EditExamPage from "./pages/Exams/edit";
+import PaymentViewPage from "./pages/Payments/view";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -83,7 +86,7 @@ export default function App() {
                 <Route
                   path="/courses"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}>
                       <Courses />
                     </ProtectedRoute>
                   }
@@ -142,7 +145,7 @@ export default function App() {
                 <Route
                   path="/students"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER, ERole.ROLE_RECEPTIONIST]}>
                       <Students />
                     </ProtectedRoute>
                   }
@@ -163,7 +166,7 @@ export default function App() {
                 <Route
                   path="/enrollments"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
                       <Enrollments />
                     </ProtectedRoute>
                   }
@@ -196,7 +199,7 @@ export default function App() {
                 <Route
                   path="/guardians"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
                       <Guardians />
                     </ProtectedRoute>
                   }
@@ -217,6 +220,10 @@ export default function App() {
                 <Route
                   path="/payments/create"
                   element={<CreatePaymentPage />}
+                />
+                                <Route
+                  path="/payments/:id/view"
+                  element={<PaymentViewPage />}
                 />
 
                 <Route
@@ -241,6 +248,7 @@ export default function App() {
                 <Route path="/events-calendar" element={<EventsCalendar />} />
                 <Route path="/events/create" element={<CreateEventPage />} />
                 <Route path="/events/:id/edit" element={<EditEventPage />} />
+                <Route path="/student/calendar" element={<StudentCalendar />} />
 
                 <Route
                   path="/exams"
@@ -251,6 +259,7 @@ export default function App() {
                   }
                 />
                 <Route path="/exams/create" element={<CreateExamPage />} />
+                <Route path="/exams/:id/edit" element={<EditExamPage />} />
               </Route>
 
               {/* Auth Layout */}

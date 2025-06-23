@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { MappedPaginatorInfo, Payment } from "../../types";
+import { MappedPaginatorInfo, Payment, PaymentStatusType } from "../../types";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/pagination";
+import Badge from "@components/ui/badge/Badge";
 
 export type IProps = {
   payments: Payment[];
@@ -26,7 +27,7 @@ export default function PaymentList({
   const navigate = useNavigate();
 
   const handleEdit = (id: number) => {
-    // navigate(`/courses/${slug}/edit`);
+    navigate(`/payments/${id}/view`);
   };
 
   return (
@@ -98,10 +99,21 @@ export default function PaymentList({
                   Rs. {payment.totalAmount}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {payment.status}
+                  <Badge
+                    size="sm"
+                    color={
+                      payment.status == PaymentStatusType.COMPLETED
+                        ? "success"
+                        : payment.status === PaymentStatusType.PENDING
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {payment.status}
+                  </Badge>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {payment.paymentDate}
+                  {payment.paymentDate?.slice(0, 10)}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <button onClick={() => handleEdit(payment.id)}>

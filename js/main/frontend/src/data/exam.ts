@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Exam,
+  ExamPageData,
   ExamPaginator,
   ExamQueryOptions,
   GetParams,
@@ -45,6 +46,20 @@ export const useExamQuery = ({ slug }: GetParams) => {
     loading: isLoading,
   };
 };
+
+export const useExamPageDataQuery = ({ slug }: GetParams) => {
+  const { data, error, isLoading } = useQuery<ExamPageData, Error>(
+    [API_ENDPOINTS.EXAMS, { slug }],
+    () => ExamClient.pageData({ slug })
+  );
+
+  return {
+    examPageData: data,
+    error,
+    loading: isLoading,
+  };
+};
+
 
 export const useCreateExamMutation = () => {
   const navigate = useNavigate();

@@ -38,3 +38,16 @@ export const useUserQuery = (id: string) => {
     loading: isLoading,
   };
 };
+
+export const useMeQuery = () => {
+  const { data, error, isLoading } = useQuery<User, Error>(
+    [API_ENDPOINTS.ME],
+    () => UserClient.me()
+  );
+
+  return {
+    user: data,
+    error,
+    loading: isLoading,
+  };
+};

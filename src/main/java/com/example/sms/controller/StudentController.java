@@ -5,6 +5,8 @@ import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentDetailDTO;
 import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.Student;
+import com.example.sms.entity.User;
+import com.example.sms.service.CurrentUserService;
 import com.example.sms.service.StudentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private CurrentUserService currentUserService;
+
     @GetMapping
     public ResponseEntity<PaginatedResponse<StudentListDTO>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
@@ -35,8 +40,9 @@ public class StudentController {
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
+        User currentUser = currentUserService.getCurrentUser();
 
-        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(pageable);
+        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(pageable, currentUser);
 
         PaginatedResponse<StudentListDTO> response = new PaginatedResponse<>(studentPage);
         return ResponseEntity.ok(response);

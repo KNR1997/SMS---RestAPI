@@ -2,6 +2,7 @@ package com.example.sms.controller;
 
 import com.example.sms.dto.Exam.ExamCreateDTO;
 import com.example.sms.dto.PaginatedResponse;
+import com.example.sms.dto.response.Exam.ExamPageDataResponse;
 import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
 import com.example.sms.service.ExamService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -44,5 +45,11 @@ public class ExamController {
     public ResponseEntity<Void> createExam(@RequestBody ExamCreateDTO createDto) {
         examService.create(createDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExamPageDataResponse> getExamById(@PathVariable Integer id) {
+        ExamPageDataResponse examPageData = examService.getExamPageData(id);
+        return ResponseEntity.ok(examPageData);
     }
 }

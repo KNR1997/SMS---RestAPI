@@ -42,7 +42,8 @@ public class EnrollmentController {
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String grade
+            @RequestParam(required = false) String grade,
+            @RequestParam(required = false) Integer studentId
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
@@ -52,6 +53,7 @@ public class EnrollmentController {
                 pageable,
                 search,
                 grade,
+                studentId,
                 currentUser
         );
 
