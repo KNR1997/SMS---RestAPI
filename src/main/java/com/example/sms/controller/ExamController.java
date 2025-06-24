@@ -1,6 +1,7 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.Exam.ExamCreateDTO;
+import com.example.sms.dto.Exam.ExamUpdateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.response.Exam.ExamPageDataResponse;
 import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
@@ -52,4 +54,26 @@ public class ExamController {
         ExamPageDataResponse examPageData = examService.getExamPageData(id);
         return ResponseEntity.ok(examPageData);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateExam(@PathVariable Integer id, @RequestBody ExamUpdateDTO updateDTO) {
+        examService.update(id, updateDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/results")
+    public ResponseEntity<Void> uploadExamResults(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file
+    ) {
+        examService.updateExamResults(id, file);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/generate-result-table")
+    public ResponseEntity<Void> generateResultTable(@PathVariable Integer id) {
+        examService.generateResultTable(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

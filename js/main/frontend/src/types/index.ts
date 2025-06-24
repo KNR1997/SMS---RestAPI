@@ -85,6 +85,7 @@ export interface Exam {
   course: Course;
   courseName: string;
   status: ExamStatusType;
+  code: string;
 }
 
 export interface ExamPageData {
@@ -102,6 +103,14 @@ export interface ExamPageData {
 
 export interface CreateExam {
   courseId: number;
+}
+
+export interface ExamResult {
+  id: number;
+  studentId: number;
+  studentName: string;
+  result: string;
+  courseName: string;
 }
 
 export enum ExamStatusType {
@@ -403,6 +412,8 @@ export interface CoursePaginator extends PaginatorInfo<Course> {}
 
 export interface ExamPaginator extends PaginatorInfo<Exam> {}
 
+export interface ExamResultPaginator extends PaginatorInfo<ExamResult> {}
+
 export interface HallPaginator extends PaginatorInfo<Hall> {}
 
 export interface EventPaginator extends PaginatorInfo<Event> {}
@@ -448,6 +459,10 @@ export interface EnrollmentQueryOptions extends QueryOptions {
 
 export interface ExamQueryOptions extends QueryOptions {
   name: string;
+}
+
+export interface ExamResultQueryOptions extends QueryOptions {
+  examId: string;
 }
 
 export interface HallQueryOptions extends QueryOptions {

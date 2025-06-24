@@ -52,6 +52,8 @@ import CreateExamPage from "./pages/Exams/create";
 import StudentCalendar from "./pages/Student/calendar";
 import EditExamPage from "./pages/Exams/edit";
 import PaymentViewPage from "./pages/Payments/view";
+import ExamResultsPage from "./pages/Exams/results";
+import ExamResults from "./pages/ExamResults";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -86,7 +88,9 @@ export default function App() {
                 <Route
                   path="/courses"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}
+                    >
                       <Courses />
                     </ProtectedRoute>
                   }
@@ -145,7 +149,13 @@ export default function App() {
                 <Route
                   path="/students"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER, ERole.ROLE_RECEPTIONIST]}>
+                    <ProtectedRoute
+                      roles={[
+                        ERole.ROLE_ADMIN,
+                        ERole.ROLE_TEACHER,
+                        ERole.ROLE_RECEPTIONIST,
+                      ]}
+                    >
                       <Students />
                     </ProtectedRoute>
                   }
@@ -166,7 +176,9 @@ export default function App() {
                 <Route
                   path="/enrollments"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <Enrollments />
                     </ProtectedRoute>
                   }
@@ -188,6 +200,14 @@ export default function App() {
                   }
                 />
                 <Route
+                  path="/examResults"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_STUDENT, ERole.ROLE_ADMIN]}>
+                      <ExamResults />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/enrollments/create"
                   element={<CreateEnrollPage />}
                 />
@@ -199,7 +219,9 @@ export default function App() {
                 <Route
                   path="/guardians"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <Guardians />
                     </ProtectedRoute>
                   }
@@ -221,7 +243,7 @@ export default function App() {
                   path="/payments/create"
                   element={<CreatePaymentPage />}
                 />
-                                <Route
+                <Route
                   path="/payments/:id/view"
                   element={<PaymentViewPage />}
                 />
@@ -260,6 +282,11 @@ export default function App() {
                 />
                 <Route path="/exams/create" element={<CreateExamPage />} />
                 <Route path="/exams/:id/edit" element={<EditExamPage />} />
+
+                <Route
+                  path="/exams/:id/results"
+                  element={<ExamResultsPage />}
+                />
               </Route>
 
               {/* Auth Layout */}

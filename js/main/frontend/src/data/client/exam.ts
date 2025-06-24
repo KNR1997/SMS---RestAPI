@@ -27,4 +27,10 @@ export const ExamClient = {
   pageData: ({ slug }: GetParams) => {
     return HttpClient.get<ExamPageData>(`${API_ENDPOINTS.EXAMS}/${slug}`);
   },
+  generateResultTable: ({ slug }: GetParams) => {
+    return HttpClient.post<ExamPageData>(
+      `${API_ENDPOINTS.EXAMS}/${slug}/generate-result-table`,
+      {}
+    );
+  },
 };

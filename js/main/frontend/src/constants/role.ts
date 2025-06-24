@@ -1,4 +1,4 @@
-import { EGrade, ERole, EventType } from "../types";
+import { EGrade, ERole, EventType, ExamStatusType } from "../types";
 
 export const roleOptions = [
   { value: ERole.ROLE_ADMIN, label: "Admin" },
@@ -35,4 +35,10 @@ export const monthOptions = [
   { value: 10, label: "October" },
   { value: 11, label: "November" },
   { value: 12, label: "December" },
+];
+
+export const examStatusOptions = [
+  { value: ExamStatusType.PENDING, label: "Penidng" },
+  { value: ExamStatusType.COMPLETED, label: "Completed" },
+  { value: ExamStatusType.CANCELLED, label: "Cancelled" },
 ];

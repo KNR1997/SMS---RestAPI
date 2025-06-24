@@ -180,6 +180,18 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_STUDENT],
   },
   {
+    name: "Exam Results",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      {
+        name: "My Exam Results",
+        path: "/examResults",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
+  },
+  {
     name: "Payments",
     icon: <DollarLineIcon />,
     subItems: [

@@ -68,17 +68,14 @@ export default function CourseList({
               >
                 Fee
               </TableCell>
-              <TableRow>
-                {/* ... other headers */}
-                {showActions && (
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Actions
-                  </TableCell>
-                )}
-              </TableRow>
+              {showActions && (
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHeader>
 

@@ -24,4 +24,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
             "WHERE e.course IN :courses")
     Page<Student> findDistinctStudentsByCourseIn(@Param("courses") List<Course> courses, Pageable pageable);
 
+    List<Enrollment> findByCourse(Course course);
+
 }

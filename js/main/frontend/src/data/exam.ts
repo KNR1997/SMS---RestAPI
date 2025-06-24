@@ -98,3 +98,19 @@ export const useUpdateExamMutation = () => {
     },
   });
 };
+
+export const useGenerateExamResultTableMutation = () => {
+    return useMutation(ExamClient.generateResultTable, {
+    onSuccess: async () => {
+      // navigate("/exams");
+      toast.success("Result Table created!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      // queryClient.invalidateQueries(API_ENDPOINTS.EXAMS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
+    },
+  });
+}

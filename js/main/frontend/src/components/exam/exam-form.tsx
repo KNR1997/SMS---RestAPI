@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Course, EventType, ExamPageData, Hall } from "@types";
+import { Course, EventType, ExamPageData, ExamStatusType, Hall } from "@types";
 import Label from "@components/ui/label";
 import Button from "@components/ui/button/Button";
 import { useCreateExamMutation, useUpdateExamMutation } from "@data/exam";
@@ -10,7 +10,7 @@ import { useCoursesQuery } from "@data/course";
 import Input from "@components/form/input/InputField";
 import Card from "@components/common/card";
 import Badge from "@components/ui/badge/Badge";
-import { eventTypeOptions } from "../../constants/role";
+import { eventTypeOptions, examStatusOptions } from "../../constants/role";
 import { useHallsQuery } from "@data/hall";
 import { useEventsQuery } from "@data/event";
 
@@ -23,6 +23,7 @@ type FormValues = {
   startTime: string;
   endTime: string;
   reference: string;
+  status: { label: string; value: ExamStatusType };
 };
 
 const defaultValues = {
@@ -57,6 +58,9 @@ export default function CreateOrUpdateExamForm({ initialValues }: Props) {
             (eventTypeOption) =>
               eventTypeOption.value == initialValues.eventType
           ),
+          status: examStatusOptions.find(
+            (status) => status.value == initialValues.status
+          ),
         }
       : defaultValues,
     //@ts-ignore
@@ -76,6 +80,7 @@ export default function CreateOrUpdateExamForm({ initialValues }: Props) {
       endTime: values.endTime,
       reference: values.reference,
       hallIds: values.halls.map((hall) => hall.id),
+      status: values.status.value,
     };
     if (!initialValues) {
       createExam(input);
@@ -231,7 +236,25 @@ export default function CreateOrUpdateExamForm({ initialValues }: Props) {
               errorMessage={errors.reference?.message!}
             />
           </div>
-
+          <div>
+            <Label>
+              Status <span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="status"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.value}
+              options={examStatusOptions}
+              placeholder="Select Option"
+              className="dark:bg-dark-900"
+            />
+            {errors.status && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.status.message}
+              </p>
+            )}
+          </div>
           <Button disabled={creating || updating} size="sm">
             {initialValues ? "Update" : "Create"} Exam
           </Button>
