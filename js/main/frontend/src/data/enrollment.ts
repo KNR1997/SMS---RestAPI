@@ -4,6 +4,7 @@ import {
   EnrollmentPaginator,
   EnrollmentQueryOptions,
   GetParams,
+  StudentsPerCouse,
 } from "../types";
 import { API_ENDPOINTS } from "./client/api-endpoints";
 import { mapPaginatorData } from "../utils/data-mappers";
@@ -83,4 +84,17 @@ export const useUpdateCourseMutation = () => {
       toast.error(error?.response?.data?.message ?? "Something going wrong!");
     },
   });
+};
+
+export const useStudentCountPerCourseQuery = () => {
+  const { data, error, isLoading } = useQuery<StudentsPerCouse[], Error>(
+    [`${API_ENDPOINTS.ENROLLMENTS}/students-per-course`],
+    () => EnrollmentClient.getStudentCountsPerCourse()
+  );
+
+  return {
+    studentsPerCourses: data,
+    error,
+    loading: isLoading,
+  };
 };

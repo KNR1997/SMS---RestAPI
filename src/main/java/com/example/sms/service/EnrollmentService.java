@@ -1,5 +1,6 @@
 package com.example.sms.service;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
 import com.example.sms.entity.*;
@@ -106,6 +107,10 @@ public class EnrollmentService {
         }
 
         return enrollment;
+    }
+
+    public List<CourseStudentCountDTO> getStudentsCountInCourses() {
+        return enrollmentRepository.getCourseStudentCounts();
     }
 
 }

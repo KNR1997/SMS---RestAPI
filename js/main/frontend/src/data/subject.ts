@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   GetParams,
+  StudentsPerGrade,
   Subject,
   SubjectPaginator,
   SubjectQueryOptions,
@@ -82,4 +83,17 @@ export const useUpdateSubjectMutation = () => {
       toast.error(error?.response?.data?.message);
     },
   });
+};
+
+export const useStudentCountPerGradeQuery = () => {
+  const { data, error, isLoading } = useQuery<StudentsPerGrade[], Error>(
+    [`${API_ENDPOINTS.STUDENTS}/students-per-grade`],
+    () => SubjectClient.getStudentCountsPerGrade()
+  );
+
+  return {
+    studentsPerGrades: data,
+    error,
+    loading: isLoading,
+  };
 };

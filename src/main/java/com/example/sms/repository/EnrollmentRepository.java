@@ -1,5 +1,6 @@
 package com.example.sms.repository;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Enrollment;
 import com.example.sms.entity.Student;
@@ -25,5 +26,10 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
     Page<Student> findDistinctStudentsByCourseIn(@Param("courses") List<Course> courses, Pageable pageable);
 
     List<Enrollment> findByCourse(Course course);
+
+    @Query("SELECT e.course.name AS courseName, COUNT(e.student.id) AS studentCount " +
+            "FROM Enrollment e " +
+            "GROUP BY e.course.name")
+    List<CourseStudentCountDTO> getCourseStudentCounts();
 
 }

@@ -1,6 +1,7 @@
 package com.example.sms.controller;
 
 import com.example.sms.dto.PaginatedResponse;
+import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentDetailDTO;
 import com.example.sms.dto.Student.StudentListDTO;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -66,6 +68,11 @@ public class StudentController {
     public ResponseEntity<Void> updateStudent(@PathVariable Integer id, @RequestBody StudentCreateDTO studentCreateDTO) {
         studentService.updateStudent(id, studentCreateDTO);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/students-per-grade")
+    public List<GradeStudentCountDTO> getStudentsCountInGrades() {
+        return studentService.getStudentsCountInGrades();
     }
 
 }

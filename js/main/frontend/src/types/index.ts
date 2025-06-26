@@ -30,6 +30,16 @@ export interface Enrollment {
   lastPaidMonthName: string;
 }
 
+export interface StudentsPerCouse {
+  studentCount: number;
+  courseName: string;
+}
+
+export interface StudentsPerGrade {
+  studentCount: number;
+  grade: string;
+}
+
 export interface EnrollmentPayment {
   monthNumber: number;
   monthName: string;

@@ -1,5 +1,7 @@
 package com.example.sms.service;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.*;
@@ -150,5 +152,7 @@ public class StudentService {
         return "ST/" + year + "/" + sequencePart;
     }
 
-
+    public List<GradeStudentCountDTO> getStudentsCountInGrades() {
+        return studentRepository.getGradeStudentCounts();
+    }
 }

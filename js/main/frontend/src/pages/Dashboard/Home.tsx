@@ -9,12 +9,21 @@ import { useStudentsQuery } from "@data/student";
 import Loader from "@components/ui/loader/loader";
 import ErrorMessage from "@components/ui/error-message";
 import { useCoursesQuery } from "@data/course";
+import CourseStudentChart from "@components/ecommerce/CourseStudentChart";
+import StudentInGrades from "@components/ecommerce/StudentInGrades";
+import { useStudentCountPerGradeQuery } from "@data/subject";
+import { useStudentCountPerCourseQuery } from "@data/enrollment";
 
 export default function Home() {
   const { paginatorInfo, loading, error } = useStudentsQuery({});
   const { paginatorInfo: coursePaginatorInfo } = useCoursesQuery({});
+  const { studentsPerGrades, loading: studentsPerGradesLoading } =
+    useStudentCountPerGradeQuery();
+  const { studentsPerCourses, loading: studenPerCoursesLoading } =
+    useStudentCountPerCourseQuery();
 
-  if (loading) return <Loader text="Loading..." />;
+  if (loading || studenPerCoursesLoading || studentsPerGradesLoading)
+    return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
 
   return (
@@ -29,23 +38,30 @@ export default function Home() {
             totalStudents={paginatorInfo?.total}
             totalCourses={coursePaginatorInfo?.total}
           />
-
-          {/* <MonthlySalesChart /> */}
+          {studentsPerGrades && (
+            <StudentInGrades studentsPerGrades={studentsPerGrades} />
+          )}
         </div>
 
         {/* <div className="col-span-12 xl:col-span-5">
           <MonthlyTarget />
-        </div>
-
-        <div className="col-span-12">
-          <StatisticsChart />
-        </div>
+        </div> */}
 
         <div className="col-span-12 xl:col-span-5">
-          <DemographicCard />
+          {studentsPerCourses && (
+            <CourseStudentChart studentsPerCourses={studentsPerCourses} />
+          )}
         </div>
 
-        <div className="col-span-12 xl:col-span-7">
+        {/* <div className="col-span-12">
+          <StatisticsChart />
+        </div> */}
+
+        {/* <div className="col-span-12 xl:col-span-5">
+          <DemographicCard />
+        </div> */}
+
+        {/* <div className="col-span-12 xl:col-span-7">
           <RecentOrders />
         </div> */}
       </div>

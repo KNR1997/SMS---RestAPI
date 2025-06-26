@@ -22,4 +22,7 @@ export const SubjectClient = {
       }),
     });
   },
+  getStudentCountsPerGrade: () => {
+    return HttpClient.get<any>(`${API_ENDPOINTS.STUDENTS}/students-per-grade`);
+  },
 };

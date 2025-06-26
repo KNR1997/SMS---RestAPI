@@ -1,5 +1,6 @@
 package com.example.sms.controller;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Enrollment.EnrollmentDetailDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
 import com.example.sms.dto.PaginatedResponse;
@@ -74,5 +75,10 @@ public class EnrollmentController {
         Enrollment enrollment = enrollmentService.getEnrollmentById(id);
         enrollment = enrollmentService.invokeEnrollment(enrollment);
         return ResponseEntity.ok(new EnrollmentDetailDTO(enrollment));
+    }
+
+    @GetMapping("/students-per-course")
+    public List<CourseStudentCountDTO> getStudentCountsPerCourse() {
+        return enrollmentService.getStudentsCountInCourses();
     }
 }

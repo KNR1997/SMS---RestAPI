@@ -27,4 +27,9 @@ export const EnrollmentClient = {
       {}
     );
   },
+  getStudentCountsPerCourse: () => {
+    return HttpClient.get<any>(
+      `${API_ENDPOINTS.ENROLLMENTS}/students-per-course`
+    );
+  },
 };
