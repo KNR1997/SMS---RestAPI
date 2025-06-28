@@ -191,7 +191,7 @@ export default function CreatePaymentForm() {
             />
           </div>
           <Button disabled={creating} size="sm">
-            Enroll Student
+            Create Payment
           </Button>
         </div>
       </form>

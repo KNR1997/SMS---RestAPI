@@ -54,6 +54,9 @@ import EditExamPage from "./pages/Exams/edit";
 import PaymentViewPage from "./pages/Payments/view";
 import ExamResultsPage from "./pages/Exams/results";
 import ExamResults from "./pages/ExamResults";
+import TeacherReport from "./pages/Reports/teacher-report";
+import EmployeeReport from "./pages/Reports/employee-report";
+import StudentReport from "./pages/Reports/student-report";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -202,7 +205,9 @@ export default function App() {
                 <Route
                   path="/examResults"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_STUDENT, ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_STUDENT, ERole.ROLE_ADMIN]}
+                    >
                       <ExamResults />
                     </ProtectedRoute>
                   }
@@ -282,10 +287,34 @@ export default function App() {
                 />
                 <Route path="/exams/create" element={<CreateExamPage />} />
                 <Route path="/exams/:id/edit" element={<EditExamPage />} />
-
                 <Route
                   path="/exams/:id/results"
                   element={<ExamResultsPage />}
+                />
+
+                <Route
+                  path="/reports/teacher-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <TeacherReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/employee-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <EmployeeReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/student-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <StudentReport />
+                    </ProtectedRoute>
+                  }
                 />
               </Route>
 

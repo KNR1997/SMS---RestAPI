@@ -237,6 +237,16 @@ const navItems: NavItem[] = [
     // ],
     roles: [ERole.ROLE_STUDENT, ERole.ROLE_TEACHER],
   },
+  {
+    name: "Reports",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
+      { name: "Student Report", path: "/reports/student-report", pro: false },
+      { name: "Employee Report", path: "/reports/employee-report", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER],
+  },
 ];
 
 const othersItems: NavItem[] = [
@@ -483,7 +493,7 @@ const AppSidebar: React.FC = () => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
         <Link to="/">
@@ -491,14 +501,14 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/yma-logo.svg"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/yma-logo-dark-mode.svg"
                 alt="Logo"
                 width={150}
                 height={40}

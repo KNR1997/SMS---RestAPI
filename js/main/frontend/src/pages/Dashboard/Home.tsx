@@ -13,6 +13,7 @@ import CourseStudentChart from "@components/ecommerce/CourseStudentChart";
 import StudentInGrades from "@components/ecommerce/StudentInGrades";
 import { useStudentCountPerGradeQuery } from "@data/subject";
 import { useStudentCountPerCourseQuery } from "@data/enrollment";
+import Widgets from "@components/ecommerce/Widgets";
 
 export default function Home() {
   const { paginatorInfo, loading, error } = useStudentsQuery({});
@@ -34,10 +35,26 @@ export default function Home() {
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 space-y-6 xl:col-span-7">
+          <Widgets />
+        </div>
+
+        <div className="col-span-12 xl:col-span-5">
+          {studentsPerCourses && (
+            <CourseStudentChart studentsPerCourses={studentsPerCourses} />
+          )}
+        </div>
+
+        <div className="col-span-12 space-y-6 xl:col-span-7">
           <EcommerceMetrics
             totalStudents={paginatorInfo?.total}
             totalCourses={coursePaginatorInfo?.total}
           />
+          {/* {studentsPerGrades && (
+            <StudentInGrades studentsPerGrades={studentsPerGrades} />
+          )} */}
+        </div>
+
+        <div className="col-span-12 xl:col-span-5">
           {studentsPerGrades && (
             <StudentInGrades studentsPerGrades={studentsPerGrades} />
           )}
@@ -46,12 +63,6 @@ export default function Home() {
         {/* <div className="col-span-12 xl:col-span-5">
           <MonthlyTarget />
         </div> */}
-
-        <div className="col-span-12 xl:col-span-5">
-          {studentsPerCourses && (
-            <CourseStudentChart studentsPerCourses={studentsPerCourses} />
-          )}
-        </div>
 
         {/* <div className="col-span-12">
           <StatisticsChart />
