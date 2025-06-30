@@ -244,8 +244,11 @@ const navItems: NavItem[] = [
       { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
       { name: "Student Report", path: "/reports/student-report", pro: false },
       { name: "Employee Report", path: "/reports/employee-report", pro: false },
+      { name: "Institute Income Report", path: "/reports/institute-income-report", pro: false },
+      { name: "Monthly Active Student Report", path: "/reports/monthly-active-student-report", pro: false },
+      { name: "Student Registration Increment Report", path: "/reports/student-registration-increment-report", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER],
+    roles: [ERole.ROLE_ADMIN],
   },
 ];
 

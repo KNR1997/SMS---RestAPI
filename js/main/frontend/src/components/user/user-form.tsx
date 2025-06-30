@@ -4,20 +4,17 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { useNavigate } from "react-router";
 import SelectInput from "../form/select-input";
 import { ERole, User } from "../../types";
-import { useMutation } from "@tanstack/react-query";
-import { createUser, updateUser } from "../../services/userService";
-import { toast } from "react-toastify";
 import { roleOptions } from "../../constants/role";
+import { useCreateUserMutation, useUpdateUserMutation } from "@data/user";
 
 type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
   username: string;
-  role: string;
+  role: ERole;
   password: string;
 };
 
@@ -43,8 +40,6 @@ interface Props {
 }
 
 export default function CreateOrUpdateUserForm({ initialValues }: Props) {
-  const navigate = useNavigate();
-
   const {
     control,
     register,
@@ -55,34 +50,19 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     defaultValues: initialValues
       ? {
           ...initialValues,
-          role: roleOptions.find((role) => role.value === ERole.ROLE_RECEPTIONIST),
+          role: roleOptions.find(
+            (role) => role.value === ERole.ROLE_RECEPTIONIST
+          ),
         }
       : defaultValues,
     //@ts-ignore
     resolver: yupResolver(validationSchema),
   });
 
-  const createMutation = useMutation({
-    mutationFn: createUser,
-    onSuccess: () => {
-      navigate("/users");
-      toast.success("Successfully created!");
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
-    },
-  });
+  console.log('initialValues: ', initialValues)
 
-  const updateMutation = useMutation({
-    mutationFn: updateUser,
-    onSuccess: () => {
-      navigate("/users");
-      toast.success("Successfully updated!");
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
-    },
-  });
+  const { mutate: createUser, isLoading: creating } = useCreateUserMutation();
+  const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -95,9 +75,9 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     };
 
     if (!initialValues) {
-      createMutation.mutate(input);
+      createUser(input);
     } else {
-      updateMutation.mutate({ id: initialValues.id, input });
+      updateUser({ id: initialValues.id, ...input });
     }
   };
 
@@ -177,7 +157,9 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             errorMessage={errors.password?.message!}
           />
         </div>
-        <Button size="sm">{initialValues ? "Update" : "Create"} User</Button>
+        <Button disabled={creating || updating} size="sm">
+          {initialValues ? "Update" : "Create"} User
+        </Button>
       </div>
     </form>
   );

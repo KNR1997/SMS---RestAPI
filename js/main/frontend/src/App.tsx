@@ -57,6 +57,9 @@ import ExamResults from "./pages/ExamResults";
 import TeacherReport from "./pages/Reports/teacher-report";
 import EmployeeReport from "./pages/Reports/employee-report";
 import StudentReport from "./pages/Reports/student-report";
+import InstituteIncomeReport from "./pages/Reports/institute-income-report";
+import MonthlyActiveStudentReport from "./pages/Reports/monthly-active-student-report";
+import StudentRegistrationIncrementReport from "./pages/Reports/student-registration-increment-report";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -313,6 +316,30 @@ export default function App() {
                   element={
                     <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
                       <StudentReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/institute-income-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <InstituteIncomeReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/monthly-active-student-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <MonthlyActiveStudentReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/student-registration-increment-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <StudentRegistrationIncrementReport />
                     </ProtectedRoute>
                   }
                 />
