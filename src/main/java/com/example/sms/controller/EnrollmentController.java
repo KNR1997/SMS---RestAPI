@@ -1,5 +1,6 @@
 package com.example.sms.controller;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Enrollment.EnrollmentDetailDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
 import com.example.sms.dto.PaginatedResponse;
@@ -42,7 +43,8 @@ public class EnrollmentController {
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String grade
+            @RequestParam(required = false) String grade,
+            @RequestParam(required = false) Integer studentId
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
@@ -52,6 +54,7 @@ public class EnrollmentController {
                 pageable,
                 search,
                 grade,
+                studentId,
                 currentUser
         );
 
@@ -72,5 +75,10 @@ public class EnrollmentController {
         Enrollment enrollment = enrollmentService.getEnrollmentById(id);
         enrollment = enrollmentService.invokeEnrollment(enrollment);
         return ResponseEntity.ok(new EnrollmentDetailDTO(enrollment));
+    }
+
+    @GetMapping("/students-per-course")
+    public List<CourseStudentCountDTO> getStudentCountsPerCourse() {
+        return enrollmentService.getStudentsCountInCourses();
     }
 }

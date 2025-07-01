@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Exam,
+  ExamPageData,
   ExamPaginator,
   ExamQueryOptions,
   GetParams,
@@ -46,6 +47,20 @@ export const useExamQuery = ({ slug }: GetParams) => {
   };
 };
 
+export const useExamPageDataQuery = ({ slug }: GetParams) => {
+  const { data, error, isLoading } = useQuery<ExamPageData, Error>(
+    [API_ENDPOINTS.EXAMS, { slug }],
+    () => ExamClient.pageData({ slug })
+  );
+
+  return {
+    examPageData: data,
+    error,
+    loading: isLoading,
+  };
+};
+
+
 export const useCreateExamMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -83,3 +98,19 @@ export const useUpdateExamMutation = () => {
     },
   });
 };
+
+export const useGenerateExamResultTableMutation = () => {
+    return useMutation(ExamClient.generateResultTable, {
+    onSuccess: async () => {
+      // navigate("/exams");
+      toast.success("Result Table created!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      // queryClient.invalidateQueries(API_ENDPOINTS.EXAMS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
+    },
+  });
+}

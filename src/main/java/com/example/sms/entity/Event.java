@@ -16,6 +16,14 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "exam_id", nullable = true)
+    private Exam exam;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id", nullable = true)
+    private Course course;
+
     private String code;
 
     @Enumerated(EnumType.STRING)

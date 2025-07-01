@@ -99,19 +99,20 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-  // {
-  //   name: "Courses",
-  //   icon: <FileIcon />,
-  //   subItems: [
-  //     // {
-  //     //   name: "Available courses",
-  //     //   path: "/courses/available-courses",
-  //     //   pro: false,
-  //     // },
-  //     { name: "My course", path: "/courses/my-courses", pro: false },
-  //   ],
-  //   roles: [ERole.ROLE_STUDENT],
-  // },
+  {
+    name: "My Courses",
+    icon: <BoxIconLine />,
+    path: '/courses',
+    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    roles: [ERole.ROLE_TEACHER],
+  },
+    {
+    name: "My Students",
+    icon: <BoxIconLine />,
+    path: '/students',
+    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    roles: [ERole.ROLE_TEACHER],
+  },
   {
     name: "Users",
     icon: <UserIcon />,
@@ -130,7 +131,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Guardians",
@@ -141,7 +142,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Enrollments",
@@ -152,7 +153,7 @@ const navItems: NavItem[] = [
       // { name: "Entroll student", path: "/students/enroll", pro: false },
       // { name: "Payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Courses",
@@ -179,6 +180,18 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_STUDENT],
   },
   {
+    name: "Exam Results",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      {
+        name: "My Exam Results",
+        path: "/examResults",
+        pro: false,
+      },
+    ],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
+  },
+  {
     name: "Payments",
     icon: <DollarLineIcon />,
     subItems: [
@@ -196,7 +209,7 @@ const navItems: NavItem[] = [
     ],
     roles: [ERole.ROLE_ADMIN],
   },
-    {
+  {
     name: "Exams",
     icon: <CalenderIcon />,
     subItems: [
@@ -212,6 +225,28 @@ const navItems: NavItem[] = [
       { name: "Calendar", path: "/events-calendar", pro: false },
       { name: "All Events", path: "/events", pro: false },
       { name: "Create event", path: "/events/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Events",
+    icon: <CalenderIcon />,
+    path: "/student/calendar",
+    // subItems: [
+    //   { name: "Events", path: "/events-calendar", pro: false },
+    // ],
+    roles: [ERole.ROLE_STUDENT, ERole.ROLE_TEACHER],
+  },
+  {
+    name: "Reports",
+    icon: <PaperPlaneIcon />,
+    subItems: [
+      { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
+      { name: "Student Report", path: "/reports/student-report", pro: false },
+      { name: "Employee Report", path: "/reports/employee-report", pro: false },
+      { name: "Institute Income Report", path: "/reports/institute-income-report", pro: false },
+      { name: "Monthly Active Student Report", path: "/reports/monthly-active-student-report", pro: false },
+      { name: "Student Registration Increment Report", path: "/reports/student-registration-increment-report", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN],
   },
@@ -409,7 +444,7 @@ const AppSidebar: React.FC = () => {
                       }`}
                     >
                       {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
+                      {/* <span className="flex items-center gap-1 ml-auto">
                         {subItem.new && (
                           <span
                             className={`ml-auto ${
@@ -432,7 +467,7 @@ const AppSidebar: React.FC = () => {
                             pro
                           </span>
                         )}
-                      </span>
+                      </span> */}
                     </Link>
                   </li>
                 ))}
@@ -461,7 +496,7 @@ const AppSidebar: React.FC = () => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
         <Link to="/">
@@ -469,14 +504,14 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/yma-logo.svg"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/yma-logo-dark-mode.svg"
                 alt="Logo"
                 width={150}
                 height={40}

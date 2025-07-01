@@ -1,10 +1,11 @@
 package com.example.sms.service;
 
-import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
-import com.example.sms.dto.request.StudentCourseEnrollmentRequest;
 import com.example.sms.entity.*;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -48,10 +47,28 @@ public class StudentService {
     @Autowired
     private GuardianRepository guardianRepository;
 
-    public Page<StudentListDTO> getStudentsPaginated(Pageable pageable) {
-        Page<Student> studentPage = studentRepository.findAll(pageable);
+    public Page<StudentListDTO> getStudentsPaginated(Pageable pageable, User currentUser) {
+        Page<Student> studentPage;
+        if (currentUser.isAdmin()) {
+            studentPage = studentRepository.findAll(pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
+            User user = userRepository.findById(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            List<Course> courses = courseRepository.findByTeacher(user);
+            studentPage = enrollmentRepository.findDistinctStudentsByCourseIn(courses, pageable);
+//            studentPage = studentRepository.findAll(pageable);
+        } else {
+            // fallback for other roles (optional)
+            studentPage = studentRepository.findAll(pageable);
+        }
         return studentPage.map(StudentListDTO::new);
     }
+
+//    public Page<StudentListDTO> getStudentsPaginated(Pageable pageable) {
+//        Page<Student> studentPage = studentRepository.findAll(pageable);
+//        return studentPage.map(StudentListDTO::new);
+//    }
 
     public Student getStudentById(Integer id) {
         return studentRepository.findById(id)
@@ -135,5 +152,7 @@ public class StudentService {
         return "ST/" + year + "/" + sequencePart;
     }
 
-
+    public List<GradeStudentCountDTO> getStudentsCountInGrades() {
+        return studentRepository.getGradeStudentCounts();
+    }
 }

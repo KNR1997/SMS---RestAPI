@@ -1,4 +1,5 @@
 import {
+  CreateUser,
   QueryOptions,
   User,
   UserPaginator,
@@ -9,7 +10,7 @@ import { crudFactory } from "./crud-factory";
 import { HttpClient } from "./http-client";
 
 export const UserClient = {
-  ...crudFactory<User, QueryOptions, User>(API_ENDPOINTS.USERS),
+  ...crudFactory<User, QueryOptions, CreateUser>(API_ENDPOINTS.USERS),
   paginated: ({ username, ...params }: Partial<UserQueryOptions>) => {
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.USERS, {
       searchJoin: "and",
@@ -26,5 +27,8 @@ export const UserClient = {
   },
   removeUser: ({ id }: { id: string }) => {
     return HttpClient.delete<any>(`${API_ENDPOINTS.USERS}/${id}`);
+  },
+  me: () => {
+    return HttpClient.get<any>(API_ENDPOINTS.ME);
   },
 };

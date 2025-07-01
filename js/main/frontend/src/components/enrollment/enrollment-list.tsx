@@ -66,23 +66,14 @@ export default function EnrollmentList({
               >
                 Status
               </TableCell>
-              {/* <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Fee
-              </TableCell> */}
-              <TableRow>
-                {/* ... other headers */}
-                {showActions && (
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Actions
-                  </TableCell>
-                )}
-              </TableRow>
+              {showActions && (
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -113,24 +104,18 @@ export default function EnrollmentList({
                     {enrollment.status}
                   </Badge>
                 </TableCell>
-                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {course.fee}
-                </TableCell> */}
-                <TableRow key={enrollment.id}>
-                  {/* ... other cells */}
-                  {showActions && (
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      <button onClick={() => handleEdit(enrollment.id)}>
-                        <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6 mr-2" />
-                      </button>
-                      <button
-                        onClick={() => invokeEnrollment({ id: enrollment.id })}
-                      >
-                        <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                      </button>
-                    </TableCell>
-                  )}
-                </TableRow>
+                {showActions && (
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <button onClick={() => handleEdit(enrollment.id)}>
+                      <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6 mr-2" />
+                    </button>
+                    <button
+                      onClick={() => invokeEnrollment({ id: enrollment.id })}
+                    >
+                      <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

@@ -49,6 +49,17 @@ import EditEventPage from "./pages/Events/edit";
 import EventsCalendar from "./pages/Events/calendar";
 import Exams from "./pages/Exams";
 import CreateExamPage from "./pages/Exams/create";
+import StudentCalendar from "./pages/Student/calendar";
+import EditExamPage from "./pages/Exams/edit";
+import PaymentViewPage from "./pages/Payments/view";
+import ExamResultsPage from "./pages/Exams/results";
+import ExamResults from "./pages/ExamResults";
+import TeacherReport from "./pages/Reports/teacher-report";
+import EmployeeReport from "./pages/Reports/employee-report";
+import StudentReport from "./pages/Reports/student-report";
+import InstituteIncomeReport from "./pages/Reports/institute-income-report";
+import MonthlyActiveStudentReport from "./pages/Reports/monthly-active-student-report";
+import StudentRegistrationIncrementReport from "./pages/Reports/student-registration-increment-report";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -83,7 +94,9 @@ export default function App() {
                 <Route
                   path="/courses"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}
+                    >
                       <Courses />
                     </ProtectedRoute>
                   }
@@ -142,7 +155,13 @@ export default function App() {
                 <Route
                   path="/students"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute
+                      roles={[
+                        ERole.ROLE_ADMIN,
+                        ERole.ROLE_TEACHER,
+                        ERole.ROLE_RECEPTIONIST,
+                      ]}
+                    >
                       <Students />
                     </ProtectedRoute>
                   }
@@ -163,7 +182,9 @@ export default function App() {
                 <Route
                   path="/enrollments"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <Enrollments />
                     </ProtectedRoute>
                   }
@@ -185,6 +206,16 @@ export default function App() {
                   }
                 />
                 <Route
+                  path="/examResults"
+                  element={
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_STUDENT, ERole.ROLE_ADMIN]}
+                    >
+                      <ExamResults />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/enrollments/create"
                   element={<CreateEnrollPage />}
                 />
@@ -196,7 +227,9 @@ export default function App() {
                 <Route
                   path="/guardians"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <Guardians />
                     </ProtectedRoute>
                   }
@@ -217,6 +250,10 @@ export default function App() {
                 <Route
                   path="/payments/create"
                   element={<CreatePaymentPage />}
+                />
+                <Route
+                  path="/payments/:id/view"
+                  element={<PaymentViewPage />}
                 />
 
                 <Route
@@ -241,6 +278,7 @@ export default function App() {
                 <Route path="/events-calendar" element={<EventsCalendar />} />
                 <Route path="/events/create" element={<CreateEventPage />} />
                 <Route path="/events/:id/edit" element={<EditEventPage />} />
+                <Route path="/student/calendar" element={<StudentCalendar />} />
 
                 <Route
                   path="/exams"
@@ -251,6 +289,60 @@ export default function App() {
                   }
                 />
                 <Route path="/exams/create" element={<CreateExamPage />} />
+                <Route path="/exams/:id/edit" element={<EditExamPage />} />
+                <Route
+                  path="/exams/:id/results"
+                  element={<ExamResultsPage />}
+                />
+
+                <Route
+                  path="/reports/teacher-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <TeacherReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/employee-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <EmployeeReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/student-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <StudentReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/institute-income-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <InstituteIncomeReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/monthly-active-student-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <MonthlyActiveStudentReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports/student-registration-increment-report"
+                  element={
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                      <StudentRegistrationIncrementReport />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* Auth Layout */}

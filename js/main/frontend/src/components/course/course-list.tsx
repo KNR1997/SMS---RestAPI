@@ -68,17 +68,14 @@ export default function CourseList({
               >
                 Fee
               </TableCell>
-              <TableRow>
-                {/* ... other headers */}
-                {showActions && (
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Actions
-                  </TableCell>
-                )}
-              </TableRow>
+              {showActions && (
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -101,7 +98,7 @@ export default function CourseList({
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   Rs. {course.fee}
                 </TableCell>
-                <TableRow key={course.id}>
+                <TableCell key={course.id}>
                   {/* ... other cells */}
                   {showActions && (
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -110,7 +107,7 @@ export default function CourseList({
                       </button>
                     </TableCell>
                   )}
-                </TableRow>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

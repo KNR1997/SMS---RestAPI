@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type FormValues = {
   username: string;
@@ -50,7 +51,8 @@ export default function SignInForm() {
       login(res.data.token); // Save token and reload
       navigate("/"); // ✅ Redirect after login
     } catch (err) {
-      alert("Login failed");
+      // alert("Login failed");
+      toast.error("Login failed")
     }
   };
 
@@ -72,7 +74,7 @@ export default function SignInForm() {
               Sign In
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign in!
+              Enter your username and password to sign in!
             </p>
           </div>
           <div>

@@ -1,5 +1,7 @@
 package com.example.sms.repository;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Student;
 import com.example.sms.entity.User;
@@ -9,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
@@ -20,5 +23,10 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByUser_Id(Integer userId);
 
     Optional<Student> findByUser(User user);
+
+    @Query("SELECT s.gradeType AS grade, COUNT(s.studentId) AS studentCount " +
+            "FROM Student s " +
+            "GROUP BY s.gradeType")
+    List<GradeStudentCountDTO> getGradeStudentCounts();
 
 }

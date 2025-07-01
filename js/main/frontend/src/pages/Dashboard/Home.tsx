@@ -9,12 +9,22 @@ import { useStudentsQuery } from "@data/student";
 import Loader from "@components/ui/loader/loader";
 import ErrorMessage from "@components/ui/error-message";
 import { useCoursesQuery } from "@data/course";
+import CourseStudentChart from "@components/ecommerce/CourseStudentChart";
+import StudentInGrades from "@components/ecommerce/StudentInGrades";
+import { useStudentCountPerGradeQuery } from "@data/subject";
+import { useStudentCountPerCourseQuery } from "@data/enrollment";
+import Widgets from "@components/ecommerce/Widgets";
 
 export default function Home() {
   const { paginatorInfo, loading, error } = useStudentsQuery({});
   const { paginatorInfo: coursePaginatorInfo } = useCoursesQuery({});
+  const { studentsPerGrades, loading: studentsPerGradesLoading } =
+    useStudentCountPerGradeQuery();
+  const { studentsPerCourses, loading: studenPerCoursesLoading } =
+    useStudentCountPerCourseQuery();
 
-  if (loading) return <Loader text="Loading..." />;
+  if (loading || studenPerCoursesLoading || studentsPerGradesLoading)
+    return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
 
   return (
@@ -25,27 +35,44 @@ export default function Home() {
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 space-y-6 xl:col-span-7">
+          <Widgets />
+        </div>
+
+        <div className="col-span-12 xl:col-span-5">
+          {studentsPerCourses && (
+            <CourseStudentChart studentsPerCourses={studentsPerCourses} />
+          )}
+        </div>
+
+        <div className="col-span-12 space-y-6 xl:col-span-7">
           <EcommerceMetrics
             totalStudents={paginatorInfo?.total}
             totalCourses={coursePaginatorInfo?.total}
           />
+          {/* {studentsPerGrades && (
+            <StudentInGrades studentsPerGrades={studentsPerGrades} />
+          )} */}
+        </div>
 
-          {/* <MonthlySalesChart /> */}
+        <div className="col-span-12 xl:col-span-5">
+          {studentsPerGrades && (
+            <StudentInGrades studentsPerGrades={studentsPerGrades} />
+          )}
         </div>
 
         {/* <div className="col-span-12 xl:col-span-5">
           <MonthlyTarget />
-        </div>
+        </div> */}
 
-        <div className="col-span-12">
+        {/* <div className="col-span-12">
           <StatisticsChart />
-        </div>
+        </div> */}
 
-        <div className="col-span-12 xl:col-span-5">
+        {/* <div className="col-span-12 xl:col-span-5">
           <DemographicCard />
-        </div>
+        </div> */}
 
-        <div className="col-span-12 xl:col-span-7">
+        {/* <div className="col-span-12 xl:col-span-7">
           <RecentOrders />
         </div> */}
       </div>

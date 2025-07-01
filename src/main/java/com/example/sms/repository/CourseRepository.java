@@ -1,12 +1,14 @@
 package com.example.sms.repository;
 
 import com.example.sms.entity.Course;
+import com.example.sms.entity.User;
 import com.example.sms.enums.GradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpecificationExecutor<Course> {
@@ -16,5 +18,9 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     boolean existsBySlug(String slug);
 
     Page<Course> findByGradeType(GradeType gradeType, Pageable pageable);
+
+    List<Course> findByTeacher(User teacher);
+
+    Page<Course> findByTeacher(User teacher, Pageable pageable);
 
 }

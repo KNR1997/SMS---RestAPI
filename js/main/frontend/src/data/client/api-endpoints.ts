@@ -6,9 +6,11 @@ export const API_ENDPOINTS = {
   GUARDIANS: 'guardians',
   COURSES: 'courses',
   EXAMS: 'exams',
+  EXAMRESULTS: 'examResults',
   HALLS: 'halls',
   EVENTS: 'events',
   ENROLLMENTS: 'enrollments',
   INVOICE_STATUS_AUDITS: 'invoice-status-audits',
   PAYMENTS: 'payments',
+  ME: 'auth/me',
 }

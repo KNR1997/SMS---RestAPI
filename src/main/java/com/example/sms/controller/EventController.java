@@ -5,6 +5,8 @@ import com.example.sms.dto.Event.EventUpdateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.response.Event.EventPageDataResponse;
 import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
+import com.example.sms.entity.User;
+import com.example.sms.service.CurrentUserService;
 import com.example.sms.service.EventService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
 
     @Autowired
+    private CurrentUserService currentUserService;
+
+    @Autowired
     private EventService eventService;
 
     @GetMapping
@@ -35,8 +40,9 @@ public class EventController {
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
+        User currentUser = currentUserService.getCurrentUser();
 
-        Page<EventPaginatedDataResponse> eventPage = eventService.getPaginated(pageable, search);
+        Page<EventPaginatedDataResponse> eventPage = eventService.getPaginated(pageable, search, currentUser);
 
         PaginatedResponse<EventPaginatedDataResponse> response = new PaginatedResponse<>(eventPage);
         return ResponseEntity.ok(response);

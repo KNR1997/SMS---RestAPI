@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
-import { PencilIcon } from "../../icons";
-import { Exam, MappedPaginatorInfo } from "@types";
+import { BoltIcon, PencilIcon } from "../../icons";
+import { Exam, ExamStatusType, MappedPaginatorInfo } from "@types";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@components/ui/table";
 import Pagination from "@components/ui/pagination";
+import Badge from "@components/ui/badge/Badge";
 
 export type IProps = {
   exams: Exam[];
@@ -31,7 +32,11 @@ export default function ExamList({
     navigate(`/exams/${id}/edit`);
   };
 
-  console.log('exams: ', exams)
+  const handleEnterExamResults = (id: number) => {
+    navigate(`/exams/${id}/results`);
+  };
+
+  // console.log("exams: ", exams);
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -52,17 +57,20 @@ export default function ExamList({
               >
                 Course
               </TableCell>
-              <TableRow>
-                {/* ... other headers */}
-                {showActions && (
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Actions
-                  </TableCell>
-                )}
-              </TableRow>
+              <TableCell
+                isHeader
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
+                Status
+              </TableCell>
+              {showActions && (
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -76,16 +84,30 @@ export default function ExamList({
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {exam.courseName}
                 </TableCell>
-                <TableRow key={exam.id}>
-                  {/* ... other cells */}
-                  {showActions && (
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      <button onClick={() => handleEdit(exam.id)}>
-                        <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                      </button>
-                    </TableCell>
-                  )}
-                </TableRow>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <Badge
+                    size="sm"
+                    color={
+                      exam.status === ExamStatusType.COMPLETED
+                        ? "success"
+                        : exam.status === ExamStatusType.PENDING
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {exam.status}
+                  </Badge>
+                </TableCell>
+                {showActions && (
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <button onClick={() => handleEdit(exam.id)}>
+                      <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                    </button>
+                    <button onClick={() => handleEnterExamResults(exam.id)}>
+                      <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

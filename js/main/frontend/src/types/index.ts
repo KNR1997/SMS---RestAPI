@@ -26,6 +26,18 @@ export interface Enrollment {
   courseCode: string;
   enrollmentDate: string;
   status: string;
+  lastPaidMonth: number;
+  lastPaidMonthName: string;
+}
+
+export interface StudentsPerCouse {
+  studentCount: number;
+  courseName: string;
+}
+
+export interface StudentsPerGrade {
+  studentCount: number;
+  grade: string;
 }
 
 export interface EnrollmentPayment {
@@ -82,10 +94,39 @@ export interface Exam {
   courseId: number;
   course: Course;
   courseName: string;
+  status: ExamStatusType;
+  code: string;
+}
+
+export interface ExamPageData {
+  id: number;
+  course: Course;
+  capacity: number;
+  status: ExamStatusType;
+  eventType: EventType;
+  date: string;
+  startTime: string;
+  endTime: string;
+  reference: string;
+  code: string;
 }
 
 export interface CreateExam {
   courseId: number;
+}
+
+export interface ExamResult {
+  id: number;
+  studentId: number;
+  studentName: string;
+  result: string;
+  courseName: string;
+}
+
+export enum ExamStatusType {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED"
 }
 
 export enum EStatus {
@@ -228,10 +269,12 @@ export interface StudentPageData {
 export interface Payment {
   id: number;
   payerType: PayerType;
+  payeeType: PayerType;
   totalAmount: number;
   paymentDate: string;
   paymentMethod: PaymentMethod;
   status: PaymentStatusType;
+  referenceNumber: string;
 }
 
 export interface CreatePayment {
@@ -379,6 +422,8 @@ export interface CoursePaginator extends PaginatorInfo<Course> {}
 
 export interface ExamPaginator extends PaginatorInfo<Exam> {}
 
+export interface ExamResultPaginator extends PaginatorInfo<ExamResult> {}
+
 export interface HallPaginator extends PaginatorInfo<Hall> {}
 
 export interface EventPaginator extends PaginatorInfo<Event> {}
@@ -418,8 +463,16 @@ export interface CourseQueryOptions extends QueryOptions {
   gradeType: EGrade;
 }
 
+export interface EnrollmentQueryOptions extends QueryOptions {
+  studentId: number;
+}
+
 export interface ExamQueryOptions extends QueryOptions {
   name: string;
+}
+
+export interface ExamResultQueryOptions extends QueryOptions {
+  examId: string;
 }
 
 export interface HallQueryOptions extends QueryOptions {

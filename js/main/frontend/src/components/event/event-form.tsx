@@ -1,7 +1,7 @@
-import { EventType, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Course, Event, Hall } from "@types";
+import { Course, Event, EventType, Hall } from "@types";
 import Label from "@components/ui/label";
 import Input from "@components/form/input/InputField";
 import Button from "@components/ui/button/Button";
@@ -22,10 +22,10 @@ type FormValues = {
   eventType: { value: EventType; label: string };
   course: Course;
   halls: Hall[];
-  date: number;
-  startTime: number;
-  endTime: number;
-  reference: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  reference: string;
 };
 
 const defaultValues = {
@@ -34,7 +34,7 @@ const defaultValues = {
 };
 
 const validationSchema = yup.object().shape({
-  code: yup.string().required("Event code is required"),
+  // code: yup.string().required("Event code is required"),
   eventType: yup.object().required("Event Type is required"),
   date: yup.string().required("Date is required"),
   startTime: yup.string().required("Start time is required"),
@@ -76,17 +76,31 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
   const { mutate: createEvent, isLoading: creating } = useCreateEventMutation();
   const { mutate: updateEvent, isLoading: updating } = useUpdateEventMutation();
 
+  const eventType = watch("eventType");
+  const course = watch("course");
   const selectedHalls = watch("halls");
   const selectedDate = watch("date");
 
+  const nameSuggest = () => {
+    if (!course) return "";
+
+    if (eventType.value == EventType.EXAM) {
+      return `${course.name} exam`;
+    } else if (eventType.value == EventType.COURSE) {
+      return `${course.name} class`;
+    }
+  };
+
   const filterEvents = () => {
     let filteredEvents = events;
+
+    console.log("filteredEvents: ");
 
     if (selectedHalls && selectedHalls.length > 0) {
       const selectedHallIds = selectedHalls.map((hall) => hall.id ?? hall); // handle IDs or objects
 
       filteredEvents = filteredEvents.filter((event) => {
-        const eventHallIds = event.halls.map((hall) => hall.id);
+        const eventHallIds = event?.halls.map((hall) => hall.id);
         return selectedHallIds.some((id) => eventHallIds.includes(id));
       });
     }
@@ -106,7 +120,8 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      code: values.code,
+      code: nameSuggest(),
+      courseId: values.course.id,
       eventType: values.eventType.value,
       date: values.date,
       startTime: values.startTime,
@@ -114,7 +129,6 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
       reference: values.reference,
       hallIds: values.halls.map((hall) => hall.id),
     };
-
     if (!initialValues) {
       createEvent(input);
     } else {
@@ -197,7 +211,12 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
             <Label>
               Name <span className="text-error-500">*</span>{" "}
             </Label>
-            <Input {...register("code")} errorMessage={errors.code?.message!} />
+            <Input
+              {...register("code")}
+              errorMessage={errors.code?.message!}
+              disabled
+              value={nameSuggest()}
+            />
           </div>
 
           <div>
@@ -241,7 +260,10 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
           Scheduled Events
         </h4>
         {filterEvents().map((event) => (
-          <Card className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+          <Card
+            key={event.id}
+            className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6"
+          >
             <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
               {event.code}
             </p>

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -41,7 +40,7 @@ public class CourseService {
             String grade,
             User currentUser
     ) {
-        Page<Course> coursePage =null;
+        Page<Course> coursePage = null;
         GradeType gradeType;
 
         if (currentUser.isAdmin()) {
@@ -61,9 +60,15 @@ public class CourseService {
                     .toList();
 
             coursePage = new PageImpl<>(courses, pageable, enrollments.getTotalElements());
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
+            User user = userRepository.findById(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            coursePage = courseRepository.findByTeacher(user, pageable);
+        } else {
+            // Admin sees all courses
+            coursePage = courseRepository.findAll(pageable);
         }
 
-        assert coursePage != null;
         return coursePage.map(CourseListDTO::new);
     }
 

@@ -3,8 +3,10 @@ package com.example.sms.service;
 import com.example.sms.dto.Payment.PaymentCreateDTO;
 import com.example.sms.dto.Payment.PaymentItemCreateDTO;
 import com.example.sms.dto.Payment.PaymentListDTO;
+import com.example.sms.entity.Event;
 import com.example.sms.entity.Payment;
 import com.example.sms.enums.PaymentStatusType;
+import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,11 @@ public class PaymentService {
     public Page<PaymentListDTO> getPaymentsPaginated(Pageable pageable) {
         Page<Payment> paymentPage = paymentRepository.findAll(pageable);
         return paymentPage.map(PaymentListDTO::new);
+    }
+
+    public Payment getById(Integer id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
     }
 
     @Transactional

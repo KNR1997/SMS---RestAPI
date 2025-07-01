@@ -47,9 +47,13 @@ const validationSchema = yup.object().shape({
 
 interface Props {
   initialValues?: Course;
+  isEditable: boolean;
 }
 
-export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
+export default function CreateOrUpdateCourseForm({
+  initialValues,
+  isEditable = false,
+}: Props) {
   const { subjects } = useSubjectsQuery({});
   const { users } = useUsersQuery({
     role: ERole.ROLE_TEACHER,
@@ -67,7 +71,9 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
       ? {
           ...initialValues,
           gradeType: initialValues?.gradeType
-            ? gradeOptions.find((gradeType) => gradeType.value === initialValues.gradeType)
+            ? gradeOptions.find(
+                (gradeType) => gradeType.value === initialValues.gradeType
+              )
             : null,
           subject: initialValues?.subjectId
             ? subjects.find((subject) => subject.id === initialValues.subjectId)
@@ -140,6 +146,7 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             Grade <span className="text-error-500">*</span>
           </Label>
           <SelectInput
+            disabled={!isEditable}
             name="gradeType"
             control={control}
             options={gradeOptions}
@@ -156,6 +163,7 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             Subject <span className="text-error-500">*</span>
           </Label>
           <SelectInput
+            disabled={!isEditable}
             name="subject"
             control={control}
             getOptionLabel={(option: any) => option.name}
@@ -174,6 +182,7 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             Teacher <span className="text-error-500">*</span>
           </Label>
           <SelectInput
+            disabled={!isEditable}
             name="teacher"
             control={control}
             getOptionLabel={(option: any) => option.firstName}
@@ -192,16 +201,18 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             Batch <span className="text-error-500">*</span>
           </Label>
           <Input
+            disabled={!isEditable}
             type="number"
             {...register("batch")}
             errorMessage={errors.batch?.message!}
           />
         </div>
-                <div>
+        <div>
           <Label>
             Fee <span className="text-error-500">*</span>
           </Label>
           <Input
+            disabled={!isEditable}
             type="number"
             {...register("fee")}
             errorMessage={errors.fee?.message!}
@@ -231,9 +242,11 @@ export default function CreateOrUpdateCourseForm({ initialValues }: Props) {
             disabled
           />
         </div>
-        <Button disabled={creating || updating} size="sm">
-          {initialValues ? "Update" : "Create"} Course
-        </Button>
+        {isEditable && (
+          <Button disabled={creating || updating} size="sm">
+            {initialValues ? "Update" : "Create"} Course
+          </Button>
+        )}
       </div>
     </form>
   );

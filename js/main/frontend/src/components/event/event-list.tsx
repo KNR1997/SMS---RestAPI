@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Event, EventType, Hall, MappedPaginatorInfo } from "@types";
+import {
+  Event,
+  EventStatusType,
+  EventType,
+  Hall,
+  MappedPaginatorInfo,
+} from "@types";
 import {
   Table,
   TableBody,
@@ -81,17 +87,14 @@ export default function EventList({
               >
                 Status
               </TableCell>
-              <TableRow>
-                {/* ... other headers */}
-                {showActions && (
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Actions
-                  </TableCell>
-                )}
-              </TableRow>
+              {showActions && (
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -125,18 +128,27 @@ export default function EventList({
                   {event.endTime}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {event.status}
+                  <Badge
+                    size="sm"
+                    color={
+                      event.status === EventStatusType.COMPLETED
+                        ? "success"
+                        : event.status === EventStatusType.PENDING
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {event.status}
+                  </Badge>
                 </TableCell>
-                <TableRow key={event.id}>
-                  {/* ... other cells */}
-                  {showActions && (
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      <button onClick={() => handleEdit(event.id)}>
-                        <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                      </button>
-                    </TableCell>
-                  )}
-                </TableRow>
+                {/* ... other cells */}
+                {showActions && (
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <button onClick={() => handleEdit(event.id)}>
+                      <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

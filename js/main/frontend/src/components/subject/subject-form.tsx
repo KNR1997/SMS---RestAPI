@@ -78,8 +78,6 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
-  // console.log('initialValues: ', initialValues)
-
   const { mutate: createSubject, isLoading: creating } =
     useCreateSubjectMutation();
   const { mutate: updateSubject, isLoading: updating } =

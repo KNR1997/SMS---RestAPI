@@ -3,8 +3,18 @@ import UserMetaCard from "../components/UserProfile/UserMetaCard";
 import UserInfoCard from "../components/UserProfile/UserInfoCard";
 import UserAddressCard from "../components/UserProfile/UserAddressCard";
 import PageMeta from "../components/common/PageMeta";
+import { useMeQuery } from "@data/user";
+import Loader from "@components/ui/loader/loader";
+import ErrorMessage from "@components/ui/error-message";
 
 export default function UserProfiles() {
+  const { user, loading, error } = useMeQuery();
+
+  if (loading) return <Loader text="Loading..." />;
+  if (error) return <ErrorMessage message={error.message} />;
+
+  console.log('user: ', user)
+
   return (
     <>
       <PageMeta
@@ -16,11 +26,13 @@ export default function UserProfiles() {
         <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
           Profile
         </h3>
-        <div className="space-y-6">
-          <UserMetaCard />
-          <UserInfoCard />
-          <UserAddressCard />
-        </div>
+        {user && (
+          <div className="space-y-6">
+            <UserMetaCard user={user} />
+            <UserInfoCard user={user} />
+            <UserAddressCard user={user} />
+          </div>
+        )}
       </div>
     </>
   );

@@ -9,6 +9,7 @@ import com.example.sms.entity.Course;
 import com.example.sms.entity.Enrollment;
 import com.example.sms.entity.Payment;
 import com.example.sms.entity.Student;
+import com.example.sms.enums.EnrollmentStatusType;
 import com.example.sms.enums.PayerType;
 import com.example.sms.enums.PaymentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ public class CoursePaymentService {
                 ));
                 if (monthNumber > enrollment.getLastPaidMonth()) {
                     enrollment.setLastPaidMonth(monthNumber);
+                    enrollment.setStatus(EnrollmentStatusType.ACTIVE);
                     enrollmentService.saveEnrollment(enrollment);
                 }
                 paymentItemService.createPaymentItem(new PaymentItemCreateDTO(

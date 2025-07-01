@@ -1,5 +1,6 @@
 package com.example.sms.service;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
 import com.example.sms.entity.*;
@@ -38,14 +39,21 @@ public class EnrollmentService {
             Pageable pageable,
             String search,
             String grade,
+            Integer studentId,
             User currentUser
     ) {
         Page<Enrollment> enrollmentPage = null;
         if (currentUser.isAdmin()) {
-            enrollmentPage = enrollmentRepository.findAll(pageable);
+            if (studentId != null) {
+                enrollmentPage = enrollmentRepository.findByStudentId(studentId, pageable);
+            } else {
+                enrollmentPage = enrollmentRepository.findAll(pageable);
+            }
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             Student student = studentService.getStudentByUser(currentUser);
             enrollmentPage = enrollmentRepository.findByStudentId(student.getId(), pageable);
+        } else {
+            enrollmentPage = enrollmentRepository.findAll(pageable);
         }
         assert enrollmentPage != null;
         return enrollmentPage.map(EnrollmentListDTO::new);
@@ -92,13 +100,17 @@ public class EnrollmentService {
         List<EnrollmentPayment> enrollments = enrollmentPaymentService.getAllByEnrollment(enrollment);
 
         for (EnrollmentPayment enrollmentPayment : enrollments) {
-            if (enrollmentPayment.getMonthNumber() > enrollment.getCurrentMonth()) {
+            if (enrollmentPayment.getMonthNumber() >= enrollment.getCurrentMonth()) {
                 enrollment.setStatus(EnrollmentStatusType.ACTIVE);
                 return saveEnrollment(enrollment);
             }
         }
 
         return enrollment;
+    }
+
+    public List<CourseStudentCountDTO> getStudentsCountInCourses() {
+        return enrollmentRepository.getCourseStudentCounts();
     }
 
 }

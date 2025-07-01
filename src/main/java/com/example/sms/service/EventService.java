@@ -4,14 +4,11 @@ import com.example.sms.dto.Event.EventCreateDTO;
 import com.example.sms.dto.Event.EventUpdateDTO;
 import com.example.sms.dto.response.Event.EventPageDataResponse;
 import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
-import com.example.sms.entity.Event;
-import com.example.sms.entity.EventHallAssignment;
-import com.example.sms.entity.Hall;
+import com.example.sms.entity.*;
 import com.example.sms.enums.EventStatusType;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
-import com.example.sms.repository.EventHallAssignmentRepository;
-import com.example.sms.repository.EventRepository;
-import com.example.sms.repository.HallRepository;
+import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,10 +32,54 @@ public class EventService {
     @Autowired
     private HallRepository hallRepository;
 
-    public Page<EventPaginatedDataResponse> getPaginated(Pageable pageable, String search) {
-        Page<Event> events = eventRepository.findAll(pageable);
+    @Autowired
+    private CourseRepository courseRepository;
 
-        return events.map(event -> {
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public Page<EventPaginatedDataResponse> getPaginated(
+            Pageable pageable,
+            String search,
+            User currentUser
+    ) {
+        Page<Event> eventPage;
+        if (currentUser.isAdmin()) {
+            // Admin sees all events
+            eventPage = eventRepository.findAll(pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
+            // Student sees only enrolled courses
+            Student student = studentRepository.findByUser(currentUser)
+                    .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
+            List<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId());
+
+            // Get all the student courses from the enrollments
+            List<Course> courses = enrollments
+                    .stream()
+                    .map(Enrollment::getCourse)
+                    .toList();
+
+            eventPage = eventRepository.findByCourseIn(courses, pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
+            User user = userRepository.findById(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            List<Course> courses = courseRepository.findByTeacher(user);
+
+            eventPage = eventRepository.findByCourseIn(courses, pageable);
+        } else {
+            // fallback for other roles (optional)
+            eventPage = Page.empty(pageable);
+        }
+        assert eventPage != null;
+        return eventPage.map(event -> {
             List<Hall> halls = eventHallAssignmentRepository.findByEvent(event)
                     .stream()
                     .map(EventHallAssignment::getHall)
@@ -46,6 +87,18 @@ public class EventService {
             return new EventPaginatedDataResponse(event, halls);
         });
     }
+
+//    public Page<EventPaginatedDataResponse> getPaginated(Pageable pageable, String search) {
+//        Page<Event> events = eventRepository.findAll(pageable);
+//
+//        return events.map(event -> {
+//            List<Hall> halls = eventHallAssignmentRepository.findByEvent(event)
+//                    .stream()
+//                    .map(EventHallAssignment::getHall)
+//                    .collect(Collectors.toList());
+//            return new EventPaginatedDataResponse(event, halls);
+//        });
+//    }
 
     public EventPageDataResponse getEventPageData(Integer eventId) {
         Event event = eventRepository.findById(eventId)
@@ -66,8 +119,12 @@ public class EventService {
 
     @Transactional
     public Event create(EventCreateDTO createDTO) {
+        Course course = courseRepository.findById(createDTO.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
         Event event = new Event();
         event.setCode(createDTO.getCode());
+        event.setCourse(course);
         event.setEventType(createDTO.getEventType());
         event.setDate(createDTO.getDate());
         event.setStartTime(createDTO.getStartTime());

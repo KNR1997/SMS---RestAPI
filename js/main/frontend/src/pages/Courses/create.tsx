@@ -6,7 +6,7 @@ export default function CreateCoursePage() {
     <>
       <PageBreadcrumb pageTitle="Create Course" />
 
-      <CreateOrUpdateCourseForm />
+      <CreateOrUpdateCourseForm isEditable={true} />
     </>
   );
 }

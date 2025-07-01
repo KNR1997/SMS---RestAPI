@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { MappedPaginatorInfo, User } from "../../types";
+import { ERole, MappedPaginatorInfo, User } from "../../types";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/pagination";
+import Badge from "@components/ui/badge/Badge";
 
 export type IProps = {
   users: User[];
@@ -80,7 +81,20 @@ export default function UserList({
                   {user.username}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {user.role}
+                  <Badge
+                    size="sm"
+                    color={
+                      user.role == ERole.ROLE_ADMIN
+                        ? "success"
+                        : user.role === ERole.ROLE_TEACHER
+                        ? "warning"
+                        : user.role === ERole.ROLE_RECEPTIONIST
+                        ? "dark"
+                        : "primary"
+                    }
+                  >
+                    {user.role}
+                  </Badge>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {user.email}
