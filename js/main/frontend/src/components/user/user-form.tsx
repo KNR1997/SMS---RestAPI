@@ -14,7 +14,7 @@ type FormValues = {
   lastName: string;
   email: string;
   username: string;
-  role: ERole;
+  role: { label: string; value: ERole };
   password: string;
 };
 
@@ -59,7 +59,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
-  console.log('initialValues: ', initialValues)
+  // console.log('initialValues: ', initialValues)
 
   const { mutate: createUser, isLoading: creating } = useCreateUserMutation();
   const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
@@ -70,7 +70,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
       lastName: values.lastName,
       email: values.email,
       username: values.username,
-      role: values.role,
+      role: values.role.value,
       password: values.password,
     };
 
