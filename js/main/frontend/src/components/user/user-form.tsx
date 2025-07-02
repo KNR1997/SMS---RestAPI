@@ -14,7 +14,7 @@ type FormValues = {
   lastName: string;
   email: string;
   username: string;
-  role: { label: string; value: ERole };
+  role: ERole;
   password: string;
 };
 
@@ -65,12 +65,13 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
   const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
 
   const onSubmit = async (values: FormValues) => {
+    console.log("values: ", values);
     const input = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
       username: values.username,
-      role: values.role.value,
+      role: values.role,
       password: values.password,
     };
 

@@ -35,7 +35,7 @@ export default function SignInForm() {
     formState: { errors },
   } = useForm<FormValues>({
     //@ts-ignore
-    // resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema), //  empty filed validation (stop data to the back end if empty fields)
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -44,6 +44,7 @@ export default function SignInForm() {
         username: values.username,
         password: values.password,
       };
+
       const res = await axios.post(
         "http://localhost:8080/api/auth/login/",
         data
@@ -52,21 +53,12 @@ export default function SignInForm() {
       navigate("/"); // ✅ Redirect after login
     } catch (err) {
       // alert("Login failed");
-      toast.error("Login failed")
+      toast.error("Login failed");
     }
   };
 
   return (
     <div className="flex flex-col flex-1">
-      {/* <div className="w-full max-w-md pt-10 mx-auto">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-        >
-          <ChevronLeftIcon className="size-5" />
-          Back to dashboard
-        </Link>
-      </div> */}
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
@@ -85,7 +77,7 @@ export default function SignInForm() {
                     Username <span className="text-error-500">*</span>{" "}
                   </Label>
                   <Input
-                    placeholder="user"
+                    placeholder="username"
                     {...register("username")}
                     errorMessage={errors.username?.message!}
                   />

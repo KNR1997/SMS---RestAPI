@@ -152,7 +152,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
 
   const handleCreateAndEnroll = handleSubmit(async (data) => {
     try {
-      console.log('handle create and enroll')
+      console.log("handle create and enroll");
       // You can do your actual submit logic here
       await onSubmit(data); // if you already have an `onSubmit` function defined
 
@@ -166,7 +166,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
 
   const handleSearchGuardian = () => {
     setTriggerSearch(true); // This will enable the query
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -346,7 +346,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
           </div>
         </Card>
 
-        <div className="flex gap-5">
+        <div className="flex gap-5 justify-end">
           <Button disabled={creating || updating} size="sm">
             {initialValues ? "Update" : "Create"} Student
           </Button>
