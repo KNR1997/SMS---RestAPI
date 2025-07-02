@@ -62,7 +62,7 @@ export interface EnrollmentPageData {
   admissionPayed: boolean;
   courseDetails: Course;
   lastPaidMonth: number;
-  lastPaidMonthName: string
+  lastPaidMonthName: string;
   enrollmentPayments: EnrollmentPayment[];
 }
 
@@ -132,7 +132,7 @@ export interface ExamResult {
 export enum ExamStatusType {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
-  CANCELLED = "CANCELLED"
+  CANCELLED = "CANCELLED",
 }
 
 export enum EStatus {
@@ -288,7 +288,7 @@ export interface CreatePayment {
   admission: number;
   totalAmount: number;
   paymentMethod: PaymentMethod;
-  coursePaymentList: CoursePayment[]
+  coursePaymentList: CoursePayment[];
 }
 
 export interface CoursePayment {
