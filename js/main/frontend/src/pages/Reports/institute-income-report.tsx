@@ -10,20 +10,21 @@ import EmployeeReportDataList from "@components/report/employee-report-data-list
 import InstituteIncomeReportDataList from "@components/report/institute-income-report-data-list";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { useInstituteMonthlyIncomeQuery } from "@data/report";
+import { data } from "react-router";
 
 export default function InstituteIncomeReport() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
-  const { courses, loading, error, paginatorInfo } = useCoursesQuery({
-    page,
-    orderBy,
-    sortedBy,
-  });
+  const { instituteMonthlyIncomes, loading, error } =
+    useInstituteMonthlyIncomeQuery();
 
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
+
+  console.log('instituteMonthlyIncomes: ', instituteMonthlyIncomes)
 
   const reportData = [
     {
@@ -79,7 +80,7 @@ export default function InstituteIncomeReport() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: ["March", "April", "May", "June", "July"],
+      categories: instituteMonthlyIncomes?.map((data) => `${data.year}-${data.month}`),
       axisBorder: {
         show: false,
       },
@@ -121,8 +122,8 @@ export default function InstituteIncomeReport() {
 
   const series = [
     {
-      name: "Sales",
-      data: [24000, 30000, 50000, 65000, 45000],
+      name: "Income",
+      data: instituteMonthlyIncomes?.map((data) => data.totalIncome),
     },
   ];
 
@@ -149,11 +150,11 @@ export default function InstituteIncomeReport() {
       </div>
       <div className="space-y-6 mt-5">
         <InstituteIncomeReportDataList
-          reportData={reportData}
-          paginatorInfo={paginatorInfo}
-          onPagination={handlePagination}
-          onOrder={setOrder}
-          onSort={setColumn}
+          reportData={instituteMonthlyIncomes}
+          // paginatorInfo={paginatorInfo}
+          // onPagination={handlePagination}
+          // onOrder={setOrder}
+          // onSort={setColumn}
         />
       </div>
     </>

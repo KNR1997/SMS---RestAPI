@@ -7,6 +7,7 @@ import {
   Course,
   EEnrollmentStatus,
   Enrollment,
+  ERole,
   PaymentMethod,
   Student,
 } from "../../types";
@@ -19,6 +20,7 @@ import Card from "@components/common/card";
 import Badge from "@components/ui/badge/Badge";
 import { monthOptions } from "../../constants/role";
 import { useNavigate } from "react-router";
+import { useUsersQuery } from "@data/user";
 
 type FormValues = {
   student: Student;
@@ -33,7 +35,7 @@ const defaultValues = {
   totalPayment: "4000",
 };
 
-export default function CreatePaymentForm() {
+export default function CreateEmployeePaymentForm() {
   const navigate = useNavigate();
 
   const {
@@ -47,7 +49,9 @@ export default function CreatePaymentForm() {
     defaultValues: defaultValues,
   });
 
-  const { students } = useStudentsQuery({});
+  const { users } = useUsersQuery({
+    role: ERole.ROLE_TEACHER
+  });
   const { mutate: createPayment, isLoading: creating } =
     useCreatePaymentMutation();
 
@@ -112,14 +116,14 @@ export default function CreatePaymentForm() {
         <div className="space-y-6">
           <div>
             <Label>
-              Student <span className="text-error-500">*</span>
+              Employee <span className="text-error-500">*</span>
             </Label>
             <SelectInput
               name="student"
               control={control}
               getOptionLabel={(option: any) => option.firstName}
               getOptionValue={(option: any) => option.id}
-              options={students}
+              options={users}
               isClearable={true}
             />
             {errors.student && (
