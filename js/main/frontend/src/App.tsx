@@ -60,6 +60,8 @@ import StudentReport from "./pages/Reports/student-report";
 import InstituteIncomeReport from "./pages/Reports/institute-income-report";
 import MonthlyActiveStudentReport from "./pages/Reports/monthly-active-student-report";
 import StudentRegistrationIncrementReport from "./pages/Reports/student-registration-increment-report";
+import EmployeePayments from "./pages/Employee/Payments";
+import CreateEmployeePaymentPage from "./pages/Employee/Payments/create";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -340,6 +342,27 @@ export default function App() {
                   element={
                     <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
                       <StudentRegistrationIncrementReport />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/employee/payments"
+                  element={
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_ADMIN]}
+                    >
+                      <EmployeePayments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/employee/payments/create"
+                  element={
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_ADMIN]}
+                    >
+                      <CreateEmployeePaymentPage />
                     </ProtectedRoute>
                   }
                 />

@@ -189,16 +189,25 @@ const navItems: NavItem[] = [
         pro: false,
       },
     ],
-    roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
+    roles: [ ERole.ROLE_STUDENT],
   },
   {
-    name: "Payments",
+    name: "Employee Payments",
+    icon: <DollarLineIcon />,
+    subItems: [
+      { name: "All Payments", path: "/employee/payments", pro: false },
+      { name: "Create payment", path: "/employee/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Student Payments",
     icon: <DollarLineIcon />,
     subItems: [
       { name: "All Payments", path: "/payments", pro: false },
       { name: "Create payment", path: "/payments/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Halls",

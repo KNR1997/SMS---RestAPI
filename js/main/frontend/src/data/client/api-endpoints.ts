@@ -13,4 +13,5 @@ export const API_ENDPOINTS = {
   INVOICE_STATUS_AUDITS: 'invoice-status-audits',
   PAYMENTS: 'payments',
   ME: 'auth/me',
+  REPORTS: 'reports',
 }

@@ -32,7 +32,7 @@ const StudentCalendar: React.FC = () => {
     sortedBy,
   });
 
-  console.log("calendarEvents: ", calendarEvents);
+  // console.log("calendarEvents: ", calendarEvents);
 
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null

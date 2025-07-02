@@ -40,6 +40,12 @@ export interface StudentsPerGrade {
   grade: string;
 }
 
+export interface InstitueMonthlyIncome {
+  year: number;
+  month: number;
+  totalIncome: number
+}
+
 export interface EnrollmentPayment {
   monthNumber: number;
   monthName: string;

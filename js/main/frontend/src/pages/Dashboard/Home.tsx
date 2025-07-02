@@ -14,6 +14,7 @@ import StudentInGrades from "@components/ecommerce/StudentInGrades";
 import { useStudentCountPerGradeQuery } from "@data/subject";
 import { useStudentCountPerCourseQuery } from "@data/enrollment";
 import Widgets from "@components/ecommerce/Widgets";
+import AdminOnly from "@components/admin/AdminOnly";
 
 export default function Home() {
   const { paginatorInfo, loading, error } = useStudentsQuery({});
@@ -34,15 +35,19 @@ export default function Home() {
         description="This is React.js Ecommerce Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
-        <div className="col-span-12 space-y-6 xl:col-span-7">
-          <Widgets />
-        </div>
+        <AdminOnly>
+          <div className="col-span-12 space-y-6 xl:col-span-7">
+            <Widgets />
+          </div>
+        </AdminOnly>
 
-        <div className="col-span-12 xl:col-span-5">
-          {studentsPerCourses && (
-            <CourseStudentChart studentsPerCourses={studentsPerCourses} />
-          )}
-        </div>
+        <AdminOnly>
+          <div className="col-span-12 xl:col-span-5">
+            {studentsPerCourses && (
+              <CourseStudentChart studentsPerCourses={studentsPerCourses} />
+            )}
+          </div>
+        </AdminOnly>
 
         <div className="col-span-12 space-y-6 xl:col-span-7">
           <EcommerceMetrics
@@ -54,11 +59,13 @@ export default function Home() {
           )} */}
         </div>
 
-        <div className="col-span-12 xl:col-span-5">
-          {studentsPerGrades && (
-            <StudentInGrades studentsPerGrades={studentsPerGrades} />
-          )}
-        </div>
+        <AdminOnly>
+          <div className="col-span-12 xl:col-span-5">
+            {studentsPerGrades && (
+              <StudentInGrades studentsPerGrades={studentsPerGrades} />
+            )}
+          </div>
+        </AdminOnly>
 
         {/* <div className="col-span-12 xl:col-span-5">
           <MonthlyTarget />

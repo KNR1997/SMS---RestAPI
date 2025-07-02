@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { PencilIcon } from "../../icons";
-import { Course, MappedPaginatorInfo } from "@types";
+import { Course, InstitueMonthlyIncome, MappedPaginatorInfo } from "@types";
 import {
   Table,
   TableBody,
@@ -11,13 +11,7 @@ import {
 import Pagination from "@components/ui/pagination";
 
 export type IProps = {
-  reportData: {
-    id: number;
-    // employeeName: string;
-    // role: string;
-    month: string;
-    income: number;
-  }[];
+  reportData: InstitueMonthlyIncome[];
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
@@ -44,11 +38,17 @@ export default function InstituteIncomeReportDataList({
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Id
+              </TableCell> */}
+              <TableCell
+                isHeader
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
+                Year
               </TableCell>
               <TableCell
                 isHeader
@@ -88,15 +88,18 @@ export default function InstituteIncomeReportDataList({
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {reportData.map((data) => (
-              <TableRow key={data.id}>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+              <TableRow key={data.year - data.month}>
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {data.id}
+                </TableCell> */}
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {data.year}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {data.month}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {data.income}
+                  Rs. {data.totalIncome}
                 </TableCell>
                 {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {data.month}
