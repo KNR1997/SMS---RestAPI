@@ -70,7 +70,7 @@ public class UserService {
 
     public User updateUser(Integer id, UserCreateDTO updateDto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
         Role role = roleRepository.findByName(updateDto.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + updateDto.getRole()));
@@ -87,6 +87,14 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public User resetUserPassword(Integer id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        user.setPassword(encoder.encode("1234"));
+        return userRepository.save(user);
+
     }
 
 }

@@ -31,4 +31,10 @@ export const UserClient = {
   me: () => {
     return HttpClient.get<any>(API_ENDPOINTS.ME);
   },
+  resetPassword: ({ id }: { id: number }) => {
+    return HttpClient.put<User>(
+      `${API_ENDPOINTS.USERS}/${id}/reset-password`,
+      {}
+    );
+  },
 };

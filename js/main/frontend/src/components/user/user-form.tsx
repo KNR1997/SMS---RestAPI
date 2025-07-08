@@ -65,7 +65,6 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
   const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
 
   const onSubmit = async (values: FormValues) => {
-    console.log("values: ", values);
     const input = {
       firstName: values.firstName,
       lastName: values.lastName,
