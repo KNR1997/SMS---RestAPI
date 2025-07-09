@@ -50,9 +50,9 @@ public class UserService {
     }
 
     public User createUser(UserCreateDTO userCreateDTO) {
-        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
-        }
+//        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
+//            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
+//        }
 
         Role role = roleRepository.findByName(userCreateDTO.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + userCreateDTO.getRole()));
@@ -60,9 +60,11 @@ public class UserService {
         User user = new User();
         user.setFirstName(userCreateDTO.getFirstName());
         user.setLastName(userCreateDTO.getLastName());
-        user.setEmail(userCreateDTO.getEmail());
+//        user.setEmail(userCreateDTO.getEmail());
         user.setUsername(userCreateDTO.getUsername());
         user.setRole(role);
+        user.setAddress(userCreateDTO.getAddress());
+        user.setGenderType(userCreateDTO.getGenderType());
         user.setPassword(encoder.encode(userCreateDTO.getPassword()));
 
         return userRepository.save(user);

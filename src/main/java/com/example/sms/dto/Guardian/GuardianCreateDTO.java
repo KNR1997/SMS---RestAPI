@@ -1,5 +1,6 @@
 package com.example.sms.dto.Guardian;
 
+import com.example.sms.enums.RelationshipType;
 import lombok.Data;
 
 @Data
@@ -15,4 +16,6 @@ public class GuardianCreateDTO {
     private String nationalIdentityNumber;
 
     private String contactNumber;
+
+    private RelationshipType relationship;
 }

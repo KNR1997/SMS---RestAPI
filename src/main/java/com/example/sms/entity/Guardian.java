@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.RelationshipType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,5 +21,8 @@ public class Guardian {
     private String nationalIdentityNumber;
 
     private String contactNumber;
+
+    @Enumerated(EnumType.STRING)
+    private RelationshipType relationship;
 
 }

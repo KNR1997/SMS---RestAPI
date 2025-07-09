@@ -1,5 +1,7 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.GenderType;
+import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,7 +19,12 @@ public class User {
 
     private String lastName;
 
-    @Column(unique = true)
+    @Enumerated(EnumType.STRING)
+    private GenderType genderType;
+
+    private String address;
+
+//    @Column(unique = true)
     private String email;
 
     private String username;

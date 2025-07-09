@@ -83,8 +83,10 @@ public class StudentService {
     @Transactional
     public Student createStudent(StudentCreateDTO studentCreateDTO) {
 
+        // First create a User
         User newUser = userService.createUser(studentCreateDTO.getUserDetails());
 
+        // Create a new Student
         Student student = new Student();
         student.setUser(newUser);
         student.setStudentId(generateStudentId());
@@ -93,7 +95,6 @@ public class StudentService {
 
         Guardian guardian;
         Integer guardianId = studentCreateDTO.getGuardianDetails().getId();
-
         if (guardianId == null) {
             // If no ID is provided, create a new guardian
             guardian = guardianService.createGuardian(studentCreateDTO.getGuardianDetails());
@@ -116,7 +117,9 @@ public class StudentService {
 
         user.setFirstName(studentCreateDTO.getUserDetails().getFirstName());
         user.setLastName(studentCreateDTO.getUserDetails().getLastName());
-        user.setEmail(studentCreateDTO.getUserDetails().getEmail());
+//        user.setEmail(studentCreateDTO.getUserDetails().getEmail());
+        user.setGenderType(studentCreateDTO.getUserDetails().getGenderType());
+        user.setAddress(studentCreateDTO.getUserDetails().getAddress());
 
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGradeType(studentCreateDTO.getGradeType());

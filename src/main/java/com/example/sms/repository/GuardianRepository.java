@@ -9,4 +9,7 @@ public interface GuardianRepository extends JpaRepository<Guardian, Integer> {
 
     Optional<Guardian> findByNationalIdentityNumber(String slug);
 
+    boolean existsByNationalIdentityNumber(String slug);
+
+
 }

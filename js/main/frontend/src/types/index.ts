@@ -43,7 +43,7 @@ export interface StudentsPerGrade {
 export interface InstitueMonthlyIncome {
   year: number;
   month: number;
-  totalIncome: number
+  totalIncome: number;
 }
 
 export interface EnrollmentPayment {
@@ -167,6 +167,17 @@ export enum EGrade {
   GRADE_11 = "GRADE_11",
 }
 
+export enum EGender {
+  Male = "Male",
+  Female = "Female",
+}
+
+export enum RelationshipType {
+  FATHER = "FATHER",
+  MOTHER = "MOTHER",
+  GUARDIAN = "GUARDIAN",
+}
+
 export enum EEnrollmentStatus {
   ACTIVE = "ACTIVE",
   LOCKED = "LOCKED",
@@ -216,9 +227,11 @@ export interface User {
 export interface CreateUser {
   firstName: string;
   lastName: string;
-  email: string;
+  // email: string;
   username: string;
   role: ERole;
+  address: string;
+  genderType: EGender;
 }
 
 export interface Guardian {
@@ -237,6 +250,7 @@ export interface GuardianPageData {
   email: string;
   nationalIdentityNumber: string;
   contactNumber: string;
+  relationship: RelationshipType;
 }
 
 export interface CreateGuardian {
@@ -245,6 +259,7 @@ export interface CreateGuardian {
   email: string;
   nationalIdentityNumber: string;
   contactNumber: string;
+  relationship: RelationshipType;
 }
 
 export interface EnrollCourseData {
