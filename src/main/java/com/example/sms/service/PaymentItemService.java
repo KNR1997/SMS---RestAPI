@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class PaymentItemService {
 
@@ -19,6 +21,10 @@ public class PaymentItemService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    public List<PaymentItem> getAll() {
+        return paymentItemRepository.findAll();
+    }
 
     @Transactional
     public PaymentItem createPaymentItem(PaymentItemCreateDTO createDto) {
