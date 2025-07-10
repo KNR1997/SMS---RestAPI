@@ -4,13 +4,23 @@ import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import { EGrade, ERole, StudentPageData } from "@types";
+import {
+  EGender,
+  EGrade,
+  ERole,
+  RelationshipType,
+  StudentPageData,
+} from "@types";
 import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
 } from "@data/student";
 import SelectInput from "../form/select-input";
-import { gradeOptions } from "../../constants/role";
+import {
+  genderOptions,
+  gradeOptions,
+  relationshipOptions,
+} from "../../constants/role";
 import { useNavigate } from "react-router";
 import Card from "../common/card";
 import { useEffect, useState } from "react";
@@ -21,6 +31,8 @@ type FormValues = {
   lastName: string;
   email: string;
   gradeType: EGrade;
+  genderType: EGender;
+  address: string;
   username: string;
   password: string;
   dateOfBirth: Date;
@@ -31,6 +43,7 @@ type FormValues = {
   guardianEmail: string;
   guardianIdNumber: string;
   guardianContactNumber: string;
+  guardianRelatioship: RelationshipType;
 };
 
 const defaultValues = {
@@ -38,6 +51,8 @@ const defaultValues = {
   lastName: "",
   email: "",
   gradeType: "",
+  genderType: "",
+  address: "",
   username: "",
   password: "",
 
@@ -45,13 +60,17 @@ const defaultValues = {
   guardianLastName: "",
   guardianIdNumber: "",
   guardianContactNumber: "",
+  guardianRelatioship: "",
 };
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
-  email: yup.string().required("Email is required"),
+  //email: yup.string().required("Email is required"),
   gradeType: yup.string().required("Grade is required"),
+  genderType: yup.string().required("Gender is required"),
+  address: yup.string().required("Address is required"),
+
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
   dateOfBirth: yup.string().required("Birthday is required"),
@@ -60,6 +79,9 @@ const validationSchema = yup.object().shape({
   guardianLastName: yup.string().required("Guardian Last Name is required"),
   guardianIdNumber: yup.string().required("Guardian ID number is required"),
   guardianContactNumber: yup.string().required("Contact Number is required"),
+  guardianRelatioship: yup
+    .object()
+    .required("Guardian Relationship is required"),
 });
 
 interface Props {
@@ -110,6 +132,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
           guardianEmail: initialValues.guardianPageData.email,
           guardianIdNumber: initialValues.guardianPageData.id,
           guardianContactNumber: initialValues.guardianPageData.contactNumber,
+          guardianRelatioship: relationshipOptions.find(
+            (relationshipOption) =>
+              relationshipOption.value ==
+              initialValues.guardianPageData.relationship
+          ),
         }
       : defaultValues,
     //@ts-ignore
@@ -128,10 +155,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
       userDetails: {
         firstName: values.firstName,
         lastName: values.lastName,
-        email: values.email,
+        // email: values.email,
         username: values.username,
         role: ERole.ROLE_STUDENT,
         password: values.password,
+        genderType: values.genderType,
+        address: values.address,
       },
       guardianDetails: {
         id: values.guardianId,
@@ -140,8 +169,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         email: values.guardianEmail,
         nationalIdentityNumber: values.guardianIdNumber,
         contactNumber: values.guardianContactNumber,
+        relationship: values.guardianRelatioship,
       },
     };
+
+    console.log("input: ", input);
 
     if (!initialValues) {
       createStudent(input);
@@ -171,6 +203,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
+        {/* Student Details  */}
         <Card>
           <h2
             className="text-xl text-gray-800 dark:text-white/90 mb-4"
@@ -235,6 +268,30 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
             </div>
             <div>
               <Label>
+                Gender <span className="text-error-500">*</span>
+              </Label>
+              <Controller
+                name="genderType"
+                control={control}
+                rules={{ required: "Gender is required" }}
+                render={({ field }) => (
+                  <SelectInput
+                    options={genderOptions}
+                    placeholder="Select Option"
+                    value={field.value}
+                    onChange={field.onChange}
+                    className="dark:bg-dark-900"
+                  />
+                )}
+              />
+              {errors.genderType && (
+                <p className="text-error-500 text-sm mt-1">
+                  {errors.genderType.message}
+                </p>
+              )}
+            </div>
+            {/* <div>
+              <Label>
                 Email <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
@@ -242,31 +299,19 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 {...register("email")}
                 errorMessage={errors.email?.message!}
               />
-            </div>
+            </div> */}
             <div>
               <Label>
-                Username <span className="text-error-500">*</span>{" "}
+                Address <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="user123"
-                {...register("username")}
-                errorMessage={errors.username?.message!}
-              />
-            </div>
-            <div>
-              <Label>
-                Password <span className="text-error-500">*</span>{" "}
-              </Label>
-              <Input
-                type="password"
-                // placeholder="user"
-                {...register("password")}
-                errorMessage={errors.password?.message!}
+                placeholder="Enter Address"
+                {...register("address")}
+                errorMessage={errors.address?.message!}
               />
             </div>
           </div>
         </Card>
-
         {/* Guardian Details */}
         <Card>
           <div className="flex justify-between mb-5">
@@ -277,9 +322,9 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
               Guardian Details
             </h2>
             <div className="flex gap-5">
-              {/* <Label>Search Guardian by ID Number</Label> */}
+              {/* <Label>Search Guardian with NIC Number</Label> */}
               <Input
-                placeholder="Search Guardian by ID"
+                placeholder="Search Guardian with NIC"
                 value={guardianSearchInput}
                 onChange={(e) => setGuardianSearchInput(e.target.value)}
               />
@@ -310,7 +355,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
             </div>
             <div>
               <Label>
-                Email <span className="text-error-500">*</span>{" "}
+                Email <span className="text-error-500"></span>{" "}
               </Label>
               <Input
                 // placeholder="user@example.com"
@@ -320,7 +365,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
             </div>
             <div>
               <Label>
-                ID Number <span className="text-error-500">*</span>{" "}
+                NIC Number <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
                 // placeholder="user@example.com"
@@ -338,6 +383,40 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 errorMessage={errors.guardianContactNumber?.message!}
               />
             </div>
+            {/* <div>
+              <Label>
+                Relationship <span className="text-error-500">*</span>{" "}
+              </Label>
+              <Input
+                // placeholder="father or mother"
+                {...register("guardianRelatioship")}
+                errorMessage={errors.guardianRelatioship?.message!}
+              />
+            </div> */}
+            <div>
+              <Label>
+                Relationship <span className="text-error-500">*</span>
+              </Label>
+              <Controller
+                name="guardianRelatioship"
+                control={control}
+                rules={{ required: "Relationship is required" }}
+                render={({ field }) => (
+                  <SelectInput
+                    options={relationshipOptions}
+                    placeholder="Select Option"
+                    value={field.value}
+                    onChange={field.onChange}
+                    className="dark:bg-dark-900"
+                  />
+                )}
+              />
+              {errors.guardianRelatioship && (
+                <p className="text-error-500 text-sm mt-1">
+                  {errors.guardianRelatioship.message}
+                </p>
+              )}
+            </div>
             <Input
               className="hidden"
               {...register("guardianId")}
@@ -346,6 +425,38 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
           </div>
         </Card>
 
+        {/* Login Details  */}
+        <Card>
+          <h2
+            className="text-xl text-gray-800 dark:text-white/90 mb-4"
+            x-text="pageName"
+          >
+            Login Details
+          </h2>
+          <div className="grid grid-cols-2 gap-5">
+            <div>
+              <Label>
+                Username <span className="text-error-500">*</span>{" "}
+              </Label>
+              <Input
+                placeholder="user123"
+                {...register("username")}
+                errorMessage={errors.username?.message!}
+              />
+            </div>
+            <div>
+              <Label>
+                Password <span className="text-error-500">*</span>{" "}
+              </Label>
+              <Input
+                type="password"
+                // placeholder="user"
+                {...register("password")}
+                errorMessage={errors.password?.message!}
+              />
+            </div>
+          </div>
+        </Card>
         <div className="flex gap-5 justify-end">
           <Button disabled={creating || updating} size="sm">
             {initialValues ? "Update" : "Create"} Student

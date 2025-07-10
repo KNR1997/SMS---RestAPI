@@ -30,7 +30,6 @@ type FormValues = {
 
 const defaultValues = {
   admission: "2000",
-  totalPayment: "4000",
 };
 
 export default function CreatePaymentForm() {
@@ -83,6 +82,8 @@ export default function CreatePaymentForm() {
       enrollments.some((enrollment) => enrollment.courseCode == course.code)
     );
   };
+
+  const calculatePaymentTotal = () => {};
 
   const onSubmit = async (values: FormValues) => {
     const input = {

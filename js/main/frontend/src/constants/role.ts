@@ -1,4 +1,11 @@
-import { EGrade, ERole, EventType, ExamStatusType } from "../types";
+import {
+  EGender,
+  EGrade,
+  ERole,
+  EventType,
+  ExamStatusType,
+  RelationshipType,
+} from "../types";
 
 export const roleOptions = [
   { value: ERole.ROLE_ADMIN, label: "Admin" },
@@ -15,6 +22,17 @@ export const gradeOptions = [
   { value: EGrade.GRADE_9, label: "Grade 9" },
   { value: EGrade.GRADE_10, label: "Grade 10" },
   { value: EGrade.GRADE_11, label: "Grade 11" },
+];
+
+export const genderOptions = [
+  { value: EGender.Male, label: "Male" },
+  { value: EGender.Female, label: "Female" },
+];
+
+export const relationshipOptions = [
+  { value: RelationshipType.FATHER, label: "Father" },
+  { value: RelationshipType.MOTHER, label: "Mother" },
+  { value: RelationshipType.GUARDIAN, label: "Guardian" },
 ];
 
 export const eventTypeOptions = [

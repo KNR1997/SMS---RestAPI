@@ -3,6 +3,7 @@ package com.example.sms.service;
 import com.example.sms.dto.Guardian.GuardianCreateDTO;
 import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.entity.Guardian;
+import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.GuardianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class GuardianService {
     }
 
     public Guardian createGuardian(GuardianCreateDTO createDto) {
+        if (guardianRepository.existsByNationalIdentityNumber(createDto.getNationalIdentityNumber())) {
+            throw new BadRequestException("Guardian with NIC number '" + createDto.getNationalIdentityNumber() + "' already exists.");
+        }
 
         Guardian guardian = new Guardian();
         guardian.setFirstName(createDto.getFirstName());
@@ -42,6 +46,7 @@ public class GuardianService {
         guardian.setEmail(createDto.getEmail());
         guardian.setNationalIdentityNumber(createDto.getNationalIdentityNumber());
         guardian.setContactNumber(createDto.getContactNumber());
+        guardian.setRelationship(createDto.getRelationship());
 
         return guardianRepository.save(guardian);
     }

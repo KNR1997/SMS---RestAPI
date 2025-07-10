@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { PencilIcon } from "../../icons";
+import { PencilIcon, BoltIcon } from "../../icons";
 import { ERole, MappedPaginatorInfo, User } from "../../types";
 import {
   Table,
@@ -10,6 +10,7 @@ import {
 } from "../ui/table";
 import Pagination from "../ui/pagination";
 import Badge from "@components/ui/badge/Badge";
+import { useResetUserPasswordMutation } from "@data/user";
 
 export type IProps = {
   users: User[];
@@ -29,6 +30,8 @@ export default function UserList({
   const handleEdit = (id: number) => {
     navigate(`/users/${id}/edit`);
   };
+
+  const { mutate: resetPassword } = useResetUserPasswordMutation();
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -100,8 +103,11 @@ export default function UserList({
                   {user.email}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <button onClick={() => handleEdit(user.id)}>
+                  <button onClick={() => handleEdit(user.id)} className="pr-1">
                     <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                  </button>
+                  <button onClick={() => resetPassword({ id: user.id })}>
+                    <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                   </button>
                 </TableCell>
               </TableRow>
