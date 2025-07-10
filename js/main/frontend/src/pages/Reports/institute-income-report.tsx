@@ -1,22 +1,19 @@
 import PageBreadcrumb from "@components/common/PageBreadCrumb";
-import TeacherReportDataList from "@components/report/teacher-report-data-list";
 import ErrorMessage from "@components/ui/error-message";
 import Loader from "@components/ui/loader/loader";
-import { useCoursesQuery } from "@data/course";
 import { SortOrder } from "@types";
 import { useState } from "react";
 import Button from "@components/ui/button/Button";
-import EmployeeReportDataList from "@components/report/employee-report-data-list";
 import InstituteIncomeReportDataList from "@components/report/institute-income-report-data-list";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { useInstituteMonthlyIncomeQuery } from "@data/report";
-import { data } from "react-router";
 
 export default function InstituteIncomeReport() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const token = localStorage.getItem("token");
 
   const { instituteMonthlyIncomes, loading, error } =
     useInstituteMonthlyIncomeQuery();
@@ -24,7 +21,7 @@ export default function InstituteIncomeReport() {
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
 
-  console.log('instituteMonthlyIncomes: ', instituteMonthlyIncomes)
+  console.log("instituteMonthlyIncomes: ", instituteMonthlyIncomes);
 
   const reportData = [
     {
@@ -80,7 +77,9 @@ export default function InstituteIncomeReport() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: instituteMonthlyIncomes?.map((data) => `${data.year}-${data.month}`),
+      categories: instituteMonthlyIncomes?.map(
+        (data) => `${data.year}-${data.month}`
+      ),
       axisBorder: {
         show: false,
       },
@@ -127,11 +126,40 @@ export default function InstituteIncomeReport() {
     },
   ];
 
+  async function handleExportOrder() {
+    try {
+      const response = await fetch(
+        `/api/reports/export/institute-monthly-income`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.ms-excel",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to export file");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "institute_income.xls";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export error:", error);
+    }
+  }
+
   return (
     <>
       <PageBreadcrumb pageTitle="Institute Income Report" />
       <div className="flex justify-end py-2">
-        <Button size="sm" className="mr-5">
+        <Button onClick={handleExportOrder} size="sm" className="mr-5">
           Export
         </Button>
       </div>
