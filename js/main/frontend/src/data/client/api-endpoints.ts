@@ -10,6 +10,8 @@ export const API_ENDPOINTS = {
   HALLS: 'halls',
   EVENTS: 'events',
   ENROLLMENTS: 'enrollments',
+  ENROLLMENT_PAYMENTS: 'enrollment-payments',
+  EMPLOYEE_PAYMENTS: 'employee-payments',
   INVOICE_STATUS_AUDITS: 'invoice-status-audits',
   PAYMENTS: 'payments',
   ME: 'auth/me',
