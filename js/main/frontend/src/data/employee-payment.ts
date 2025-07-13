@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router";
 import { EmployeePaymentClient } from "./client/employee-payment";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { API_ENDPOINTS } from "./client/api-endpoints";
+import { EmployeePaymentPaginator, EmployeePaymentQueryOptions } from "@types";
+import { mapPaginatorData } from "../utils/data-mappers";
 
 export const useCreateEmployeePaymentMutation = () => {
   const navigate = useNavigate();
@@ -21,4 +23,26 @@ export const useCreateEmployeePaymentMutation = () => {
       toast.error("Something going wrong!");
     },
   });
+};
+
+export const useEmployeePaymentsQuery = (
+  params: Partial<EmployeePaymentQueryOptions>,
+  options: any = {}
+) => {
+  const { data, error, isLoading } = useQuery<EmployeePaymentPaginator, Error>(
+    [API_ENDPOINTS.EMPLOYEE_PAYMENTS, params],
+    ({ queryKey, pageParam }) =>
+      EmployeePaymentClient.paginated(Object.assign({}, queryKey[1], pageParam)),
+    {
+      keepPreviousData: true,
+      ...options,
+    }
+  );
+
+  return {
+    employeePayments: data?.content ?? [],
+    paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
 };

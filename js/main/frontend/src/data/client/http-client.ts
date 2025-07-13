@@ -69,6 +69,7 @@ interface SearchParamOptions {
   companyName: string;
   username: string;
   role: ERole;
+  employeeName: string;
 }
 
 export class HttpClient {

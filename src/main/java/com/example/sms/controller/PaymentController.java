@@ -24,7 +24,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<PaymentListDTO>> getAllCourses(
+    public ResponseEntity<PaginatedResponse<PaymentListDTO>> getAllPayments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,

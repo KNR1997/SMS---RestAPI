@@ -11,19 +11,19 @@ import SelectInput from "../ui/select-input";
 import { useForm } from "react-hook-form";
 import Badge from "@components/ui/badge/Badge";
 import { ERole } from "@types";
-import { monthOptions } from "../../constants/role";
 
 interface IProps {
   employee: any;
+  onCalculate: (totalIncome: number, monthNumber: number) => void;
 }
 
 type FormValues = {
-  student: { label: string; value: number };
+  month: { label: string; value: number };
 };
 
 const defaultValues = {};
 
-export default function EmployeeDetails({ employee }: IProps) {
+export default function EmployeeDetails({ employee, onCalculate }: IProps) {
   const {
     control,
     handleSubmit,
@@ -33,14 +33,14 @@ export default function EmployeeDetails({ employee }: IProps) {
     defaultValues: defaultValues,
   });
 
-  const student = watch("student");
+  const month = watch("month");
 
   const { coursePayments, loading, error } = useCoursePaymentsSummaryQuery({
     teacherId: employee?.id,
-    monthNumber: student?.value ?? 0,
+    monthNumber: month?.value ?? 0,
   });
 
-  console.log("student: ", student);
+  console.log("student: ", month);
 
   console.log("coursePayments: ", coursePayments);
 
@@ -61,8 +61,11 @@ export default function EmployeeDetails({ employee }: IProps) {
 
   const onSubmit = async (values: FormValues) => {};
 
-  const totalIncome =
-    coursePayments?.reduce((sum, c) => sum + c.income, 0) || 0;
+  const totalIncome = () => {
+    const value = coursePayments?.reduce((sum, c) => sum + c.income, 0) || 0;
+    onCalculate(value * 0.7, month?.value);
+    return value;
+  };
 
   return (
     <div className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -71,7 +74,7 @@ export default function EmployeeDetails({ employee }: IProps) {
       </h4>
       <form onSubmit={handleSubmit(onSubmit)}>
         <SelectInput
-          name="student"
+          name="month"
           placeholder="Select month..."
           control={control}
           options={monthOptions}
@@ -220,8 +223,8 @@ export default function EmployeeDetails({ employee }: IProps) {
           </div>
         )} */}
         <div className="text-sm my-2 flex flex-col font-medium text-gray-800 dark:text-white/90">
-          <div>Total: Rs. {totalIncome} % 30</div>
-          <div>Portion: Rs. {totalIncome * 0.7}</div>
+          <div>Total: Rs. {totalIncome()} % 30</div>
+          <div>Portion: Rs. {totalIncome() * 0.7}</div>
         </div>
       </div>
     </div>

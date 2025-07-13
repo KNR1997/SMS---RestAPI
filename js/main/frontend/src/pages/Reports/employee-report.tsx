@@ -7,17 +7,21 @@ import { SortOrder } from "@types";
 import { useState } from "react";
 import Button from "@components/ui/button/Button";
 import EmployeeReportDataList from "@components/report/employee-report-data-list";
+import { useEmployeePaymentsQuery } from "@data/employee-payment";
+import EmployeePaymentReportDataList from "@components/report/employee-payment-report-data-list";
 
 export default function EmployeeReport() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
-  const { courses, loading, error, paginatorInfo } = useCoursesQuery({
-    page,
-    orderBy,
-    sortedBy,
-  });
+  const { employeePayments, loading, error, paginatorInfo } =
+    useEmployeePaymentsQuery({
+      page,
+      orderBy,
+      sortedBy,
+    });
+
 
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -73,8 +77,8 @@ export default function EmployeeReport() {
         </Button>
       </div>
       <div className="space-y-6">
-        <EmployeeReportDataList
-          reportData={reportData}
+        <EmployeePaymentReportDataList
+          reportData={employeePayments}
           paginatorInfo={paginatorInfo}
           onPagination={handlePagination}
           onOrder={setOrder}

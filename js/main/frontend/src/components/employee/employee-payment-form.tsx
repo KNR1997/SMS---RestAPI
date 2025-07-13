@@ -7,6 +7,7 @@ import { Course, ERole, Student } from "../../types";
 import { useUsersQuery } from "@data/user";
 import EmployeeDetails from "./employee-details";
 import { useCreateEmployeePaymentMutation } from "@data/employee-payment";
+import { useState } from "react";
 
 type FormValues = {
   employee: Student;
@@ -22,6 +23,9 @@ const defaultValues = {
 };
 
 export default function CreateEmployeePaymentForm() {
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [monthNumber, setMonthNumber] = useState(0);
+
   const {
     control,
     register,
@@ -43,10 +47,15 @@ export default function CreateEmployeePaymentForm() {
   const onSubmit = async (values: FormValues) => {
     const input = {
       employeeId: values.employee.id,
-      monthNumber: 7,
-      amount: 4900,
+      monthNumber: monthNumber,
+      amount: totalIncome,
     };
-     createEmployeePayment({ ...input });
+    createEmployeePayment({ ...input });
+  };
+
+  const handleSetIncomeValue = (totalIncome: number , monthNumber: number) => {
+    setTotalIncome(totalIncome);
+    setMonthNumber(monthNumber);
   };
 
   // const enableCreatePaymentButton = () => {
@@ -85,18 +94,23 @@ export default function CreateEmployeePaymentForm() {
             </Label>
             <Input
               {...register("totalPayment")}
+              value={totalIncome}
               errorMessage={errors.totalPayment?.message!}
               disabled
             />
           </div>
-          <Button 
-          // disabled={!enableCreatePaymentButton() || creating} 
-          size="sm">
+          <Button
+            // disabled={!enableCreatePaymentButton() || creating}
+            size="sm"
+          >
             Create Payment
           </Button>
         </div>
       </form>
-      <EmployeeDetails employee={selectedEmployee} />
+      <EmployeeDetails
+        employee={selectedEmployee}
+        onCalculate={handleSetIncomeValue}
+      />
     </div>
   );
 }

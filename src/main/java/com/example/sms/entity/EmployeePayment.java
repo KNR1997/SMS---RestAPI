@@ -2,18 +2,18 @@ package com.example.sms.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class EmployeePayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
     private User employee;
 
     private Integer monthNumber;

@@ -1,10 +1,8 @@
 import {
   CreateEmployeePayment,
-  CreateEvent,
   EmployeePayment,
-  Event,
-  EventPaginator,
-  EventQueryOptions,
+  EmployeePaymentPaginator,
+  EmployeePaymentQueryOptions,
   QueryOptions,
 } from "@types";
 import { crudFactory } from "./crud-factory";
@@ -15,15 +13,21 @@ export const EmployeePaymentClient = {
   ...crudFactory<EmployeePayment, QueryOptions, CreateEmployeePayment>(
     API_ENDPOINTS.EMPLOYEE_PAYMENTS
   ),
-  //   paginated: ({ code, ...params }: Partial<EventQueryOptions>) => {
-  //     return HttpClient.get<EventPaginator>(API_ENDPOINTS.EVENTS, {
-  //       searchJoin: "and",
-  //       // self,
-  //       ...params,
-  //       page: params?.page ? params.page - 1 : 0,
-  //       search: HttpClient.formatSearchParams({
-  //         code,
-  //       }),
-  //     });
-  //   },
+  paginated: ({
+    employeeName,
+    ...params
+  }: Partial<EmployeePaymentQueryOptions>) => {
+    return HttpClient.get<EmployeePaymentPaginator>(
+      API_ENDPOINTS.EMPLOYEE_PAYMENTS,
+      {
+        searchJoin: "and",
+        // self,
+        ...params,
+        page: params?.page ? params.page - 1 : 0,
+        search: HttpClient.formatSearchParams({
+          employeeName,
+        }),
+      }
+    );
+  },
 };

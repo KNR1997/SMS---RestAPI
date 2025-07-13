@@ -33,4 +33,9 @@ public class User {
         return roleType.equals(RoleType.ROLE_ADMIN);
     }
 
+    public String getUserFullName() {
+        return this.getFirstName() + " "  + this.getLastName();
+    }
+
+
 }

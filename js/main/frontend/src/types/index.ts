@@ -380,9 +380,11 @@ export interface Event {
 export interface EmployeePayment {
   id: number;
   employeeId: string;
+  employeeName: string;
   monthNumber: number;
   amount: number;
   paymentDate: string;
+  roleType: ERole;
 }
 
 export interface CreateEmployeePayment {
@@ -471,6 +473,8 @@ export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
 export interface CoursePaymentSummaryPaginator extends PaginatorInfo<CoursePaymentSummary> {}
 
+export interface EmployeePaymentPaginator extends PaginatorInfo<EmployeePayment> {}
+
 export interface InvoiceStatusAuditPaginator
   extends PaginatorInfo<InvoiceStatusAudit> {}
 
@@ -511,6 +515,10 @@ export interface EnrollmentQueryOptions extends QueryOptions {
 export interface CoursePaymentQueryOptions extends QueryOptions {
   teacherId: number;
   monthNumber: number;
+}
+
+export interface EmployeePaymentQueryOptions extends QueryOptions {
+  employeeName: string;
 }
 
 export interface ExamQueryOptions extends QueryOptions {
