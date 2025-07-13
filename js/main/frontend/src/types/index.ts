@@ -30,6 +30,25 @@ export interface Enrollment {
   lastPaidMonthName: string;
 }
 
+export interface EnrollmentPayment {
+  id: number;
+  enrollment?: Enrollment;
+  enrollmentId: number;
+  monthNumber: number;
+  amount: number;
+  paymentDate: string;
+  payment?: Payment;
+  paymentId: number;
+}
+
+export interface CoursePaymentSummary {
+  courseName: string;
+  courseFee: number;
+  income: number;
+  students?: number;
+  monthNumber: number;
+}
+
 export interface StudentsPerCouse {
   studentCount: number;
   courseName: string;
@@ -373,6 +392,22 @@ export interface Event {
   status: EventStatusType;
 }
 
+export interface EmployeePayment {
+  id: number;
+  employeeId: string;
+  employeeName: string;
+  monthNumber: number;
+  amount: number;
+  paymentDate: string;
+  roleType: ERole;
+}
+
+export interface CreateEmployeePayment {
+  employeeId: number;
+  monthNumber: number;
+  amount: number;
+}
+
 export interface CreateEvent {
   code: string;
   eventType: EventType;
@@ -451,6 +486,10 @@ export interface EventPaginator extends PaginatorInfo<Event> {}
 
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
+export interface CoursePaymentSummaryPaginator extends PaginatorInfo<CoursePaymentSummary> {}
+
+export interface EmployeePaymentPaginator extends PaginatorInfo<EmployeePayment> {}
+
 export interface InvoiceStatusAuditPaginator
   extends PaginatorInfo<InvoiceStatusAudit> {}
 
@@ -486,6 +525,15 @@ export interface CourseQueryOptions extends QueryOptions {
 
 export interface EnrollmentQueryOptions extends QueryOptions {
   studentId: number;
+}
+
+export interface CoursePaymentQueryOptions extends QueryOptions {
+  teacherId: number;
+  monthNumber: number;
+}
+
+export interface EmployeePaymentQueryOptions extends QueryOptions {
+  employeeName: string;
 }
 
 export interface ExamQueryOptions extends QueryOptions {

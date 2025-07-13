@@ -22,5 +22,4 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     List<Course> findByTeacher(User teacher);
 
     Page<Course> findByTeacher(User teacher, Pageable pageable);
-
 }

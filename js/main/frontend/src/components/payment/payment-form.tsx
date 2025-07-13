@@ -107,6 +107,10 @@ export default function CreatePaymentForm() {
     );
   };
 
+  const totalPayment =
+    (selectedStudent?.admissionPayed ? 0 : 2000) +
+    (selectedCourses?.reduce((sum, course) => sum + course.fee, 0) || 0);
+
   return (
     <div className="grid grid-cols-2 gap-5  ">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -202,6 +206,7 @@ export default function CreatePaymentForm() {
             </Label>
             <Input
               {...register("totalPayment")}
+              value={totalPayment}
               errorMessage={errors.totalPayment?.message!}
               disabled
             />
