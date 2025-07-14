@@ -13,6 +13,8 @@ type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
+  nic: string;
+  phoneNumber: string;
   username: string;
   role: ERole;
   password: string;
@@ -22,7 +24,9 @@ const defaultValues = {
   firstName: "",
   lastName: "",
   email: "",
+  nic: "",
   username: "",
+  phoneNumber: "",
   role: "",
   password: "",
 };
@@ -31,6 +35,17 @@ const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
   email: yup.string().required("Email is required"),
+  nic: yup
+    .string()
+    .required("NIC is required")
+    .matches(
+      /^(\d{9}[vV]|\d{12})$/,
+      "NIC must be in the format 123456789V or 200012345678"
+    ),
+  phoneNumber: yup
+    .string()
+    .required("Contact Number is required")
+    .matches(/^\d{10}$/, "Contact Number must be exactly 10 digits"),
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
@@ -72,6 +87,8 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
       username: values.username,
       role: values.role,
       password: values.password,
+      nic: values.nic,
+      phoneNumber: values.phoneNumber,
     };
 
     if (!initialValues) {
@@ -79,6 +96,13 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     } else {
       updateUser({ id: initialValues.id, ...input });
     }
+  };
+
+  const filterRoleOptions = () => {
+    return roleOptions.filter(
+      (role) =>
+        role.value !== ERole.ROLE_ADMIN && role.value !== ERole.ROLE_STUDENT
+    );
   };
 
   return (
@@ -102,6 +126,26 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             placeholder="Doe"
             {...register("lastName")}
             errorMessage={errors.lastName?.message!}
+          />
+        </div>
+        <div>
+          <Label>
+            Contact Number <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            placeholder=""
+            {...register("phoneNumber")}
+            errorMessage={errors.phoneNumber?.message!}
+          />
+        </div>
+        <div>
+          <Label>
+            NIC <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            placeholder=""
+            {...register("nic")}
+            errorMessage={errors.nic?.message!}
           />
         </div>
         <div>
@@ -134,7 +178,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             rules={{ required: "Role is required" }}
             render={({ field }) => (
               <SelectInput
-                options={roleOptions}
+                options={filterRoleOptions()}
                 placeholder="Select Option"
                 value={field.value}
                 onChange={field.onChange}

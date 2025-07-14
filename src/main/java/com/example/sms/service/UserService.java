@@ -60,12 +60,13 @@ public class UserService {
         User user = new User();
         user.setFirstName(userCreateDTO.getFirstName());
         user.setLastName(userCreateDTO.getLastName());
-//        user.setEmail(userCreateDTO.getEmail());
         user.setUsername(userCreateDTO.getUsername());
         user.setRole(role);
         user.setAddress(userCreateDTO.getAddress());
         user.setGenderType(userCreateDTO.getGenderType());
         user.setPassword(encoder.encode(userCreateDTO.getPassword()));
+        user.setEmail(userCreateDTO.getEmail());
+        user.setNic(userCreateDTO.getNic());
 
         return userRepository.save(user);
     }
@@ -82,6 +83,8 @@ public class UserService {
         user.setEmail(updateDto.getEmail());
         user.setUsername(updateDto.getUsername());
         user.setRole(role);
+        user.setEmail(updateDto.getEmail());
+        user.setNic(updateDto.getNic());
 
         // Only update password if a new one is provided (optional, but recommended)
         if (updateDto.getPassword() != null && !updateDto.getPassword().isEmpty()) {

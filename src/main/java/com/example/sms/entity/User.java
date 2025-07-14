@@ -24,12 +24,15 @@ public class User {
 
     private String address;
 
-//    @Column(unique = true)
     private String email;
 
     private String username;
 
     private String password;
+
+    private String nic;
+
+    private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)

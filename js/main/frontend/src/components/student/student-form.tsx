@@ -42,7 +42,7 @@ type FormValues = {
   guardianLastName: string;
   guardianEmail: string;
   guardianIdNumber: string;
-  guardianContactNumber: string;
+  guardianContactNumber: number;
   guardianRelatioship: RelationshipType;
 };
 
@@ -66,7 +66,6 @@ const defaultValues = {
 const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
-  //email: yup.string().required("Email is required"),
   gradeType: yup.string().required("Grade is required"),
   genderType: yup.string().required("Gender is required"),
   address: yup.string().required("Address is required"),
@@ -77,10 +76,20 @@ const validationSchema = yup.object().shape({
 
   guardianFirstName: yup.string().required("Guardian First Name is required"),
   guardianLastName: yup.string().required("Guardian Last Name is required"),
-  guardianIdNumber: yup.string().required("Guardian ID number is required"),
-  guardianContactNumber: yup.string().required("Contact Number is required"),
+  guardianEmail: yup.string().notRequired().email("Invalid email format"),
+  guardianIdNumber: yup
+    .string()
+    .required("Guardian ID number is required")
+    .matches(
+      /^(\d{9}[vV]|\d{12})$/,
+      "Guardian ID number must be in the format 123456789V or 200012345678"
+    ),
+  guardianContactNumber: yup
+    .string()
+    .required("Contact Number is required")
+    .matches(/^\d{10}$/, "Contact Number must be exactly 10 digits"),
   guardianRelatioship: yup
-    .object()
+    .string()
     .required("Guardian Relationship is required"),
 });
 
@@ -217,7 +226,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 First Name <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="John"
+                placeholder="Nimal"
                 {...register("firstName")}
                 errorMessage={errors.firstName?.message!}
               />

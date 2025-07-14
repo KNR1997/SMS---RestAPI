@@ -18,6 +18,10 @@ public class UserDetailDTO {
 
     private Role role;
 
+    private String nic;
+
+    private String phoneNumber;
+
     public UserDetailDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
@@ -25,5 +29,7 @@ public class UserDetailDTO {
         this.email = user.getEmail();
         this.username = user.getUsername();
         this.role = user.getRole();
+        this.nic = user.getNic();
+        this.phoneNumber = user.getPhoneNumber();
     }
 }
