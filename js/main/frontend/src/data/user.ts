@@ -6,6 +6,7 @@ import { mapPaginatorData } from "../utils/data-mappers";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
+// get all users from backend
 export const useUsersQuery = (
   params: Partial<UserQueryOptions>,
   options: any = {}
@@ -28,6 +29,7 @@ export const useUsersQuery = (
   };
 };
 
+// User create
 export const useCreateUserMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -47,10 +49,11 @@ export const useCreateUserMutation = () => {
   });
 };
 
+// user update
 export const useUpdateUserMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   return useMutation(UserClient.update, {
     onSuccess: async () => {
       navigate("/users");
@@ -66,6 +69,7 @@ export const useUpdateUserMutation = () => {
   });
 };
 
+// get single user from the backend
 export const useUserQuery = (id: string) => {
   const { data, error, isLoading } = useQuery<User, Error>(
     [API_ENDPOINTS.USERS, { id }],
@@ -79,6 +83,7 @@ export const useUserQuery = (id: string) => {
   };
 };
 
+// user details in profile
 export const useMeQuery = () => {
   const { data, error, isLoading } = useQuery<User, Error>(
     [API_ENDPOINTS.ME],
@@ -90,4 +95,25 @@ export const useMeQuery = () => {
     error,
     loading: isLoading,
   };
+};
+
+// user password reset
+export const useResetUserPasswordMutation = () => {
+  //const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation(UserClient.resetPassword, {
+    onSuccess: async () => {
+      // navigate("/users");
+      toast.success("Successfull Password Reset!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+    },
+    onError: (error: any) => {
+      console.error("error: ", error);
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
+    },
+  });
 };

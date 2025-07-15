@@ -1,5 +1,6 @@
 package com.example.sms.dto.User;
 
+import com.example.sms.enums.GenderType;
 import com.example.sms.enums.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +22,14 @@ public class UserCreateDTO {
     private String email;
 
     private String username;
+
+    private GenderType genderType;
+
+    private String address;
+
+    private String nic;
+
+    private String phoneNumber;
 
     @NotNull
     @NotBlank(message = "Role is required")

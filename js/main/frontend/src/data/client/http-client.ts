@@ -20,7 +20,7 @@ Axios.interceptors.request.use((config) => {
   // if (cookies) {
   //   token = JSON.parse(cookies)["token"];
   // }
-  
+
   const token = localStorage.getItem("token");
 
   // @ts-ignore
@@ -45,6 +45,8 @@ Axios.interceptors.response.use(
       // Cookies.remove(AUTH_TOKEN_KEY);
       // Router.reload();
       // navigate("/login"); // Navigate to the login page
+      localStorage.removeItem("token"); // optional
+      window.location.href = "/login"; // redirect to login
     }
     return Promise.reject(error);
   }

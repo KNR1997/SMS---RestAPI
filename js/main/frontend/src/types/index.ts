@@ -62,7 +62,7 @@ export interface StudentsPerGrade {
 export interface InstitueMonthlyIncome {
   year: number;
   month: number;
-  totalIncome: number
+  totalIncome: number;
 }
 
 export interface EnrollmentPayment {
@@ -171,19 +171,31 @@ export enum ERequestType {
 
 export enum ERole {
   ROLE_ADMIN = "ROLE_ADMIN",
+  ROLE_MANAGER = "ROLE_MANAGER",
   ROLE_TEACHER = "ROLE_TEACHER",
   ROLE_RECEPTIONIST = "ROLE_RECEPTIONIST",
   ROLE_STUDENT = "ROLE_STUDENT",
 }
 
 export enum EGrade {
-  GRADE_5 = "GRADE_5",
+  //GRADE_5 = "GRADE_5",
   GRADE_6 = "GRADE_6",
   GRADE_7 = "GRADE_7",
   GRADE_8 = "GRADE_8",
   GRADE_9 = "GRADE_9",
   GRADE_10 = "GRADE_10",
   GRADE_11 = "GRADE_11",
+}
+
+export enum EGender {
+  Male = "Male",
+  Female = "Female",
+}
+
+export enum RelationshipType {
+  FATHER = "FATHER",
+  MOTHER = "MOTHER",
+  GUARDIAN = "GUARDIAN",
 }
 
 export enum EEnrollmentStatus {
@@ -235,9 +247,11 @@ export interface User {
 export interface CreateUser {
   firstName: string;
   lastName: string;
-  email: string;
+  // email: string;
   username: string;
   role: ERole;
+  address: string;
+  genderType: EGender;
 }
 
 export interface Guardian {
@@ -246,7 +260,7 @@ export interface Guardian {
   lastName: string;
   email: string;
   nationalIdentityNumber: string;
-  contactNumber: string;
+  contactNumber: number;
 }
 
 export interface GuardianPageData {
@@ -256,6 +270,7 @@ export interface GuardianPageData {
   email: string;
   nationalIdentityNumber: string;
   contactNumber: string;
+  relationship: RelationshipType;
 }
 
 export interface CreateGuardian {
@@ -263,7 +278,8 @@ export interface CreateGuardian {
   lastName: string;
   email: string;
   nationalIdentityNumber: string;
-  contactNumber: string;
+  contactNumber: number;
+  relationship: RelationshipType;
 }
 
 export interface EnrollCourseData {
@@ -471,9 +487,11 @@ export interface EventPaginator extends PaginatorInfo<Event> {}
 
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
-export interface CoursePaymentSummaryPaginator extends PaginatorInfo<CoursePaymentSummary> {}
+export interface CoursePaymentSummaryPaginator
+  extends PaginatorInfo<CoursePaymentSummary> {}
 
-export interface EmployeePaymentPaginator extends PaginatorInfo<EmployeePayment> {}
+export interface EmployeePaymentPaginator
+  extends PaginatorInfo<EmployeePayment> {}
 
 export interface InvoiceStatusAuditPaginator
   extends PaginatorInfo<InvoiceStatusAudit> {}

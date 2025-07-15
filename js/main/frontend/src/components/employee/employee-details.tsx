@@ -223,7 +223,7 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
           </div>
         )} */}
         <div className="text-sm my-2 flex flex-col font-medium text-gray-800 dark:text-white/90">
-          <div>Total: Rs. {totalIncome()} % 30</div>
+          <div>Total: Rs. {totalIncome()} % 70</div>
           <div>Portion: Rs. {totalIncome() * 0.7}</div>
         </div>
       </div>

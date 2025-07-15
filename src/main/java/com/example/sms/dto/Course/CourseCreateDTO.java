@@ -26,4 +26,6 @@ public class CourseCreateDTO {
     private Integer batch;
 
     private Double fee;
+
+    private String description;
 }

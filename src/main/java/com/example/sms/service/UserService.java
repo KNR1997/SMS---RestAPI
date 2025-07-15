@@ -51,9 +51,9 @@ public class UserService {
     }
 
     public User createUser(UserCreateDTO userCreateDTO) {
-        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
-        }
+//        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
+//            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
+//        }
 
         Role role = roleRepository.findByName(userCreateDTO.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + userCreateDTO.getRole()));
@@ -61,17 +61,20 @@ public class UserService {
         User user = new User();
         user.setFirstName(userCreateDTO.getFirstName());
         user.setLastName(userCreateDTO.getLastName());
-        user.setEmail(userCreateDTO.getEmail());
         user.setUsername(userCreateDTO.getUsername());
         user.setRole(role);
+        user.setAddress(userCreateDTO.getAddress());
+        user.setGenderType(userCreateDTO.getGenderType());
         user.setPassword(encoder.encode(userCreateDTO.getPassword()));
+        user.setEmail(userCreateDTO.getEmail());
+        user.setNic(userCreateDTO.getNic());
 
         return userRepository.save(user);
     }
 
     public User updateUser(Integer id, UserCreateDTO updateDto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
         if (!Objects.equals(user.getEmail(), updateDto.getEmail())) {
             if (userRepository.existsByEmail(updateDto.getEmail())) {
@@ -87,6 +90,8 @@ public class UserService {
         user.setEmail(updateDto.getEmail());
         user.setUsername(updateDto.getUsername());
         user.setRole(role);
+        user.setEmail(updateDto.getEmail());
+        user.setNic(updateDto.getNic());
 
         // Only update password if a new one is provided (optional, but recommended)
         if (updateDto.getPassword() != null && !updateDto.getPassword().isEmpty()) {
@@ -94,6 +99,14 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public User resetUserPassword(Integer id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        user.setPassword(encoder.encode("1234"));
+        return userRepository.save(user);
+
     }
 
 }

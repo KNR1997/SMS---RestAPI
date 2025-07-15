@@ -63,4 +63,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<Void> resetUserPassword(@PathVariable Integer id) {
+        User user = userService.resetUserPassword(id);
+        URI location = URI.create("/users/" + user.getId()); // assuming course has getSlug()
+        return ResponseEntity.created(location).build();
+    }
+
+
 }

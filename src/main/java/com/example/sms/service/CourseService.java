@@ -115,6 +115,7 @@ public class CourseService {
         course.setTeacher(teacher);
         course.setBatch(createDto.getBatch());
         course.setFee(createDto.getFee());
+        course.setDescription(createDto.getDescription());
 
         return courseRepository.save(course);
 
