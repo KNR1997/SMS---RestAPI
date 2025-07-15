@@ -1,5 +1,6 @@
 package com.example.sms.controller;
 
+import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
@@ -73,6 +74,23 @@ public class StudentController {
     @GetMapping("/students-per-grade")
     public List<GradeStudentCountDTO> getStudentsCountInGrades() {
         return studentService.getStudentsCountInGrades();
+    }
+
+    @GetMapping("/{id}/enrolled-courses")
+    public ResponseEntity<PaginatedResponse<CourseListDTO>> getStudentEnrolledCourses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "desc") String direction,
+            @PathVariable Integer id
+    ) {
+        Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+
+        Page<CourseListDTO> courseListDTOPage = studentService.getStudentEnrolledCourses(pageable, id);
+
+        PaginatedResponse<CourseListDTO> response = new PaginatedResponse<>(courseListDTOPage);
+        return ResponseEntity.ok(response);
     }
 
 }

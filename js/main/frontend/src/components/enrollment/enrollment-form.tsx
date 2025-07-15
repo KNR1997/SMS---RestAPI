@@ -4,7 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "@components/ui/button/Button";
 import { Course, PaymentMethod, Student } from "@types";
-import { useStudentsQuery } from "@data/student";
+import {
+  useStudentEnrolledCoursesQuery,
+  useStudentsQuery,
+} from "@data/student";
 import SelectInput from "@components/ui/select-input";
 import { useCoursesQuery } from "@data/course";
 import Input from "@components/form/input/InputField";
@@ -25,6 +28,7 @@ const defaultValues = {
 
 const validationSchema = yup.object().shape({
   student: yup.object().required("Student is required"),
+  courses: yup.array().required("Course is required")
 });
 
 interface Props {
@@ -66,14 +70,31 @@ export default function EnrollForm({ initialValues }: Props) {
   const selectedStudent = watch("student");
   const studentGradeType = selectedStudent?.gradeType;
 
+  // Get selected student's already enrolled courses
+  const { courses: alreadyEnrolledCourses } = useStudentEnrolledCoursesQuery({
+    studentId: selectedStudent?.id,
+  });
+
   useEffect(() => {
     if (selectedStudent && selectedStudent?.admissionPayed)
       setValue("admission", 0);
   }, [selectedStudent, setValue]);
 
+  // Get all courses filter by selected student grade
   const { courses } = useCoursesQuery({
-    gradeType: studentGradeType,
+    grade: studentGradeType,
   });
+
+  // filter courses by already enrolled courses
+  const filterCourses = () => {
+    if (!courses || !alreadyEnrolledCourses) return [];
+    const enrolledCourseCodes = alreadyEnrolledCourses.map(
+      (course) => course.code
+    );
+    return courses.filter(
+      (course: Course) => !enrolledCourseCodes.includes(course.code)
+    );
+  };
 
   const { mutate: enrollStudent, isLoading: creating } =
     useStudentEnrollCourseMutation();
@@ -86,7 +107,6 @@ export default function EnrollForm({ initialValues }: Props) {
       admission: values.admission,
       total: values.totalPayment,
     };
-
     enrollStudent({ studentId: values.student.id, input });
   };
 
@@ -130,7 +150,7 @@ export default function EnrollForm({ initialValues }: Props) {
             control={control}
             getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
             getOptionValue={(option: any) => option.id}
-            options={courses}
+            options={filterCourses()}
             isClearable={true}
             isMulti
           />

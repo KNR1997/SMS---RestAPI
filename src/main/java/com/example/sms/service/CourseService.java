@@ -34,39 +34,52 @@ public class CourseService {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
+    private String extractSearchValue(String search, String key) {
+        if (search == null || search.isEmpty()) return null;
+
+        String[] parts = search.split(";");
+        for (String part : parts) {
+            String[] keyValue = part.split(":");
+            if (keyValue.length == 2 && keyValue[0].equalsIgnoreCase(key)) {
+                return keyValue[1];
+            }
+        }
+        return null;
+    }
+
     public Page<CourseListDTO> getCoursesPaginated(
             Pageable pageable,
             String search,
             String grade,
             User currentUser
     ) {
+        GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
+        String name = extractSearchValue(search, "name");
+
         Page<Course> coursePage = null;
-        GradeType gradeType;
 
         if (currentUser.isAdmin()) {
             // Admin sees all courses
-            coursePage = courseRepository.findAll(pageable);
+            coursePage = courseRepository.searchCourses(name, gradeType, pageable);
+
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             // Student sees only enrolled courses
             Student student = studentRepository.findByUser(currentUser)
                     .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
-            Page<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId(), pageable);
+            coursePage = courseRepository.searchCoursesByStudentEnrollments(name, gradeType, student.getId(), pageable);
 
-            // Convert enrollments to a page of courses
-            List<Course> courses = enrollments
-                    .stream()
-                    .map(Enrollment::getCourse)
-                    .toList();
-
-            coursePage = new PageImpl<>(courses, pageable, enrollments.getTotalElements());
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-            coursePage = courseRepository.findByTeacher(user, pageable);
+
+            coursePage = (gradeType != null)
+                    ? courseRepository.findByTeacherAndGradeType(user, gradeType, pageable)
+                    : courseRepository.findByTeacher(user, pageable);
         } else {
-            // Admin sees all courses
-            coursePage = courseRepository.findAll(pageable);
+            coursePage = (gradeType != null)
+                    ? courseRepository.findByGradeType(gradeType, pageable)
+                    : courseRepository.findAll(pageable);
         }
 
         return coursePage.map(CourseListDTO::new);

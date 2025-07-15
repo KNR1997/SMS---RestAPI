@@ -35,7 +35,7 @@ Axios.interceptors.request.use((config) => {
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const navigate = useNavigate(); // Use navigate for navigation
+    // const navigate = useNavigate(); // Use navigate for navigation
     if (
       (error.response && error.response.status === 401) ||
       (error.response && error.response.status === 403) ||
@@ -44,7 +44,7 @@ Axios.interceptors.response.use(
     ) {
       // Cookies.remove(AUTH_TOKEN_KEY);
       // Router.reload();
-      navigate("/login"); // Navigate to the login page
+      // navigate("/login"); // Navigate to the login page
     }
     return Promise.reject(error);
   }

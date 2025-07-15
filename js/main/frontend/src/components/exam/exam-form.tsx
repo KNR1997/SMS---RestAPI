@@ -28,6 +28,9 @@ type FormValues = {
 
 const defaultValues = {
   eventType: eventTypeOptions[1],
+  status: examStatusOptions.find(
+    (examStatusOption) => examStatusOption.value == ExamStatusType.PENDING
+  ),
 };
 
 const validationSchema = yup.object().shape({

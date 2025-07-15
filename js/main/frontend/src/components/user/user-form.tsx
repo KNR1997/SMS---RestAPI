@@ -1,10 +1,10 @@
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import SelectInput from "../form/select-input";
+import SelectInput from "../ui/select-input";
 import { ERole, User } from "../../types";
 import { roleOptions } from "../../constants/role";
 import { useCreateUserMutation, useUpdateUserMutation } from "@data/user";
@@ -14,7 +14,7 @@ type FormValues = {
   lastName: string;
   email: string;
   username: string;
-  role: ERole;
+  role: { label: string; value: ERole };
   password: string;
 };
 
@@ -23,7 +23,7 @@ const defaultValues = {
   lastName: "",
   email: "",
   username: "",
-  role: "",
+  // role: "",
   password: "",
 };
 
@@ -51,7 +51,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
       ? {
           ...initialValues,
           role: roleOptions.find(
-            (role) => role.value === ERole.ROLE_RECEPTIONIST
+            (role) => role.value === initialValues.role.name
           ),
         }
       : defaultValues,
@@ -59,26 +59,27 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
-  // console.log('initialValues: ', initialValues)
-
   const { mutate: createUser, isLoading: creating } = useCreateUserMutation();
   const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
 
   const onSubmit = async (values: FormValues) => {
-    console.log("values: ", values);
     const input = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
       username: values.username,
-      role: values.role,
+      role: values.role.value,
       password: values.password,
     };
 
-    if (!initialValues) {
-      createUser(input);
-    } else {
-      updateUser({ id: initialValues.id, ...input });
+    try {
+      if (!initialValues) {
+        createUser(input);
+      } else {
+        updateUser({ id: initialValues.id, ...input });
+      }
+    } catch (error) {
+      // console.log("errorrrrrrrr: ", error);
     }
   };
 
@@ -129,19 +130,11 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
           <Label>
             Role <span className="text-error-500">*</span>
           </Label>
-          <Controller
+          <SelectInput
             name="role"
             control={control}
-            rules={{ required: "Role is required" }}
-            render={({ field }) => (
-              <SelectInput
-                options={roleOptions}
-                placeholder="Select Option"
-                value={field.value}
-                onChange={field.onChange}
-                className="dark:bg-dark-900"
-              />
-            )}
+            options={roleOptions}
+            isClearable={true}
           />
           {errors.role && (
             <p className="text-error-500 text-sm mt-1">{errors.role.message}</p>

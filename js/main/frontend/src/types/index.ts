@@ -505,7 +505,7 @@ export interface GuardianQueryOptions extends QueryOptions {}
 
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
-  gradeType: EGrade;
+  grade: EGrade | null;
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {

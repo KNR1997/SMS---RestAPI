@@ -1,5 +1,6 @@
 package com.example.sms.service;
 
+import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
@@ -154,5 +155,10 @@ public class StudentService {
 
     public List<GradeStudentCountDTO> getStudentsCountInGrades() {
         return studentRepository.getGradeStudentCounts();
+    }
+
+    public Page<CourseListDTO> getStudentEnrolledCourses(Pageable pageable, Integer studentId) {
+        Page<Enrollment> enrollmentPage  = enrollmentRepository.findByStudentId(studentId, pageable);
+        return enrollmentPage.map(enrollment -> new CourseListDTO(enrollment.getCourse()));
     }
 }

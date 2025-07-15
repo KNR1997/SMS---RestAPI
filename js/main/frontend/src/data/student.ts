@@ -103,3 +103,23 @@ export const useMyCoursesQuery = (
     loading: isLoading,
   };
 };
+
+export const useStudentEnrolledCoursesQuery = (
+  params: Partial<StudentQueryOptions & { studentId: number }>
+) => {
+  const { data, error, isLoading } = useQuery<CoursePaginator, Error>(
+    [API_ENDPOINTS.STUDENTS, params],
+    () => StudentClient.getStudentEnrolledCourses(params),
+    {
+      keepPreviousData: true,
+      enabled: !!params.studentId,
+    }
+  );
+
+  return {
+    courses: data?.content ?? [],
+    paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
+};

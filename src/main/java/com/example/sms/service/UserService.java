@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -71,6 +72,12 @@ public class UserService {
     public User updateUser(Integer id, UserCreateDTO updateDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
+
+        if (!Objects.equals(user.getEmail(), updateDto.getEmail())) {
+            if (userRepository.existsByEmail(updateDto.getEmail())) {
+                throw new BadRequestException("User with email '" + updateDto.getEmail() + "' already exists.");
+            }
+        }
 
         Role role = roleRepository.findByName(updateDto.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + updateDto.getRole()));

@@ -8,6 +8,7 @@ import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
 import com.example.sms.enums.RoleType;
 import com.example.sms.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody UserCreateDTO updateDto) {
+    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody @Valid UserCreateDTO updateDto) {
         userService.updateUser(id, updateDto);
         return ResponseEntity.noContent().build();
     }

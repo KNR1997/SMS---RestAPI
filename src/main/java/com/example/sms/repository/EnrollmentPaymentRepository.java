@@ -22,9 +22,9 @@ public interface EnrollmentPaymentRepository extends JpaRepository<EnrollmentPay
                 SUM(ep.amount) as income, 
                 COUNT(ep.amount) as student_count, 
                 ep.month_number as month_number
-            FROM student_db.enrollment_payment ep
-            JOIN student_db.enrollment e ON ep.enrollment_id = e.id 
-            JOIN student_db.course c ON c.id = e.course_id
+            FROM enrollment_payment ep
+            JOIN enrollment e ON ep.enrollment_id = e.id 
+            JOIN course c ON c.id = e.course_id
             WHERE ep.month_number = :monthNumber AND c.teacher_id = :teacherId
             GROUP BY c.name, ep.month_number, c.fee
             """, nativeQuery = true)

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +24,28 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     List<Course> findByTeacher(User teacher);
 
     Page<Course> findByTeacher(User teacher, Pageable pageable);
+
+    Page<Course> findByTeacherAndGradeType(User teacher, GradeType gradeType, Pageable pageable);
+
+    @Query("SELECT c FROM Course c WHERE " +
+            "(:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:grade IS NULL OR c.gradeType = :grade)")
+    Page<Course> searchCourses(
+            @Param("name") String name,
+            @Param("grade") GradeType grade,
+            Pageable pageable
+    );
+
+    @Query("SELECT c FROM Course c " +
+            "JOIN Enrollment e ON e.course = c " +
+            "WHERE (:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:grade IS NULL OR c.gradeType = :grade) AND " +
+            "(:studentId IS NULL OR e.student.id = :studentId)")
+    Page<Course> searchCoursesByStudentEnrollments(
+            @Param("name") String name,
+            @Param("grade") GradeType grade,
+            @Param("studentId") Integer studentId,
+            Pageable pageable
+    );
+
 }
