@@ -44,7 +44,7 @@ export const useCreateUserMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data.message || "Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };
@@ -64,8 +64,7 @@ export const useUpdateUserMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
     },
     onError: (error: any) => {
-      console.error("error: ", error);
-      toast.error(error?.response?.data?.message ?? "Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };

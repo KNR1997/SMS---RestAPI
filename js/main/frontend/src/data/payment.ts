@@ -52,7 +52,7 @@ export const useCreatePaymentMutation = () => {
 
   return useMutation(PaymentClient.create, {
     onSuccess: async () => {
-      navigate("/subjects");
+      navigate("/payments");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:

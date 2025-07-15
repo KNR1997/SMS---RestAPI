@@ -48,7 +48,6 @@ export default function ExamResultList({
   } = useForm<FormValues>({});
 
   const onSubmit = async (values: FormValues) => {
-    console.log("values: ", values);
     const input = {
       result: values.result,
     };

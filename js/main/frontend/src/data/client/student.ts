@@ -42,8 +42,19 @@ export const StudentClient = {
     name,
     ...params
   }: Partial<CourseQueryOptions & { studentId: number }>) => {
+    return HttpClient.get<CoursePaginator>(`${API_ENDPOINTS.STUDENTS}`, {
+      searchJoin: "and",
+      ...params,
+      search: HttpClient.formatSearchParams({ name }),
+    });
+  },
+  getStudentEnrolledCourses: ({
+    studentId,
+    name,
+    ...params
+  }: Partial<CourseQueryOptions & { studentId: number }>) => {
     return HttpClient.get<CoursePaginator>(
-      `${API_ENDPOINTS.STUDENTS}`,
+      `${API_ENDPOINTS.STUDENTS}/${studentId}/enrolled-courses`,
       {
         searchJoin: "and",
         ...params,

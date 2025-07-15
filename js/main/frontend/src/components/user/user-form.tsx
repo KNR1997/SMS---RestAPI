@@ -1,10 +1,10 @@
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../ui/button/Button";
-import SelectInput from "../form/select-input";
+import SelectInput from "../ui/select-input";
 import { ERole, User } from "../../types";
 import { roleOptions } from "../../constants/role";
 import { useCreateUserMutation, useUpdateUserMutation } from "@data/user";
@@ -16,7 +16,7 @@ type FormValues = {
   nic: string;
   phoneNumber: string;
   username: string;
-  role: ERole;
+  role: { label: string; value: ERole };
   password: string;
 };
 
@@ -66,15 +66,13 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
       ? {
           ...initialValues,
           role: roleOptions.find(
-            (role) => role.value === ERole.ROLE_RECEPTIONIST
+            (role) => role.value === initialValues.role.name
           ),
         }
       : defaultValues,
     //@ts-ignore
     resolver: yupResolver(validationSchema),
   });
-
-  // console.log('initialValues: ', initialValues)
 
   const { mutate: createUser, isLoading: creating } = useCreateUserMutation();
   const { mutate: updateUser, isLoading: updating } = useUpdateUserMutation();
@@ -85,7 +83,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
       lastName: values.lastName,
       email: values.email,
       username: values.username,
-      role: values.role,
+      role: values.role.value,
       password: values.password,
       nic: values.nic,
       phoneNumber: values.phoneNumber,
@@ -96,13 +94,6 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
     } else {
       updateUser({ id: initialValues.id, ...input });
     }
-  };
-
-  const filterRoleOptions = () => {
-    return roleOptions.filter(
-      (role) =>
-        role.value !== ERole.ROLE_ADMIN && role.value !== ERole.ROLE_STUDENT
-    );
   };
 
   return (
@@ -163,19 +154,11 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
           <Label>
             Role <span className="text-error-500">*</span>
           </Label>
-          <Controller
+          <SelectInput
             name="role"
             control={control}
-            rules={{ required: "Role is required" }}
-            render={({ field }) => (
-              <SelectInput
-                options={filterRoleOptions()}
-                placeholder="Select Option"
-                value={field.value}
-                onChange={field.onChange}
-                className="dark:bg-dark-900"
-              />
-            )}
+            options={roleOptions}
+            isClearable={true}
           />
           {errors.role && (
             <p className="text-error-500 text-sm mt-1">{errors.role.message}</p>

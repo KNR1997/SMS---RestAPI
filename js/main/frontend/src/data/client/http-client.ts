@@ -35,12 +35,16 @@ Axios.interceptors.request.use((config) => {
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {
+    // const navigate = useNavigate(); // Use navigate for navigation
     if (
       (error.response && error.response.status === 401) ||
       (error.response && error.response.status === 403) ||
       (error.response &&
         error.response.data.message === "PICKBAZAR_ERROR.NOT_AUTHORIZED")
     ) {
+      // Cookies.remove(AUTH_TOKEN_KEY);
+      // Router.reload();
+      // navigate("/login"); // Navigate to the login page
       localStorage.removeItem("token"); // optional
       window.location.href = "/login"; // redirect to login
     }

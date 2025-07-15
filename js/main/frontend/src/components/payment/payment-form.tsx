@@ -22,14 +22,15 @@ import { useNavigate } from "react-router";
 
 type FormValues = {
   student: Student;
-  admission: string;
-  courses: Course[];
+  admission: number;
+  course: Course;
   totalPayment: string;
-  months: { label: string; value: string }[];
+  months: { label: string; value: number }[];
 };
 
 const defaultValues = {
-  admission: "2000",
+  admission: 2000,
+  // totalPayment: "4000",
 };
 
 export default function CreatePaymentForm() {
@@ -51,7 +52,7 @@ export default function CreatePaymentForm() {
     useCreatePaymentMutation();
 
   const selectedStudent = watch("student");
-  const selectedCourses = watch("courses");
+  const selectedCourse = watch("course");
   const selectedMonths = watch("months");
   const studentGradeType = selectedStudent?.gradeType;
 
@@ -62,17 +63,17 @@ export default function CreatePaymentForm() {
   useEffect(() => {
     if (selectedStudent) {
       if (selectedStudent.admissionPayed) {
-        setValue("admission", "0");
+        setValue("admission", 0);
       } else {
-        setValue("admission", "2000");
+        setValue("admission", 2000);
       }
     } else {
-      setValue("admission", "2000");
+      setValue("admission", 2000);
     }
   }, [selectedStudent, setValue]);
 
   const { courses } = useCoursesQuery({
-    gradeType: studentGradeType,
+    grade: studentGradeType,
   });
 
   const eligibleCoursesToCreatePayment = () => {
@@ -83,33 +84,40 @@ export default function CreatePaymentForm() {
     );
   };
 
-  const calculatePaymentTotal = () => {};
+  const totalPayment =
+    (selectedStudent?.admissionPayed ? 0 : 2000) +
+    selectedCourse?.fee * selectedMonths.length;
+
+  console.log("totalPayment: ", totalPayment);
 
   const onSubmit = async (values: FormValues) => {
     const input = {
       studentId: values.student.id,
       admission: values.admission,
-      totalAmount: values.totalPayment,
+      totalAmount: totalPayment,
       paymentMethod: PaymentMethod.CASH,
-      coursePaymentList: values.courses.map((course) => ({
-        courseId: course.id,
-        paymentMonths: values.months.map((month) => month.value),
-      })),
+      // coursePaymentList: values.course.map((course) => ({
+      //   courseId: course.id,
+      //   paymentMonths: values.months.map((month) => month.value),
+      // })),
+      coursePaymentList: [
+        {
+          courseId: values.course.id,
+          paymentMonths: values.months.map((month) => month.value),
+        },
+      ],
     };
+    console.log("payment create data: ", input);
     createPayment({ ...input });
   };
 
   const enableCreatePaymentButton = () => {
     return (
       selectedStudent != null &&
-      selectedCourses?.length > 0 &&
+      selectedCourse != null &&
       selectedMonths?.length > 0
     );
   };
-
-  const totalPayment =
-    (selectedStudent?.admissionPayed ? 0 : 2000) +
-    (selectedCourses?.reduce((sum, course) => sum + course.fee, 0) || 0);
 
   return (
     <div className="grid grid-cols-2 gap-5  ">
@@ -148,17 +156,17 @@ export default function CreatePaymentForm() {
               Courses <span className="text-error-500">*</span>
             </Label>
             <SelectInput
-              name="courses"
+              name="course"
               control={control}
               getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
               getOptionValue={(option: any) => option.id}
               options={eligibleCoursesToCreatePayment()}
               isClearable={true}
-              isMulti
+              // isMulti
             />
-            {errors.courses && (
+            {errors.course && (
               <p className="text-error-500 text-sm mt-1">
-                {errors.courses.message}
+                {errors.course.message}
               </p>
             )}
           </div>
