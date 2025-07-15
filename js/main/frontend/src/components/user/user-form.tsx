@@ -113,7 +113,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             First Name <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder="John"
+            placeholder="e.g.- Nimal"
             {...register("firstName")}
             errorMessage={errors.firstName?.message!}
           />
@@ -123,7 +123,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             Last Name <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder="Doe"
+            placeholder="e.g.- Perera"
             {...register("lastName")}
             errorMessage={errors.lastName?.message!}
           />
@@ -133,7 +133,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             Contact Number <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder=""
+            placeholder="e.g.- 0771234567"
             {...register("phoneNumber")}
             errorMessage={errors.phoneNumber?.message!}
           />
@@ -143,7 +143,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             NIC <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder=""
+            placeholder="e.g.- 123456789V or 200012345678"
             {...register("nic")}
             errorMessage={errors.nic?.message!}
           />
@@ -158,16 +158,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             errorMessage={errors.email?.message!}
           />
         </div>
-        <div>
-          <Label>
-            Username <span className="text-error-500">*</span>{" "}
-          </Label>
-          <Input
-            placeholder="user123"
-            {...register("username")}
-            errorMessage={errors.username?.message!}
-          />
-        </div>
+
         <div>
           <Label>
             Role <span className="text-error-500">*</span>
@@ -189,6 +180,16 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
           {errors.role && (
             <p className="text-error-500 text-sm mt-1">{errors.role.message}</p>
           )}
+        </div>
+        <div>
+          <Label>
+            Username <span className="text-error-500">*</span>{" "}
+          </Label>
+          <Input
+            placeholder="user123"
+            {...register("username")}
+            errorMessage={errors.username?.message!}
+          />
         </div>
         <div>
           <Label>

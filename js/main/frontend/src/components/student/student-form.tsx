@@ -226,7 +226,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 First Name <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="Nimal"
+                placeholder="e.g.- Nimal"
                 {...register("firstName")}
                 errorMessage={errors.firstName?.message!}
               />
@@ -236,7 +236,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Last Name <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="Doe"
+                placeholder="e.g.- Perera"
                 {...register("lastName")}
                 errorMessage={errors.lastName?.message!}
               />
@@ -314,7 +314,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Address <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="Enter Address"
+                placeholder="e.g.- No 10, Hospital Road, Rajagiriya"
                 {...register("address")}
                 errorMessage={errors.address?.message!}
               />
@@ -347,7 +347,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 First Name <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                // placeholder="user@example.com"
+                placeholder="e.g.- Kamal"
                 {...register("guardianFirstName")}
                 errorMessage={errors.guardianFirstName?.message!}
               />
@@ -357,7 +357,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Last Name <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                // placeholder="user@example.com"
+                placeholder="e.g.- Perera"
                 {...register("guardianLastName")}
                 errorMessage={errors.guardianLastName?.message!}
               />
@@ -367,7 +367,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Email <span className="text-error-500"></span>{" "}
               </Label>
               <Input
-                // placeholder="user@example.com"
+                placeholder="user@example.com"
                 {...register("guardianEmail")}
                 errorMessage={errors.guardianEmail?.message!}
               />
@@ -377,7 +377,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 NIC Number <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                // placeholder="user@example.com"
+                placeholder="e.g.- 123456789V or 200012345678"
                 {...register("guardianIdNumber")}
                 errorMessage={errors.guardianIdNumber?.message!}
               />
@@ -387,7 +387,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Contact Number <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                // placeholder="user@example.com"
+                placeholder="0771234567"
                 {...register("guardianContactNumber")}
                 errorMessage={errors.guardianContactNumber?.message!}
               />
@@ -448,7 +448,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 Username <span className="text-error-500">*</span>{" "}
               </Label>
               <Input
-                placeholder="user123"
+                //placeholder=" user123"
                 {...register("username")}
                 errorMessage={errors.username?.message!}
               />
@@ -459,7 +459,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
               </Label>
               <Input
                 type="password"
-                // placeholder="user"
+                //placeholder="user"
                 {...register("password")}
                 errorMessage={errors.password?.message!}
               />
