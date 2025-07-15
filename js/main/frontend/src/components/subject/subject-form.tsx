@@ -110,7 +110,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
             Name <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder="John"
+            placeholder="e.g. - Science"
             {...register("name")}
             errorMessage={errors.name?.message!}
           />
@@ -131,7 +131,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: Props) {
             Code <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder="Doe"
+            placeholder=""
             {...register("code")}
             value={subjectCode}
             errorMessage={errors.code?.message!}

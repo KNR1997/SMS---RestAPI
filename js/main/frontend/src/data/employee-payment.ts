@@ -12,7 +12,7 @@ export const useCreateEmployeePaymentMutation = () => {
 
   return useMutation(EmployeePaymentClient.create, {
     onSuccess: async () => {
-      navigate("/exams");
+      navigate("/employee/payments");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:
@@ -32,7 +32,9 @@ export const useEmployeePaymentsQuery = (
   const { data, error, isLoading } = useQuery<EmployeePaymentPaginator, Error>(
     [API_ENDPOINTS.EMPLOYEE_PAYMENTS, params],
     ({ queryKey, pageParam }) =>
-      EmployeePaymentClient.paginated(Object.assign({}, queryKey[1], pageParam)),
+      EmployeePaymentClient.paginated(
+        Object.assign({}, queryKey[1], pageParam)
+      ),
     {
       keepPreviousData: true,
       ...options,

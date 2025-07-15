@@ -27,6 +27,7 @@ type FormValues = {
   teacher: User;
   batch: number;
   fee: number;
+  description: string;
 };
 
 const defaultValues = {
@@ -35,6 +36,7 @@ const defaultValues = {
   code: "",
   // gradeType: "",
   batch: 1,
+  description: "",
 };
 
 const validationSchema = yup.object().shape({
@@ -125,15 +127,16 @@ export default function CreateOrUpdateCourseForm({
       teacherId: values.teacher.id,
       batch: values.batch,
       fee: values.fee,
+      description: values.description,
     };
 
-    // console.log("input: ", input);
+    console.log("input: ", input);
 
-    if (!initialValues) {
-      createCourse(input);
-    } else {
-      updateCourse({ id: initialValues.id, ...input });
-    }
+    // if (!initialValues) {
+    //   createCourse(input);
+    // } else {
+    //   updateCourse({ id: initialValues.id, ...input });
+    // }
   };
 
   // console.log("intitial: ", initialValues);
@@ -240,6 +243,16 @@ export default function CreateOrUpdateCourseForm({
             {...register("code")}
             errorMessage={errors.code?.message!}
             disabled
+          />
+        </div>
+        <div>
+          <Label>
+            Description <span className="text-error-500"></span>{" "}
+          </Label>
+          <Input
+            // placeholder="Doe"
+            {...register("description")}
+            errorMessage={errors.description?.message!}
           />
         </div>
         {isEditable && (

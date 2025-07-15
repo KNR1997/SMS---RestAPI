@@ -171,13 +171,14 @@ export enum ERequestType {
 
 export enum ERole {
   ROLE_ADMIN = "ROLE_ADMIN",
+  ROLE_MANAGER = "ROLE_MANAGER",
   ROLE_TEACHER = "ROLE_TEACHER",
   ROLE_RECEPTIONIST = "ROLE_RECEPTIONIST",
   ROLE_STUDENT = "ROLE_STUDENT",
 }
 
 export enum EGrade {
-  GRADE_5 = "GRADE_5",
+  //GRADE_5 = "GRADE_5",
   GRADE_6 = "GRADE_6",
   GRADE_7 = "GRADE_7",
   GRADE_8 = "GRADE_8",
@@ -259,7 +260,7 @@ export interface Guardian {
   lastName: string;
   email: string;
   nationalIdentityNumber: string;
-  contactNumber: string;
+  contactNumber: number;
 }
 
 export interface GuardianPageData {
@@ -277,7 +278,7 @@ export interface CreateGuardian {
   lastName: string;
   email: string;
   nationalIdentityNumber: string;
-  contactNumber: string;
+  contactNumber: number;
   relationship: RelationshipType;
 }
 
@@ -486,9 +487,11 @@ export interface EventPaginator extends PaginatorInfo<Event> {}
 
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
-export interface CoursePaymentSummaryPaginator extends PaginatorInfo<CoursePaymentSummary> {}
+export interface CoursePaymentSummaryPaginator
+  extends PaginatorInfo<CoursePaymentSummary> {}
 
-export interface EmployeePaymentPaginator extends PaginatorInfo<EmployeePayment> {}
+export interface EmployeePaymentPaginator
+  extends PaginatorInfo<EmployeePayment> {}
 
 export interface InvoiceStatusAuditPaginator
   extends PaginatorInfo<InvoiceStatusAudit> {}

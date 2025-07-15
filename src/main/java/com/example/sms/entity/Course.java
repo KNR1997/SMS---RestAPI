@@ -37,4 +37,6 @@ public class Course {
 
     private Double fee;
 
+    private String description;
+
 }

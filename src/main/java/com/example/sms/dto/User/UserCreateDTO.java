@@ -23,6 +23,10 @@ public class UserCreateDTO {
 
     private String address;
 
+    private String nic;
+
+    private String phoneNumber;
+
     @NotNull
     private RoleType role;
 

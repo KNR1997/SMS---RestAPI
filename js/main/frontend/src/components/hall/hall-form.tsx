@@ -68,7 +68,7 @@ export default function CreateOrUpdateHallForm({ initialValues }: Props) {
             Name <span className="text-error-500">*</span>{" "}
           </Label>
           <Input
-            placeholder="John"
+            placeholder="e.g.- Hall 1"
             {...register("name")}
             errorMessage={errors.name?.message!}
           />
