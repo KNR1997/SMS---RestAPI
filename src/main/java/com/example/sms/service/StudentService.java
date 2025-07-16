@@ -1,7 +1,7 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.Course.CourseListDTO;
-import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.Guardian.GuardianCreateDTO;
 import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
@@ -116,16 +116,29 @@ public class StudentService {
         User user = userRepository.findById(student.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
+        // Update User model
         user.setFirstName(studentCreateDTO.getUserDetails().getFirstName());
         user.setLastName(studentCreateDTO.getUserDetails().getLastName());
-//        user.setEmail(studentCreateDTO.getUserDetails().getEmail());
         user.setGenderType(studentCreateDTO.getUserDetails().getGenderType());
         user.setAddress(studentCreateDTO.getUserDetails().getAddress());
 
+        // Update Student model
         student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGradeType(studentCreateDTO.getGradeType());
-//        student.setGuardianName(studentCreateDTO.getGuardianName());
-//        student.setContactNumber(studentCreateDTO.getContactNumber());
+
+        GuardianCreateDTO updateGuardian = studentCreateDTO.getGuardianDetails();
+
+        // Update Guardian details
+        guardianService.updateGuardian(updateGuardian.getId(),
+                GuardianCreateDTO.builder()
+                        .id(updateGuardian.getId())
+                        .firstName(updateGuardian.getFirstName())
+                        .lastName(updateGuardian.getLastName())
+                        .email(updateGuardian.getEmail())
+                        .nationalIdentityNumber(updateGuardian.getNationalIdentityNumber())
+                        .contactNumber(updateGuardian.getContactNumber())
+                        .relationship(updateGuardian.getRelationship())
+                        .build());
 
         userRepository.save(user);
         return studentRepository.save(student);
@@ -161,7 +174,7 @@ public class StudentService {
     }
 
     public Page<CourseListDTO> getStudentEnrolledCourses(Pageable pageable, Integer studentId) {
-        Page<Enrollment> enrollmentPage  = enrollmentRepository.findByStudentId(studentId, pageable);
+        Page<Enrollment> enrollmentPage = enrollmentRepository.findByStudentId(studentId, pageable);
         return enrollmentPage.map(enrollment -> new CourseListDTO(enrollment.getCourse()));
     }
 }

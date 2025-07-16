@@ -80,7 +80,7 @@ export const useUpdateStudentMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
     },
   });
 };

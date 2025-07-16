@@ -303,6 +303,7 @@ export interface StudentPageData {
   studentId: string;
   dateOfBirth: string;
   gradeType: EGrade;
+  genderType: EGender;
   admissionPayed: boolean;
   guardianPageData: GuardianPageData;
 }

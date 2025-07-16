@@ -130,16 +130,12 @@ export default function CreateOrUpdateCourseForm({
       description: values.description,
     };
 
-    console.log("input: ", input);
-
-    // if (!initialValues) {
-    //   createCourse(input);
-    // } else {
-    //   updateCourse({ id: initialValues.id, ...input });
-    // }
+    if (!initialValues) {
+      createCourse(input);
+    } else {
+      updateCourse({ id: initialValues.id, ...input });
+    }
   };
-
-  // console.log("intitial: ", initialValues);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

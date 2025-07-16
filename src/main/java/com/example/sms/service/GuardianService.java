@@ -60,6 +60,7 @@ public class GuardianService {
         guardian.setEmail(updateDto.getEmail());
         guardian.setNationalIdentityNumber(updateDto.getNationalIdentityNumber());
         guardian.setContactNumber(updateDto.getContactNumber());
+        guardian.setRelationship(updateDto.getRelationship());
 
         return guardianRepository.save(guardian);
     }

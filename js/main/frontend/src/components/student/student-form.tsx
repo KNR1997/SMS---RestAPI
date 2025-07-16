@@ -15,7 +15,7 @@ import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
 } from "@data/student";
-import SelectInput from "../form/select-input";
+import SelectInput from "../ui/select-input";
 import {
   genderOptions,
   gradeOptions,
@@ -30,8 +30,8 @@ type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
-  gradeType: EGrade;
-  genderType: EGender;
+  gradeType: { label: string; value: EGrade };
+  genderType: { label: string; value: EGender };
   address: string;
   username: string;
   password: string;
@@ -43,15 +43,15 @@ type FormValues = {
   guardianEmail: string;
   guardianIdNumber: string;
   guardianContactNumber: number;
-  guardianRelatioship: RelationshipType;
+  guardianRelatioship: { label: string; value: RelationshipType };
 };
 
 const defaultValues = {
   firstName: "",
   lastName: "",
   email: "",
-  gradeType: "",
-  genderType: "",
+  // gradeType: "",
+  // genderType: "",
   address: "",
   username: "",
   password: "",
@@ -60,14 +60,14 @@ const defaultValues = {
   guardianLastName: "",
   guardianIdNumber: "",
   guardianContactNumber: "",
-  guardianRelatioship: "",
+  // guardianRelatioship: "",
 };
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required("FirstName is required"),
   lastName: yup.string().required("LastName is required"),
-  gradeType: yup.string().required("Grade is required"),
-  genderType: yup.string().required("Gender is required"),
+  gradeType: yup.object().required("Grade is required"),
+  genderType: yup.object().required("Gender is required"),
   address: yup.string().required("Address is required"),
 
   username: yup.string().required("Username is required"),
@@ -89,7 +89,7 @@ const validationSchema = yup.object().shape({
     .required("Contact Number is required")
     .matches(/^\d{10}$/, "Contact Number must be exactly 10 digits"),
   guardianRelatioship: yup
-    .string()
+    .object()
     .required("Guardian Relationship is required"),
 });
 
@@ -103,7 +103,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const [guardianFound, setGuardianFound] = useState<boolean>(false);
   const [triggerSearch, setTriggerSearch] = useState(false);
 
-  // console.log('guardianSearchInput: ', guardianSearchInput)
+  console.log('initialValues: ', initialValues)
 
   // This hook must be declared at the top level of the component
   const { guardian } = useGuardianByIDNumberQuery({ id: guardianSearchInput });
@@ -136,10 +136,17 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
     defaultValues: initialValues
       ? {
           ...initialValues,
+          genderType: genderOptions.find(
+            (genderOption) => genderOption.value == initialValues.genderType
+          ),
+          gradeType: gradeOptions.find(
+            (gradeOption) => gradeOption.value == initialValues.gradeType
+          ),
+          guardianId: initialValues.guardianPageData.id ?? null,
           guardianFirstName: initialValues.guardianPageData.firstName,
           guardianLastName: initialValues.guardianPageData.lastName,
           guardianEmail: initialValues.guardianPageData.email,
-          guardianIdNumber: initialValues.guardianPageData.id,
+          guardianIdNumber: initialValues.guardianPageData.nationalIdentityNumber,
           guardianContactNumber: initialValues.guardianPageData.contactNumber,
           guardianRelatioship: relationshipOptions.find(
             (relationshipOption) =>
@@ -160,15 +167,14 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const onSubmit = async (values: FormValues) => {
     const input = {
       dateOfBirth: values.dateOfBirth,
-      gradeType: values.gradeType,
+      gradeType: values.gradeType.value,
       userDetails: {
         firstName: values.firstName,
         lastName: values.lastName,
-        // email: values.email,
         username: values.username,
         role: ERole.ROLE_STUDENT,
         password: values.password,
-        genderType: values.genderType,
+        genderType: values.genderType.value,
         address: values.address,
       },
       guardianDetails: {
@@ -178,11 +184,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         email: values.guardianEmail,
         nationalIdentityNumber: values.guardianIdNumber,
         contactNumber: values.guardianContactNumber,
-        relationship: values.guardianRelatioship,
+        relationship: values.guardianRelatioship.value,
       },
     };
 
-    console.log("input: ", input);
+    console.log('input: ', input)
 
     if (!initialValues) {
       createStudent(input);
@@ -193,12 +199,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
 
   const handleCreateAndEnroll = handleSubmit(async (data) => {
     try {
-      console.log("handle create and enroll");
+      // console.log("handle create and enroll");
       // You can do your actual submit logic here
       await onSubmit(data); // if you already have an `onSubmit` function defined
 
       // Navigate after successful submission
-      navigate("/students/enroll");
+      navigate("/enrollments/create");
     } catch (error) {
       console.error("Submission failed", error);
       // Handle error (e.g., show toast)
@@ -255,19 +261,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
               <Label>
                 Grade <span className="text-error-500">*</span>
               </Label>
-              <Controller
+              <SelectInput
                 name="gradeType"
                 control={control}
-                rules={{ required: "Grade is required" }}
-                render={({ field }) => (
-                  <SelectInput
-                    options={gradeOptions}
-                    placeholder="Select Option"
-                    value={field.value}
-                    onChange={field.onChange}
-                    className="dark:bg-dark-900"
-                  />
-                )}
+                options={gradeOptions}
+                isClearable={true}
               />
               {errors.gradeType && (
                 <p className="text-error-500 text-sm mt-1">
@@ -279,19 +277,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
               <Label>
                 Gender <span className="text-error-500">*</span>
               </Label>
-              <Controller
+              <SelectInput
                 name="genderType"
                 control={control}
-                rules={{ required: "Gender is required" }}
-                render={({ field }) => (
-                  <SelectInput
-                    options={genderOptions}
-                    placeholder="Select Option"
-                    value={field.value}
-                    onChange={field.onChange}
-                    className="dark:bg-dark-900"
-                  />
-                )}
+                options={genderOptions}
+                isClearable={true}
               />
               {errors.genderType && (
                 <p className="text-error-500 text-sm mt-1">
@@ -299,16 +289,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 </p>
               )}
             </div>
-            {/* <div>
-              <Label>
-                Email <span className="text-error-500">*</span>{" "}
-              </Label>
-              <Input
-                placeholder="user@example.com"
-                {...register("email")}
-                errorMessage={errors.email?.message!}
-              />
-            </div> */}
             <div>
               <Label>
                 Address <span className="text-error-500">*</span>{" "}
@@ -392,33 +372,15 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 errorMessage={errors.guardianContactNumber?.message!}
               />
             </div>
-            {/* <div>
-              <Label>
-                Relationship <span className="text-error-500">*</span>{" "}
-              </Label>
-              <Input
-                // placeholder="father or mother"
-                {...register("guardianRelatioship")}
-                errorMessage={errors.guardianRelatioship?.message!}
-              />
-            </div> */}
             <div>
               <Label>
                 Relationship <span className="text-error-500">*</span>
               </Label>
-              <Controller
+              <SelectInput
                 name="guardianRelatioship"
                 control={control}
-                rules={{ required: "Relationship is required" }}
-                render={({ field }) => (
-                  <SelectInput
-                    options={relationshipOptions}
-                    placeholder="Select Option"
-                    value={field.value}
-                    onChange={field.onChange}
-                    className="dark:bg-dark-900"
-                  />
-                )}
+                options={relationshipOptions}
+                isClearable={true}
               />
               {errors.guardianRelatioship && (
                 <p className="text-error-500 text-sm mt-1">

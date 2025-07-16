@@ -92,6 +92,7 @@ public class UserService {
         user.setRole(role);
         user.setEmail(updateDto.getEmail());
         user.setNic(updateDto.getNic());
+        user.setPhoneNumber(updateDto.getPhoneNumber());
 
         // Only update password if a new one is provided (optional, but recommended)
         if (updateDto.getPassword() != null && !updateDto.getPassword().isEmpty()) {
