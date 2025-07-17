@@ -79,12 +79,12 @@ export default function EmployeePaymentList({
               >
                 Date
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Actions
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableHeader>
 
@@ -140,11 +140,11 @@ export default function EmployeePaymentList({
                 {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {employeePayment.paymentDate?.slice(0, 10)}
                 </TableCell> */}
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <button onClick={() => handleEdit(employeePayment.id)}>
                     <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                   </button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

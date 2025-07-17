@@ -47,7 +47,12 @@ const validationSchema = yup.object().shape({
     .required("Contact Number is required")
     .matches(/^\d{10}$/, "Contact Number must be exactly 10 digits"),
   username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
+  // password: yup.string().required("Password is required"),
+  password: yup.string().when("$isEdit", {
+    is: true,
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("Password is required"),
+  }),
 });
 
 interface Props {
@@ -68,10 +73,12 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
           role: roleOptions.find(
             (role) => role.value === initialValues.role.name
           ),
+          password: "", // optional: keep it empty to avoid showing anything
         }
       : defaultValues,
     //@ts-ignore
     resolver: yupResolver(validationSchema),
+    context: { isEdit: Boolean(initialValues) },
   });
 
   const { mutate: createUser, isLoading: creating } = useCreateUserMutation();
@@ -174,17 +181,18 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             errorMessage={errors.username?.message!}
           />
         </div>
-        <div>
-          <Label>
-            Password <span className="text-error-500">*</span>{" "}
-          </Label>
-          <Input
-            type="password"
-            // placeholder="user"
-            {...register("password")}
-            errorMessage={errors.password?.message!}
-          />
-        </div>
+        {!initialValues && (
+          <div>
+            <Label>
+              Password <span className="text-error-500">*</span>{" "}
+            </Label>
+            <Input
+              type="password"
+              {...register("password")}
+              errorMessage={errors.password?.message!}
+            />
+          </div>
+        )}
         <Button disabled={creating || updating} size="sm">
           {initialValues ? "Update" : "Create"} User
         </Button>

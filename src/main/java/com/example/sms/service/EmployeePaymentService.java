@@ -1,9 +1,10 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.Course.EmployeePaymentListDTO;
+import com.example.sms.dto.CoursePaymentSummaryDto;
 import com.example.sms.dto.EmployeePayment.EmployeePaymentCreateDTO;
 import com.example.sms.dto.Payment.PaymentCreateDTO;
-import com.example.sms.dto.Payment.PaymentListDTO;
+import com.example.sms.entity.CoursePaymentSummary;
 import com.example.sms.entity.EmployeePayment;
 import com.example.sms.entity.Payment;
 import com.example.sms.entity.User;
@@ -30,8 +31,14 @@ public class EmployeePaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<EmployeePaymentListDTO> getEmployeePaymentsPaginated(Pageable pageable) {
-        Page<EmployeePayment> employeePaymentPage = employeePaymentRepository.findAll(pageable);
+    public Page<EmployeePaymentListDTO> getEmployeePaymentsPaginated(Pageable pageable, Integer employeeId) {
+        Page<EmployeePayment> employeePaymentPage;
+        if (employeeId != null) {
+            employeePaymentPage = employeePaymentRepository.findByEmployeeId(employeeId, pageable);
+
+        } else {
+            employeePaymentPage = employeePaymentRepository.findAll(pageable);
+        }
         return employeePaymentPage.map(EmployeePaymentListDTO::new);
     }
 
@@ -63,6 +70,16 @@ public class EmployeePaymentService {
         employeePayment.setAmount(createDTO.getAmount());
         employeePayment.setPaymentDateToToday();
         employeePayment.setPayment(payment);
+        employeePayment.setReference(createDTO.getReference());
+
+        for (CoursePaymentSummaryDto cpsDto : createDTO.getCoursePaymentSummaries()) {
+            CoursePaymentSummary cps = new CoursePaymentSummary();
+            cps.setCourseName(cpsDto.getCourseName());
+            cps.setCourseFee(cpsDto.getCourseFee());
+            cps.setStudentCount(cpsDto.getStudentCount());
+            cps.setIncome(cpsDto.getIncome());
+            employeePayment.addCoursePaymentSummary(cps);
+        }
 
         return employeePaymentRepository.save(employeePayment);
     }
