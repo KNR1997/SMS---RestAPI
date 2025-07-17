@@ -19,6 +19,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
 
     boolean existsBySlug(String slug);
 
+    boolean existsByCode(String code);
+
     Page<Course> findByGradeType(GradeType gradeType, Pageable pageable);
 
     List<Course> findByTeacher(User teacher);

@@ -120,7 +120,7 @@ export default function CreateOrUpdateCourseForm({
   const onSubmit = async (values: FormValues) => {
     const input = {
       name: courseName,
-      slug: courseName,
+      slug: courseCode,
       code: courseCode,
       gradeType: values.gradeType.value,
       subjectId: values.subject.id,

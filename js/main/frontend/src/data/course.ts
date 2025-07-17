@@ -60,7 +60,7 @@ export const useCreateCourseMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.COURSES);
     },
     onError: (error: any) => {
-      toast.error("Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };
@@ -68,7 +68,7 @@ export const useCreateCourseMutation = () => {
 export const useUpdateCourseMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   return useMutation(CourseClient.update, {
     onSuccess: async () => {
       navigate("/courses");

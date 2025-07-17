@@ -57,7 +57,7 @@ export const monthOptions = [
 ];
 
 export const examStatusOptions = [
-  { value: ExamStatusType.PENDING, label: "Penidng" },
+  { value: ExamStatusType.PENDING, label: "Pending" },
   { value: ExamStatusType.COMPLETED, label: "Completed" },
   { value: ExamStatusType.CANCELLED, label: "Cancelled" },
 ];
