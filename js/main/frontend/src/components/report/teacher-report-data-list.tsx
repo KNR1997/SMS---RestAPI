@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
-import { PencilIcon } from "../../icons";
-import { Course, MappedPaginatorInfo } from "@types";
+import { MappedPaginatorInfo, User } from "@types";
 import {
   Table,
   TableBody,
@@ -12,13 +11,7 @@ import Pagination from "@components/ui/pagination";
 import Button from "@components/ui/button/Button";
 
 export type IProps = {
-  reportData: {
-    id: number;
-    teacherName: string;
-    // courseName: string;
-    month: string;
-    payment: number;
-  }[];
+  reportData: User[];
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
@@ -34,8 +27,8 @@ export default function TeacherReportDataList({
 }: IProps) {
   const navigate = useNavigate();
 
-  const handleEdit = (slug: string) => {
-    navigate(`/courses/${slug}/edit`);
+  const handleEdit = (id: number) => {
+    navigate(`/teachers/${id}/detail`);
   };
 
   return (
@@ -57,24 +50,6 @@ export default function TeacherReportDataList({
               >
                 Teacher Name
               </TableCell>
-              {/* <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Course
-              </TableCell> */}
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Month
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Payment
-              </TableCell>
               {showActions && (
                 <TableCell
                   isHeader
@@ -94,29 +69,22 @@ export default function TeacherReportDataList({
                   {data.id}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {data.teacherName}
+                  {data?.firstName} {data?.lastName}
                 </TableCell>
-                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {data.month}
-                </TableCell> */}
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {data.month}
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {data.payment}
-                </TableCell>
-                <TableCell key={data.id}>
-                  {showActions && (
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {/* <button onClick={() => handleEdit(data.id)}>
+                {showActions && (
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {/* <button onClick={() => handleEdit(data.id)}>
                         <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                       </button> */}
-                      <Button  size="sm" className="mr-5">
-                        More
-                      </Button>
-                    </TableCell>
-                  )}
-                </TableCell>
+                    <Button
+                      onClick={() => handleEdit(data.id)}
+                      size="sm"
+                      className="mr-5"
+                    >
+                      More
+                    </Button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

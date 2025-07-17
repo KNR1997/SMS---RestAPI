@@ -11,10 +11,12 @@ import SelectInput from "../ui/select-input";
 import { useForm } from "react-hook-form";
 import Badge from "@components/ui/badge/Badge";
 import { ERole } from "@types";
+import { useEffect } from "react";
 
 interface IProps {
   employee: any;
   onCalculate: (totalIncome: number, monthNumber: number) => void;
+  onReference: (data: any) => void;
 }
 
 type FormValues = {
@@ -23,7 +25,11 @@ type FormValues = {
 
 const defaultValues = {};
 
-export default function EmployeeDetails({ employee, onCalculate }: IProps) {
+export default function EmployeeDetails({
+  employee,
+  onCalculate,
+  onReference,
+}: IProps) {
   const {
     control,
     handleSubmit,
@@ -35,14 +41,20 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
 
   const month = watch("month");
 
+  console.log("employee: ", employee);
+
   const { coursePayments, loading, error } = useCoursePaymentsSummaryQuery({
     teacherId: employee?.id,
     monthNumber: month?.value ?? 0,
   });
 
-  console.log("student: ", month);
-
-  console.log("coursePayments: ", coursePayments);
+  useEffect(() => {
+    if (!coursePayments || coursePayments.length === 0) {
+      onReference(null);
+      return;
+    }
+    onReference(coursePayments);
+  }, [coursePayments, onReference, month]);
 
   const monthOptions = [
     {
@@ -63,7 +75,8 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
 
   const totalIncome = () => {
     const value = coursePayments?.reduce((sum, c) => sum + c.income, 0) || 0;
-    onCalculate(value * 0.7, month?.value);
+    const roundedValue = (value * 0.7).toFixed(2);
+    onCalculate(roundedValue, month?.value);
     return value;
   };
 
@@ -81,18 +94,16 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
           isClearable={true}
         />
       </form>
-
       {employee && (
         <Card className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-          <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
-            {employee.firstName} {employee.lastName}
-          </p>
-          <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
-            {employee.email}
-          </p>
-          <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
-            {employee.role}
-          </p>
+          <div className="flex justify-between">
+            <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
+              {employee.firstName} {employee.lastName}
+            </p>
+            <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
+              {employee.email}
+            </p>
+          </div>
           <Badge
             size="sm"
             color={
@@ -107,112 +118,62 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
           >
             {employee.role}
           </Badge>
-          {/* <div className="flex gap-5">
-                <Badge
-                  size="sm"
-                  color={
-                    enrollment.status === EEnrollmentStatus.ACTIVE
-                      ? "success"
-                      : enrollment.status === EEnrollmentStatus.LOCKED
-                      ? "warning"
-                      : "error"
-                  }
-                >
-                  {enrollment.status}
-                </Badge>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                  {enrollment.lastPaidMonthName}
-                </p>
-              </div> */}
         </Card>
       )}
-      <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-            <TableRow>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Course Name
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Course Fee
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                No. of Students
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Income
-              </TableCell>
-              {/* {showActions && (
+      {employee?.role == ERole.ROLE_TEACHER ? (
+        <div className="max-w-full overflow-x-auto">
+          <Table>
+            {/* Table Header */}
+            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+              <TableRow>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Actions
+                  Course Name
                 </TableCell>
-              )} */}
-            </TableRow>
-          </TableHeader>
-
-          {/* Table Body */}
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {coursePayments?.map((coursePayment) => (
-              <TableRow key={coursePayment.courseName}>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {coursePayment.courseName}
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Course Fee
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {coursePayment.courseFee}
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  No. of Students
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {coursePayment.studentCount}
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Income
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  Rs. {coursePayment.income}
-                </TableCell>
-                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <Badge
-                    size="sm"
-                    color={
-                      enrollment.status == EEnrollmentStatus.ACTIVE
-                        ? "success"
-                        : enrollment.status === EEnrollmentStatus.LOCKED
-                        ? "warning"
-                        : "error"
-                    }
-                  >
-                    {enrollment.status}
-                  </Badge>
-                </TableCell> */}
-                {/* {showActions && (
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <button onClick={() => handleEdit(enrollment.id)}>
-                      <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6 mr-2" />
-                    </button>
-                    <button
-                      onClick={() => invokeEnrollment({ id: enrollment.id })}
-                    >
-                      <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-                    </button>
-                  </TableCell>
-                )} */}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {/* {!!paginatorInfo?.total && (
+            </TableHeader>
+
+            {/* Table Body */}
+            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              {coursePayments?.map((coursePayment) => (
+                <TableRow key={coursePayment.courseName}>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {coursePayment.courseName}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    Rs. {coursePayment.courseFee}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {coursePayment.studentCount}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    Rs. {coursePayment.income}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {/* {!!paginatorInfo?.total && (
           <div className="flex items-center justify-end pb-2">
             <Pagination
               total={paginatorInfo.total}
@@ -222,11 +183,16 @@ export default function EmployeeDetails({ employee, onCalculate }: IProps) {
             />
           </div>
         )} */}
-        <div className="text-sm my-2 flex flex-col font-medium text-gray-800 dark:text-white/90">
-          <div>Total: Rs. {totalIncome()} % 70</div>
-          <div>Portion: Rs. {totalIncome() * 0.7}</div>
+          <div className="text-sm my-2 flex flex-col font-medium text-gray-800 dark:text-white/90">
+            <div>Total: Rs. {totalIncome()} % 70</div>
+            <div>Portion: Rs. {(totalIncome() * 0.7).toFixed(2)}</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="text-sm my-2 flex flex-col font-medium text-gray-800 dark:text-white/90">
+          <div>Total: Rs. 25000</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -34,12 +34,12 @@ public class EnrollmentPaymentController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<EnrollmentPaymentDTO> enrollmentPaymentDTOS = enrollmentPaymentService.getEnrollmentPaymentsByCoursePaginated(
+        Page<EnrollmentPaymentDTO> enrollmentPaymentDTOPage = enrollmentPaymentService.getEnrollmentPaymentsByCoursePaginated(
                 pageable,
                 courseId
         );
 
-        PaginatedResponse<EnrollmentPaymentDTO> response = new PaginatedResponse<>(enrollmentPaymentDTOS);
+        PaginatedResponse<EnrollmentPaymentDTO> response = new PaginatedResponse<>(enrollmentPaymentDTOPage);
         return ResponseEntity.ok(response);
     }
 

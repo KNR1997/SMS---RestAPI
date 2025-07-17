@@ -11,7 +11,7 @@ import { HttpClient } from "./http-client";
 
 export const UserClient = {
   ...crudFactory<User, QueryOptions, CreateUser>(API_ENDPOINTS.USERS),
-  paginated: ({ username, ...params }: Partial<UserQueryOptions>) => {
+  paginated: ({ username, name, ...params }: Partial<UserQueryOptions>) => {
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.USERS, {
       searchJoin: "and",
       // self,
@@ -19,6 +19,7 @@ export const UserClient = {
       page: params?.page ? params.page - 1 : 0,
       search: HttpClient.formatSearchParams({
         username,
+        name,
       }),
     });
   },

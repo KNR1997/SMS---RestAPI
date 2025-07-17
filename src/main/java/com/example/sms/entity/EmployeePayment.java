@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,10 +28,17 @@ public class EmployeePayment {
     @JoinColumn(name = "payment_id", nullable = true)
     private Payment payment;
 
+    @OneToMany(mappedBy = "employeePayment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CoursePaymentSummary> coursePaymentSummaries = new ArrayList<>();
+
     private String reference;
 
     public void setPaymentDateToToday() {
         this.paymentDate = LocalDate.now();
     }
 
+    public void addCoursePaymentSummary(CoursePaymentSummary summary) {
+        summary.setEmployeePayment(this);
+        this.coursePaymentSummaries.add(summary);
+    }
 }

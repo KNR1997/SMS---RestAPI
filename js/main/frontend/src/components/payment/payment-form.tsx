@@ -86,7 +86,7 @@ export default function CreatePaymentForm() {
 
   const totalPayment =
     (selectedStudent?.admissionPayed ? 0 : 2000) +
-    selectedCourse?.fee * selectedMonths.length;
+    selectedCourse?.fee * selectedMonths?.length;
 
   console.log("totalPayment: ", totalPayment);
 

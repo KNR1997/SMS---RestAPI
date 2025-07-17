@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
+
 @Service
 public class CourseService {
 
@@ -33,19 +35,6 @@ public class CourseService {
 
     @Autowired
     private EnrollmentRepository enrollmentRepository;
-
-    private String extractSearchValue(String search, String key) {
-        if (search == null || search.isEmpty()) return null;
-
-        String[] parts = search.split(";");
-        for (String part : parts) {
-            String[] keyValue = part.split(":");
-            if (keyValue.length == 2 && keyValue[0].equalsIgnoreCase(key)) {
-                return keyValue[1];
-            }
-        }
-        return null;
-    }
 
     public Page<CourseListDTO> getCoursesPaginated(
             Pageable pageable,

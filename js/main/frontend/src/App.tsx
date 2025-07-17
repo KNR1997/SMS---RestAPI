@@ -62,6 +62,7 @@ import MonthlyActiveStudentReport from "./pages/Reports/monthly-active-student-r
 import StudentRegistrationIncrementReport from "./pages/Reports/student-registration-increment-report";
 import EmployeePayments from "./pages/Employee/Payments";
 import CreateEmployeePaymentPage from "./pages/Employee/Payments/create";
+import TeacherDetailPage from "./pages/Teachers/detail";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -365,6 +366,11 @@ export default function App() {
                       <CreateEmployeePaymentPage />
                     </ProtectedRoute>
                   }
+                />
+
+                <Route
+                  path="/teachers/:id/detail"
+                  element={<TeacherDetailPage />}
                 />
               </Route>
 

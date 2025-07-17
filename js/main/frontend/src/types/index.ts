@@ -402,6 +402,15 @@ export interface EmployeePayment {
   amount: number;
   paymentDate: string;
   roleType: ERole;
+  reference: string;
+  coursePaymentsSummary: CoursePaymentSummary[];
+}
+
+export interface CoursePaymentSummary {
+  courseName: string;
+  courseFee: number;
+  studentCount: number;
+  income: number;
 }
 
 export interface CreateEmployeePayment {
@@ -508,6 +517,7 @@ export interface InvoiceQueryOptions extends QueryOptions {
 export interface UserQueryOptions extends QueryOptions {
   username: string;
   role: ERole;
+  name: string;
 }
 
 export interface StudentQueryOptions extends QueryOptions {
@@ -538,6 +548,7 @@ export interface CoursePaymentQueryOptions extends QueryOptions {
 
 export interface EmployeePaymentQueryOptions extends QueryOptions {
   employeeName: string;
+  employeeId: number;
 }
 
 export interface ExamQueryOptions extends QueryOptions {

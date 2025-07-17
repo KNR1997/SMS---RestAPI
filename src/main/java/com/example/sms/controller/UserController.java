@@ -32,12 +32,13 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(required = false) RoleType role
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable, role);
+        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable, role, search);
 
         PaginatedResponse<UserListDTO> response = new PaginatedResponse<>(userPage);
         return ResponseEntity.ok(response);
