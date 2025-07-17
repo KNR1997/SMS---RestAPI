@@ -8,6 +8,7 @@ import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -84,9 +85,14 @@ public class CourseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
     }
 
+    @Transactional
     public Course createCourse(CourseCreateDTO createDto) {
         if (courseRepository.existsBySlug(createDto.getSlug())) {
             throw new BadRequestException("Course with slug '" + createDto.getSlug() + "' already exists.");
+        }
+
+        if (courseRepository.existsByCode(createDto.getCode())) {
+            throw new BadRequestException("Course with name '" + createDto.getName() + "' already exists.");
         }
 
         Subject subject = subjectRepository.findById(createDto.getSubjectId())
@@ -110,6 +116,7 @@ public class CourseService {
 
     }
 
+    @Transactional
     public Course updateCourse(Integer id, CourseCreateDTO updateDto) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + id));
