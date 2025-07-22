@@ -30,14 +30,18 @@ public class GuardianController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "desc") String direction
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) String search
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<GuardianListDTO> studentPage = guardianService.getGuardiansPaginated(pageable);
+        Page<GuardianListDTO> guardianPage = guardianService.getGuardiansPaginated(
+                pageable,
+                search
+        );
 
-        PaginatedResponse<GuardianListDTO> response = new PaginatedResponse<>(studentPage);
+        PaginatedResponse<GuardianListDTO> response = new PaginatedResponse<>(guardianPage);
         return ResponseEntity.ok(response);
     }
 

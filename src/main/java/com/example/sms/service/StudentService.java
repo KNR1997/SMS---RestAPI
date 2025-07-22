@@ -2,10 +2,12 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Course.CourseListDTO;
 import com.example.sms.dto.Guardian.GuardianCreateDTO;
+import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.dto.Student.StudentCreateDTO;
 import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.*;
+import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class StudentService {
@@ -48,21 +52,27 @@ public class StudentService {
     @Autowired
     private GuardianRepository guardianRepository;
 
-    public Page<StudentListDTO> getStudentsPaginated(Pageable pageable, User currentUser) {
-        Page<Student> studentPage;
+    public Page<StudentListDTO> getStudentsPaginated(
+            Pageable pageable,
+            String search,
+            String grade,
+            Boolean admissionPayed,
+            User currentUser
+    ) {
+        Page<Student> studentPage = null;
+        String name = extractSearchValue(search, "name");
+        GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
+
         if (currentUser.isAdmin()) {
-            studentPage = studentRepository.findAll(pageable);
+            studentPage = studentRepository.searchStudent(name, gradeType, admissionPayed, pageable);
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             List<Course> courses = courseRepository.findByTeacher(user);
             studentPage = enrollmentRepository.findDistinctStudentsByCourseIn(courses, pageable);
-//            studentPage = studentRepository.findAll(pageable);
-        } else {
-            // fallback for other roles (optional)
-            studentPage = studentRepository.findAll(pageable);
         }
+        assert studentPage != null;
         return studentPage.map(StudentListDTO::new);
     }
 

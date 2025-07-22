@@ -516,12 +516,14 @@ export interface InvoiceQueryOptions extends QueryOptions {
 
 export interface UserQueryOptions extends QueryOptions {
   username: string;
-  role: ERole;
+  role: ERole | null;
   name: string;
 }
 
 export interface StudentQueryOptions extends QueryOptions {
-  username: string;
+  name: string;
+  admissionPayed: number | null;
+  grade: EGrade | null;
 }
 
 export interface PaymentQueryOptions extends QueryOptions {}
@@ -530,7 +532,9 @@ export interface SubjectQueryOptions extends QueryOptions {
   name: string;
 }
 
-export interface GuardianQueryOptions extends QueryOptions {}
+export interface GuardianQueryOptions extends QueryOptions {
+  name: string;
+}
 
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
@@ -538,6 +542,7 @@ export interface CourseQueryOptions extends QueryOptions {
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {
+  name: string;
   studentId: number;
 }
 

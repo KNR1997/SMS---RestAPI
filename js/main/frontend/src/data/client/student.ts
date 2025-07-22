@@ -14,14 +14,14 @@ import { HttpClient } from "./http-client";
 
 export const StudentClient = {
   ...crudFactory<Student, QueryOptions, CreateStudent>(API_ENDPOINTS.STUDENTS),
-  paginated: ({ username, ...params }: Partial<StudentQueryOptions>) => {
+  paginated: ({ name, ...params }: Partial<StudentQueryOptions>) => {
     return HttpClient.get<StudentPaginator>(API_ENDPOINTS.STUDENTS, {
       searchJoin: "and",
       // self,
       ...params,
       page: params?.page ? params.page - 1 : 0,
       search: HttpClient.formatSearchParams({
-        username,
+        name,
       }),
     });
   },

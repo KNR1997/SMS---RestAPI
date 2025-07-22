@@ -2,7 +2,9 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Guardian.GuardianCreateDTO;
 import com.example.sms.dto.Guardian.GuardianListDTO;
+import com.example.sms.dto.Subject.SubjectListDTO;
 import com.example.sms.entity.Guardian;
+import com.example.sms.entity.Subject;
 import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.GuardianRepository;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class GuardianService {
@@ -20,8 +24,14 @@ public class GuardianService {
     @Autowired
     private UserService userService;
 
-    public Page<GuardianListDTO> getGuardiansPaginated(Pageable pageable) {
-        Page<Guardian> guardianPage = guardianRepository.findAll(pageable);
+    public Page<GuardianListDTO> getGuardiansPaginated(
+            Pageable pageable,
+            String search
+    )
+    {
+        String name = extractSearchValue(search, "name");
+        Page<Guardian> guardianPage = guardianRepository.searchGuardian(name, pageable);
+
         return guardianPage.map(GuardianListDTO::new);
     }
 

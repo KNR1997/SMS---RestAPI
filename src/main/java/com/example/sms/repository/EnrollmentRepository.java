@@ -3,6 +3,7 @@ package com.example.sms.repository;
 import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Enrollment;
+import com.example.sms.entity.Guardian;
 import com.example.sms.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,5 +32,15 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
             "FROM Enrollment e " +
             "GROUP BY e.course.name")
     List<CourseStudentCountDTO> getCourseStudentCounts();
+
+    @Query("SELECT e FROM Enrollment e " +
+            "JOIN e.course c " +
+            "JOIN e.student s " +
+            "JOIN s.user u WHERE " +
+            "(:name IS NULL OR LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%'))) ")
+    Page<Enrollment> searchEnrollment(
+            @Param("name") String name,
+            Pageable pageable
+    );
 
 }

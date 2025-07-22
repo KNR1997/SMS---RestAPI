@@ -22,6 +22,7 @@ export default function Subjects() {
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const { subjects, loading, error, paginatorInfo } = useSubjectsQuery({
+    name: searchTerm,
     page,
     orderBy,
     sortedBy,

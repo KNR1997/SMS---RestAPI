@@ -25,6 +25,11 @@ export const gradeOptions = [
   { value: EGrade.GRADE_11, label: "Grade 11" },
 ];
 
+export const admissionPayedOptions = [
+  { value: 1, label: "Yes" },
+  { value: 0, label: "No" },
+];
+
 export const genderOptions = [
   { value: EGender.Male, label: "Male" },
   { value: EGender.Female, label: "Female" },

@@ -42,12 +42,12 @@ export default function EnrollmentList({
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Id
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -58,7 +58,7 @@ export default function EnrollmentList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Course Code
+                Course Name
               </TableCell>
               <TableCell
                 isHeader
@@ -81,14 +81,14 @@ export default function EnrollmentList({
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {enrollments.map((enrollment) => (
               <TableRow key={enrollment.id}>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {enrollment.id}
-                </TableCell>
+                </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {enrollment.studentName}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {enrollment.courseCode}
+                  {enrollment.courseName}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <Badge

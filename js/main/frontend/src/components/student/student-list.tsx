@@ -39,12 +39,12 @@ export default function StudentList({
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Id
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -57,12 +57,12 @@ export default function StudentList({
               >
                 Grade
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 StudentID
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -82,18 +82,18 @@ export default function StudentList({
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student.id}
-                </TableCell>
+                </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student.firstName} {student.lastName}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student?.gradeType ? student.gradeType : "_"}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student.studentId}
-                </TableCell>
+                </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {student.admissionPayed}
                   <Badge

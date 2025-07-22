@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GetParams, Guardian, GuardianPaginator, GuardianQueryOptions } from "../types";
+import {
+  GetParams,
+  Guardian,
+  GuardianPaginator,
+  GuardianQueryOptions,
+} from "../types";
 import { API_ENDPOINTS } from "./client/api-endpoints";
 import { mapPaginatorData } from "../utils/data-mappers";
 import { GuardianClient } from "./client/guardian";
@@ -41,7 +46,7 @@ export const useGuardianQuery = ({ slug }: GetParams) => {
   };
 };
 
-export const useGuardianByIDNumberQuery = ({ id }: {id: string}) => {
+export const useGuardianByIDNumberQuery = ({ id }: { id: string }) => {
   const { data, error, isLoading } = useQuery<Guardian, Error>(
     [API_ENDPOINTS.GUARDIANS, { id }],
     () => GuardianClient.getByIDNumber({ id }),

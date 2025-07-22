@@ -38,12 +38,12 @@ export default function GuardianList({
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Id
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -54,7 +54,7 @@ export default function GuardianList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Identity No.
+                NIC
               </TableCell>
               <TableCell
                 isHeader
@@ -75,9 +75,9 @@ export default function GuardianList({
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {guardians.map((guardian) => (
               <TableRow key={guardian.id}>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {guardian.id}
-                </TableCell>
+                </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {guardian.firstName} {guardian.lastName}
                 </TableCell>

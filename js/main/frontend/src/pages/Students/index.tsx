@@ -3,24 +3,29 @@ import PageMeta from "../../components/common/PageMeta";
 import Loader from "../../components/ui/loader/loader";
 import ErrorMessage from "../../components/ui/error-message";
 import { useState } from "react";
-import { SortOrder } from "../../types";
+import { EGrade, SortOrder } from "../../types";
 import { useStudentsQuery } from "../../data/student";
 import StudentList from "../../components/student/student-list";
 import { Card } from "antd";
 import Search from "@components/common/search";
 import { ArrowUp } from "@components/icons/arrow-up";
 import { ArrowDown } from "@components/icons/arrow-down";
-import CourseFilter from "@components/course/course-filter";
 import cn from "classnames";
+import UserFilter from "@components/user/user-filter";
 
 export default function Students() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [grade, setGrade] = useState<EGrade | null>(null);
+  const [admissionPayed, setAdmissionPayed] = useState<number | null>(null);
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const { students, loading, error, paginatorInfo } = useStudentsQuery({
+    grade: grade,
+    admissionPayed: admissionPayed,
+    name: searchTerm,
     page,
     orderBy,
     sortedBy,
@@ -76,7 +81,19 @@ export default function Students() {
           })}
         >
           <div className="mt-5 flex w-full flex-col border-t border-gray-200 pt-5 md:mt-8 md:flex-row md:items-center md:pt-8">
-            <CourseFilter className="w-full" />
+            <UserFilter
+              className="w-full"
+              onGradeFilter={(object: any) => {
+                setGrade(object?.value);
+                setPage(1);
+              }}
+              onAdmissionPayedFilter={(object: any) => {
+                setAdmissionPayed(object?.value);
+                setPage(1);
+              }}
+              enableGrade
+              enableAdmissionFilter
+            />
           </div>
         </div>
       </Card>

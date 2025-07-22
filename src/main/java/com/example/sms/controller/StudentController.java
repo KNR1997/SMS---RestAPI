@@ -39,13 +39,22 @@ public class StudentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "desc") String direction
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String grade,
+            @RequestParam(required = false) Boolean admissionPayed
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
         User currentUser = currentUserService.getCurrentUser();
 
-        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(pageable, currentUser);
+        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(
+                pageable,
+                search,
+                grade,
+                admissionPayed,
+                currentUser
+        );
 
         PaginatedResponse<StudentListDTO> response = new PaginatedResponse<>(studentPage);
         return ResponseEntity.ok(response);
