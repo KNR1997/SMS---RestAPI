@@ -70,7 +70,7 @@ export const useInvokeEnrollmentMutation = () => {
 export const useUpdateCourseMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   return useMutation(CourseClient.update, {
     onSuccess: async () => {
       navigate("/courses");

@@ -12,13 +12,15 @@ export const EnrollmentClient = {
   ...crudFactory<Enrollment, QueryOptions, Enrollment>(
     API_ENDPOINTS.ENROLLMENTS
   ),
-  paginated: ({ ...params }: Partial<EnrollmentQueryOptions>) => {
+  paginated: ({ name, ...params }: Partial<EnrollmentQueryOptions>) => {
     return HttpClient.get<EnrollmentPaginator>(API_ENDPOINTS.ENROLLMENTS, {
       searchJoin: "and",
       // self,
       ...params,
       page: params?.page ? params.page - 1 : 0,
-      search: HttpClient.formatSearchParams({}),
+      search: HttpClient.formatSearchParams({
+        name,
+      }),
     });
   },
   invoke: ({ id }: { id: number }) => {

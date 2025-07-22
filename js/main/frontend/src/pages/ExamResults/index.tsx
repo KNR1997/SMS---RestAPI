@@ -20,7 +20,7 @@ export default function ExamResults() {
     sortedBy,
   });
 
-  console.log('examResults: ', examResults)
+  console.log("examResults: ", examResults);
 
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;

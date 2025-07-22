@@ -1,5 +1,6 @@
 package com.example.sms.service;
 
+import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.dto.Subject.SubjectCreateDTO;
 import com.example.sms.dto.Subject.SubjectListDTO;
 import com.example.sms.entity.Subject;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
+
 @Service
 public class SubjectService {
 
@@ -23,17 +26,15 @@ public class SubjectService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public Page<SubjectListDTO> getSubjectsPaginated(Pageable pageable) {
-        Page<Subject> subjectPage = subjectRepository.findAll(pageable);
+    public Page<SubjectListDTO> getSubjectsPaginated(
+            Pageable pageable,
+            String search
+    )
+    {
+        String name = extractSearchValue(search, "name");
+        Page<Subject> subjectPage = subjectRepository.searchSubjects(name, pageable);
 
-        return subjectPage.map(subject -> {
-            SubjectListDTO dto = new SubjectListDTO();
-            dto.setId(subject.getId());
-            dto.setName(subject.getName());
-            dto.setSlug(subject.getSlug());
-            dto.setCode(subject.getCode());
-            return dto;
-        });
+        return subjectPage.map(SubjectListDTO::new);
     }
 
     public Subject getSubjectBySlug(@PathVariable String slug) {

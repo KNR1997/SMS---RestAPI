@@ -2,9 +2,12 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Enrollment.EnrollmentCreateDTO;
+import com.example.sms.dto.Enrollment.EnrollmentDetailDTO;
 import com.example.sms.dto.Enrollment.EnrollmentListDTO;
+import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.entity.*;
 import com.example.sms.enums.EnrollmentStatusType;
+import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
@@ -16,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class EnrollmentService {
@@ -43,11 +48,14 @@ public class EnrollmentService {
             User currentUser
     ) {
         Page<Enrollment> enrollmentPage = null;
+        String name = extractSearchValue(search, "name");
+        GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
+
         if (currentUser.isAdmin()) {
             if (studentId != null) {
                 enrollmentPage = enrollmentRepository.findByStudentId(studentId, pageable);
             } else {
-                enrollmentPage = enrollmentRepository.findAll(pageable);
+                enrollmentPage = enrollmentRepository.searchEnrollment(name, pageable);
             }
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             Student student = studentService.getStudentByUser(currentUser);

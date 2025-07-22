@@ -5,6 +5,7 @@ import com.example.sms.dto.Student.GradeStudentCountDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Student;
 import com.example.sms.entity.User;
+import com.example.sms.enums.GradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,5 +29,19 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             "FROM Student s " +
             "GROUP BY s.gradeType")
     List<GradeStudentCountDTO> getGradeStudentCounts();
+
+    @Query("SELECT s FROM Student s " +
+            "JOIN s.user u " +
+            "WHERE (:name IS NULL OR " +
+            "LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +
+            "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:grade IS NULL OR s.gradeType = :grade) AND " +
+            "(:admissionPayed IS NULL OR s.admissionPayed = :admissionPayed)")
+    Page<Student> searchStudent(
+            @Param("name") String name,
+            @Param("grade") GradeType grade,
+            @Param("admissionPayed") Boolean admissionPayed,
+            Pageable pageable
+    );
 
 }

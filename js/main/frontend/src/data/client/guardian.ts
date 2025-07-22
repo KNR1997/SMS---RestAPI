@@ -13,16 +13,20 @@ export const GuardianClient = {
   ...crudFactory<Guardian, QueryOptions, CreateGuardian>(
     API_ENDPOINTS.GUARDIANS
   ),
-  paginated: ({ ...params }: Partial<GuardianQueryOptions>) => {
+  paginated: ({ name, ...params }: Partial<GuardianQueryOptions>) => {
     return HttpClient.get<GuardianPaginator>(API_ENDPOINTS.GUARDIANS, {
       searchJoin: "and",
       // self,
       ...params,
       page: params?.page ? params.page - 1 : 0,
-      search: HttpClient.formatSearchParams({}),
+      search: HttpClient.formatSearchParams({
+        name,
+      }),
     });
   },
   getByIDNumber: ({ id }: { id: string }) => {
-    return HttpClient.get<Guardian>(`${API_ENDPOINTS.GUARDIANS}/by-identityNumber/${id}`);
+    return HttpClient.get<Guardian>(
+      `${API_ENDPOINTS.GUARDIANS}/by-identityNumber/${id}`
+    );
   },
 };

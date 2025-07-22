@@ -30,12 +30,16 @@ public class SubjectController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "desc") String direction
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) String search
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<SubjectListDTO> subjectPage = subjectService.getSubjectsPaginated(pageable);
+        Page<SubjectListDTO> subjectPage = subjectService.getSubjectsPaginated(
+                pageable,
+                search
+        );
 
         PaginatedResponse<SubjectListDTO> response = new PaginatedResponse<>(subjectPage);
         return ResponseEntity.ok(response);
