@@ -96,6 +96,7 @@ export interface Subject {
   name: string;
   slug: string;
   code: string;
+  active: boolean;
 }
 
 export interface CreateSubject {

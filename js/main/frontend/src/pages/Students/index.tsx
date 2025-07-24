@@ -6,7 +6,7 @@ import { useState } from "react";
 import { EGrade, SortOrder } from "../../types";
 import { useStudentsQuery } from "../../data/student";
 import StudentList from "../../components/student/student-list";
-import { Card } from "antd";
+import Card from "@components/common/card";
 import Search from "@components/common/search";
 import { ArrowUp } from "@components/icons/arrow-up";
 import { ArrowDown } from "@components/icons/arrow-down";

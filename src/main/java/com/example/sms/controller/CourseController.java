@@ -85,4 +85,10 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableCourse(@PathVariable Integer id) {
+        courseService.disableCourse(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

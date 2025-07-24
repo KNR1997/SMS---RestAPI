@@ -3,6 +3,7 @@ package com.example.sms.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Data
@@ -20,4 +21,7 @@ public class Subject {
 
     @Column(unique = true)
     private String code;
+
+    @Column(name = "active")
+    private boolean active = true;
 }

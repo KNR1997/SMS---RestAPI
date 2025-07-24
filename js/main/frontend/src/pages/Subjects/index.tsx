@@ -1,16 +1,13 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import PageMeta from "../../components/common/PageMeta";
-import Loader from "../../components/ui/loader/loader";
-import ErrorMessage from "../../components/ui/error-message";
-import { Fragment, useState } from "react";
+import PageBreadcrumb from "@components/common/PageBreadCrumb";
+import PageMeta from "@components/common/PageMeta";
+import Loader from "@components/ui/loader/loader";
+import ErrorMessage from "@components/ui/error-message";
+import { useState } from "react";
 import { SortOrder } from "../../types";
 import { useSubjectsQuery } from "../../data/subject";
-import SubjectList from "../../components/subject/subject-list";
-import { Card, Menu } from "antd";
+import SubjectList from "@components/subject/subject-list";
+import Card from "@components/common/card";
 import Search from "@components/common/search";
-import { DownloadIcon, MoreDotIcon } from "icons";
-import { Transition } from "@headlessui/react";
-import classNames from "classnames";
 import { ArrowUp } from "@components/icons/arrow-up";
 import { ArrowDown } from "@components/icons/arrow-down";
 
@@ -55,9 +52,21 @@ export default function Subjects() {
           <div className="flex w-full flex-row items-center ms-auto md:w-2/4">
             <Search
               onSearch={handleSearch}
-              placeholderText="Search by Subject Name"
+              placeholderText="Search by Course Name"
             />
           </div>
+
+          <button
+            className="mt-5 flex items-center whitespace-nowrap text-base font-semibold text-accent md:mt-0 md:ms-5 dark:text-white/90"
+            onClick={toggleVisible}
+          >
+            Filters
+            {visible ? (
+              <ArrowUp className="ms-2" />
+            ) : (
+              <ArrowDown className="ms-2" />
+            )}
+          </button>
         </div>
       </Card>
       <div className="space-y-6">

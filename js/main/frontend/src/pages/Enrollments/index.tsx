@@ -1,18 +1,17 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import PageMeta from "../../components/common/PageMeta";
-import Loader from "../../components/ui/loader/loader";
-import ErrorMessage from "../../components/ui/error-message";
+import PageBreadcrumb from "@components/common/PageBreadCrumb";
+import PageMeta from "@components/common/PageMeta";
+import Loader from "@components/ui/loader/loader";
+import ErrorMessage from "@components/ui/error-message";
 import { useState } from "react";
 import { SortOrder } from "../../types";
 import { useEnrollmentsQuery } from "../../data/enrollment";
-import EnrollmentList from "../../components/enrollment/enrollment-list";
+import EnrollmentList from "@components/enrollment/enrollment-list";
 import Search from "@components/common/search";
-import { Card } from "antd";
+import Card from "@components/common/card";
 
 export default function Enrollments() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [visible, setVisible] = useState(false);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 

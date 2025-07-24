@@ -97,3 +97,41 @@ export const useStudentCountPerGradeQuery = () => {
     loading: isLoading,
   };
 };
+
+export const useDeleteSubjectMutation = () => {
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  return useMutation(SubjectClient.delete, {
+    onSuccess: async () => {
+      navigate("/subjects");
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.SUBJECTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableSubjectMutation = () => {
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  return useMutation(SubjectClient.disable, {
+    onSuccess: async () => {
+      navigate("/subjects");
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.SUBJECTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};

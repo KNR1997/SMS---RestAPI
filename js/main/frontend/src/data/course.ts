@@ -83,3 +83,22 @@ export const useUpdateCourseMutation = () => {
     },
   });
 };
+
+export const useDisableCourseMutation = () => {
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  return useMutation(CourseClient.disable, {
+    onSuccess: async () => {
+      navigate("/courses");
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.COURSES);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};

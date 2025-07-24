@@ -65,4 +65,15 @@ public class SubjectController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubject(@PathVariable Integer id) {
+        subjectService.deleteSubject(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableSubject(@PathVariable Integer id) {
+        subjectService.disableSubject(id);
+        return ResponseEntity.noContent().build();
+    }
 }

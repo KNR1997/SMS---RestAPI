@@ -145,4 +145,12 @@ public class CourseService {
         }
         courseRepository.deleteById(id);
     }
+
+    public void disableCourse(int courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        course.setActive(false);
+        courseRepository.save(course);
+    }
 }

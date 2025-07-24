@@ -71,4 +71,19 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
+    public void deleteSubject(int subjectId) {
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with ID: " + subjectId));
+
+        subjectRepository.delete(subject);
+    }
+
+    public void disableSubject(int subjectId) {
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with ID: " + subjectId));
+
+        subject.setActive(false);
+        subjectRepository.save(subject);
+    }
+
 }
