@@ -51,4 +51,31 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SubjectInUseException.class)
+    public ResponseEntity<String> handleSubjectInUseException(SubjectInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CourseInUseException.class)
+    public ResponseEntity<String> handleCourseInUseException(CourseInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserInUserException.class)
+    public ResponseEntity<String> handleUserInUserException(UserInUserException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentInUseException.class)
+    public ResponseEntity<String> handleStudentInUseException(StudentInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
 }

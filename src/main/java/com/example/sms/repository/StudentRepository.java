@@ -44,4 +44,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             Pageable pageable
     );
 
+    boolean existsByUser(User user);
+
 }

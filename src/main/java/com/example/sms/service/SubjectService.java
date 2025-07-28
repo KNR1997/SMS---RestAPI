@@ -6,6 +6,7 @@ import com.example.sms.dto.Subject.SubjectListDTO;
 import com.example.sms.entity.Subject;
 import com.example.sms.exception.AppsException;
 import com.example.sms.exception.ResourceNotFoundException;
+import com.example.sms.exception.SubjectInUseException;
 import com.example.sms.repository.CourseRepository;
 import com.example.sms.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,12 @@ public class SubjectService {
 
     public Page<SubjectListDTO> getSubjectsPaginated(
             Pageable pageable,
-            String search
+            String search,
+            Boolean is_active
     )
     {
         String name = extractSearchValue(search, "name");
-        Page<Subject> subjectPage = subjectRepository.searchSubjects(name, pageable);
+        Page<Subject> subjectPage = subjectRepository.searchSubjects(name, is_active, pageable);
 
         return subjectPage.map(SubjectListDTO::new);
     }
@@ -71,11 +73,12 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-    public void deleteSubject(int subjectId) {
+    public void enableSubject(int subjectId) {
         Subject subject = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Subject not found with ID: " + subjectId));
 
-        subjectRepository.delete(subject);
+        subject.setActive(true);
+        subjectRepository.save(subject);
     }
 
     public void disableSubject(int subjectId) {
@@ -86,4 +89,16 @@ public class SubjectService {
         subjectRepository.save(subject);
     }
 
+    public void deleteSubject(int subjectId) {
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with ID: " + subjectId));
+
+        boolean isSubjectUsedInCourses = courseRepository.existsBySubject(subject);
+
+        if (isSubjectUsedInCourses) {
+            throw new SubjectInUseException("Subject is linked to existing courses and cannot be deleted.");
+        }
+
+        subjectRepository.delete(subject);
+    }
 }

@@ -1,9 +1,9 @@
 package com.example.sms.controller;
 
-import com.example.sms.dto.*;
 import com.example.sms.dto.Course.CourseCreateDTO;
 import com.example.sms.dto.Course.CourseDetailDTO;
 import com.example.sms.dto.Course.CourseListDTO;
+import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.User;
 import com.example.sms.service.CourseService;
@@ -78,10 +78,9 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
-        courseService.deleteCourse(id);
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableSubject(@PathVariable Integer id) {
+        courseService.enableCourse(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -91,4 +90,10 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
+        courseService.deleteCourse(id);
+        return ResponseEntity.noContent().build();
+    }
 }

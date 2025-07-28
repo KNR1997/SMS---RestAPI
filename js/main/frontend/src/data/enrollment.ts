@@ -10,7 +10,7 @@ import { API_ENDPOINTS } from "./client/api-endpoints";
 import { mapPaginatorData } from "../utils/data-mappers";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { CourseClient } from "./client/course";
+import { courseClient } from "./client/course";
 import { EnrollmentClient } from "./client/enrollment";
 
 export const useEnrollmentsQuery = (
@@ -71,7 +71,7 @@ export const useUpdateCourseMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  return useMutation(CourseClient.update, {
+  return useMutation(courseClient.update, {
     onSuccess: async () => {
       navigate("/courses");
       toast.success("Successfully updated!");

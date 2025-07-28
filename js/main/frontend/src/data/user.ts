@@ -117,3 +117,51 @@ export const useResetUserPasswordMutation = () => {
     },
   });
 };
+
+export const useEnableUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(UserClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(UserClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(UserClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

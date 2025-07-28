@@ -17,6 +17,7 @@ export interface Course {
   subjectId: number;
   teacherId: number;
   fee: number;
+  active: boolean;
 }
 
 export interface Enrollment {
@@ -243,6 +244,7 @@ export interface User {
   gradeType: EGrade;
   studentId: number;
   role: ERole;
+  active: boolean;
 }
 
 export interface CreateUser {
@@ -295,6 +297,7 @@ export interface Student {
   dateOfBirth: string;
   gradeType: EGrade;
   admissionPayed: boolean;
+  active: boolean;
 }
 
 export interface StudentPageData {
@@ -375,6 +378,12 @@ export interface CreateHall {
 export enum EventType {
   COURSE = "COURSE",
   EXAM = "EXAM",
+}
+
+export enum ActionType {
+  ENABLE = "ENABLE",
+  DISABLE = "DISABLE",
+  DELETE = "DELETE"
 }
 
 export enum EventStatusType {
@@ -531,6 +540,7 @@ export interface PaymentQueryOptions extends QueryOptions {}
 
 export interface SubjectQueryOptions extends QueryOptions {
   name: string;
+  is_active: boolean;
 }
 
 export interface GuardianQueryOptions extends QueryOptions {

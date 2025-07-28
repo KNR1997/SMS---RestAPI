@@ -1,6 +1,7 @@
 package com.example.sms.repository;
 
 import com.example.sms.entity.Course;
+import com.example.sms.entity.Subject;
 import com.example.sms.entity.User;
 import com.example.sms.enums.GradeType;
 import org.springframework.data.domain.Page;
@@ -49,5 +50,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
             @Param("studentId") Integer studentId,
             Pageable pageable
     );
+
+    boolean existsBySubject(Subject subject);
+    boolean existsByTeacher(User teacher);
 
 }

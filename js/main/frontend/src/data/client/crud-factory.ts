@@ -27,8 +27,8 @@ export function crudFactory<Type, QueryParams extends LanguageParam, InputType>(
     delete({ id }: { id: number }) {
       return HttpClient.delete<boolean>(`${endpoint}/${id}`);
     },
-    disable({ id }: { id: number }) {
-      return HttpClient.put<boolean>(`${endpoint}/${id}/disable`, {});
-    },
+    // disable({ id }: { id: number }) {
+    //   return HttpClient.put<boolean>(`${endpoint}/${id}/disable`, {});
+    // },
   };
 }

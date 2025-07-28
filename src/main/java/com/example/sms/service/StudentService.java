@@ -10,6 +10,8 @@ import com.example.sms.entity.*;
 import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
+import com.example.sms.exception.StudentInUseException;
+import com.example.sms.exception.UserInUserException;
 import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,6 +53,9 @@ public class StudentService {
 
     @Autowired
     private GuardianRepository guardianRepository;
+
+    @Autowired
+    private ExamResultRepository examResultRepository;
 
     public Page<StudentListDTO> getStudentsPaginated(
             Pageable pageable,
@@ -186,5 +191,38 @@ public class StudentService {
     public Page<CourseListDTO> getStudentEnrolledCourses(Pageable pageable, Integer studentId) {
         Page<Enrollment> enrollmentPage = enrollmentRepository.findByStudentId(studentId, pageable);
         return enrollmentPage.map(enrollment -> new CourseListDTO(enrollment.getCourse()));
+    }
+
+    public void enableStudent(int studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
+
+        student.setActive(true);
+        studentRepository.save(student);
+    }
+
+    public void disableStudent(int studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
+
+        student.setActive(false);
+        studentRepository.save(student);
+    }
+
+    public void deleteStudent(Integer studentId) {
+        Student student  = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
+
+        boolean isStudentUsedInExamResults = examResultRepository.existsByStudent(student);
+        boolean isStudentUsedInEnrollments= enrollmentRepository.existsByStudent(student);
+
+        if (isStudentUsedInExamResults) {
+            throw new StudentInUseException("Student is linked to existing exam result and cannot be deleted.");
+        }
+        if (isStudentUsedInEnrollments) {
+            throw new StudentInUseException("Student is linked to existing enrollment and cannot be deleted.");
+        }
+
+        studentRepository.deleteById(studentId);
     }
 }

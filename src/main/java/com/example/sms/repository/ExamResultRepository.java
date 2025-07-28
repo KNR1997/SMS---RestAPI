@@ -13,4 +13,7 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, Integer>
     Page<ExamResult> findByStudent(Student student, Pageable pageable);
 
     boolean existsByExamAndStudent(Exam exam, Student student);
+
+    boolean existsByStudent(Student student);
+
 }

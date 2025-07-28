@@ -62,4 +62,10 @@ export const StudentClient = {
       }
     );
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.STUDENTS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.STUDENTS}/${id}/disable`, {});
+  },
 };

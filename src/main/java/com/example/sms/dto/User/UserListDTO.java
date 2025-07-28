@@ -18,6 +18,8 @@ public class UserListDTO {
 
     private RoleType role;
 
+    private boolean isActive;
+
     public UserListDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
@@ -25,5 +27,6 @@ public class UserListDTO {
         this.email = user.getEmail();
         this.username = user.getUsername();
         this.role = user.getRole().getName();
+        this.isActive = user.isActive();
     }
 }

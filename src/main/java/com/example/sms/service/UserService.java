@@ -3,14 +3,16 @@ package com.example.sms.service;
 
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.User.UserListDTO;
+import com.example.sms.entity.Course;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
 import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
+import com.example.sms.exception.CourseInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
-import com.example.sms.repository.RoleRepository;
-import com.example.sms.repository.UserRepository;
+import com.example.sms.exception.UserInUserException;
+import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,15 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private EmployeePaymentRepository employeePaymentRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     public Page<UserListDTO> getUsersPaginated(Pageable pageable, String roleType, String search) {
         RoleType role = roleType != null ? RoleType.valueOf(roleType.toUpperCase()) : null;
@@ -106,6 +117,43 @@ public class UserService {
         user.setPassword(encoder.encode("1234"));
         return userRepository.save(user);
 
+    }
+
+    public void enableUser(int courseId) {
+        User user = userRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        user.setActive(true);
+        userRepository.save(user);
+    }
+
+    public void disableUser(int courseId) {
+        User user = userRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    public void deleteUser(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + userId));
+
+        boolean isUserUsedInCourses = courseRepository.existsByTeacher(user);
+        boolean isUserUsedInEmployeePayments= employeePaymentRepository.existsByEmployee(user);
+        boolean isUserUsedInStudents = studentRepository.existsByUser(user);
+
+        if (isUserUsedInCourses) {
+            throw new UserInUserException("User is linked to existing course and cannot be deleted.");
+        }
+        if (isUserUsedInEmployeePayments) {
+            throw new UserInUserException("User is linked to existing employee payment and cannot be deleted.");
+        }
+        if (isUserUsedInStudents) {
+            throw new UserInUserException("User is linked to existing student and cannot be deleted.");
+        }
+
+        userRepository.deleteById(userId);
     }
 
 }

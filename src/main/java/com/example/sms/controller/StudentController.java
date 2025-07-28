@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -102,4 +103,22 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableStudent(@PathVariable Integer id) {
+        studentService.enableStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableStudent(@PathVariable Integer id) {
+        studentService.disableStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
 }
