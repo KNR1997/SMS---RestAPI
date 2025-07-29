@@ -20,4 +20,7 @@ public class Exam {
 
     @Enumerated(EnumType.STRING)
     private ExamStatusType status = ExamStatusType.PENDING;
+
+    @Column(name = "active")
+    private boolean active = true;
 }

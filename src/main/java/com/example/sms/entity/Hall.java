@@ -18,4 +18,7 @@ public class Hall {
 
     private Integer lectureCapacity;
 
+    @Column(name = "active")
+    private boolean active = true;
+
 }

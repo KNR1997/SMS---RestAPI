@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,4 +77,22 @@ public class ExamController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableExam(@PathVariable Integer id) {
+        examService.enableExam(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableExam(@PathVariable Integer id) {
+        examService.disableExam(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExam(@PathVariable Integer id) {
+        examService.deleteExam(id);
+        return ResponseEntity.noContent().build();
+    }
 }

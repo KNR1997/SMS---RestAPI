@@ -38,4 +38,10 @@ export const UserClient = {
       {}
     );
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.USERS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.USERS}/${id}/disable`, {});
+  },
 };

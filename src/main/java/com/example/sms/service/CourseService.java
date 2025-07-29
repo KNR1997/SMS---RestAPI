@@ -2,20 +2,21 @@ package com.example.sms.service;
 
 import com.example.sms.dto.Course.CourseCreateDTO;
 import com.example.sms.dto.Course.CourseListDTO;
-import com.example.sms.entity.*;
+import com.example.sms.entity.Course;
+import com.example.sms.entity.Student;
+import com.example.sms.entity.Subject;
+import com.example.sms.entity.User;
 import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
+import com.example.sms.exception.CourseInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
@@ -36,6 +37,12 @@ public class CourseService {
 
     @Autowired
     private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private ExamRepository examRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     public Page<CourseListDTO> getCoursesPaginated(
             Pageable pageable,
@@ -139,10 +146,40 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public void deleteCourse(Integer id) {
-        if (!courseRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Course not found with id: " + id);
+    public void enableCourse(int courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        course.setActive(true);
+        courseRepository.save(course);
+    }
+
+    public void disableCourse(int courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        course.setActive(false);
+        courseRepository.save(course);
+    }
+
+    public void deleteCourse(Integer courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+        boolean isCourseUsedInExams = examRepository.existsByCourse(course);
+        boolean isCourseUsedInEnrollments = enrollmentRepository.existsByCourse(course);
+        boolean isCourseUsedInEvents = eventRepository.existsByCourse(course);
+
+        if (isCourseUsedInExams) {
+            throw new CourseInUseException("Course is linked to existing exam and cannot be deleted.");
         }
-        courseRepository.deleteById(id);
+        if (isCourseUsedInEnrollments) {
+            throw new CourseInUseException("Course is linked to existing enrollment and cannot be deleted.");
+        }
+        if (isCourseUsedInEvents) {
+            throw new CourseInUseException("Course is linked to existing event and cannot be deleted.");
+        }
+
+        courseRepository.deleteById(courseId);
     }
 }

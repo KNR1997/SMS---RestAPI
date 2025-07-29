@@ -65,4 +65,23 @@ public class GuardianController {
         guardianService.updateGuardian(id, updateDto);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableGuardian(@PathVariable Integer id) {
+        guardianService.enableGuardian(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableGuardian(@PathVariable Integer id) {
+        guardianService.disableGuardian(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGuardian(@PathVariable Integer id) {
+        guardianService.deleteGuardian(id);
+        return ResponseEntity.noContent().build();
+    }
 }

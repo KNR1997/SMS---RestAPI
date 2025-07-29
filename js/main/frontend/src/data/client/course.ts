@@ -9,7 +9,7 @@ import { API_ENDPOINTS } from "./api-endpoints";
 import { crudFactory } from "./crud-factory";
 import { HttpClient } from "./http-client";
 
-export const CourseClient = {
+export const courseClient = {
   ...crudFactory<Course, QueryOptions, CreateCourse>(API_ENDPOINTS.COURSES),
   paginated: ({ name, ...params }: Partial<CourseQueryOptions>) => {
     return HttpClient.get<CoursePaginator>(API_ENDPOINTS.COURSES, {
@@ -21,5 +21,11 @@ export const CourseClient = {
         name,
       }),
     });
+  },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.COURSES}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.COURSES}/${id}/disable`, {});
   },
 };

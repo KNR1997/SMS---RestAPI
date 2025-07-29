@@ -56,7 +56,7 @@ export default function CreateOrUpdateCourseForm({
   initialValues,
   isEditable = false,
 }: Props) {
-  const { subjects } = useSubjectsQuery({});
+  const { subjects } = useSubjectsQuery({ is_active: true });
   const { users } = useUsersQuery({
     role: ERole.ROLE_TEACHER,
   });

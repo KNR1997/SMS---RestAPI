@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,6 +64,25 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateEvent(@PathVariable Integer id, @RequestBody EventUpdateDTO updateDto) {
         eventService.update(id, updateDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableEvent(@PathVariable Integer id) {
+        eventService.enableEvent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableEvent(@PathVariable Integer id) {
+        eventService.disableEvent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Integer id) {
+        eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
     }
 }

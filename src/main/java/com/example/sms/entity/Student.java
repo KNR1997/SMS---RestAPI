@@ -30,6 +30,9 @@ public class Student {
     @JoinColumn(name = "guardian_id", nullable = true)
     private Guardian guardian;
 
+    @Column(name = "active")
+    private boolean active = true;
+
     public String getStudentName() {
         return user.getFirstName() + " "  + user.getLastName();
     }

@@ -31,6 +31,8 @@ public class EventPaginatedDataResponse {
 
     private EventStatusType status;
 
+    private boolean isActive;
+
     public EventPaginatedDataResponse(Event event, List<Hall> halls) {
         this.id = event.getId();
         this.code = event.getCode();
@@ -40,5 +42,6 @@ public class EventPaginatedDataResponse {
         this.endTime = event.getEndTime();
         this.halls = halls;
         this.status = event.getStatus();
+        this.isActive = event.isActive();
     }
 }

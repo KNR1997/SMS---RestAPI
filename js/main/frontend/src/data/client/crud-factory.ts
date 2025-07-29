@@ -24,8 +24,11 @@ export function crudFactory<Type, QueryParams extends LanguageParam, InputType>(
     update({ id, ...input }: Partial<InputType> & { id: number }) {
       return HttpClient.put<Type>(`${endpoint}/${id}`, input);
     },
-    delete({ id }: { id: string }) {
+    delete({ id }: { id: number }) {
       return HttpClient.delete<boolean>(`${endpoint}/${id}`);
     },
+    // disable({ id }: { id: number }) {
+    //   return HttpClient.put<boolean>(`${endpoint}/${id}/disable`, {});
+    // },
   };
 }

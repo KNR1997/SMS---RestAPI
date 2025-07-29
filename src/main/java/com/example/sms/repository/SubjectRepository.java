@@ -19,9 +19,11 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     boolean existsByCode(String code);
 
     @Query("SELECT s FROM Subject s WHERE " +
+            "(:is_active IS NULL OR s.active = :is_active) AND " +
             "(:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) ")
     Page<Subject> searchSubjects(
             @Param("name") String name,
+            @Param("is_active") Boolean is_active,
             Pageable pageable
     );
 

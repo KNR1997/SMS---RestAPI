@@ -2,9 +2,7 @@ package com.example.sms.repository;
 
 import com.example.sms.dto.Course.CourseStudentCountDTO;
 import com.example.sms.dto.Student.GradeStudentCountDTO;
-import com.example.sms.entity.Course;
-import com.example.sms.entity.Student;
-import com.example.sms.entity.User;
+import com.example.sms.entity.*;
 import com.example.sms.enums.GradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +41,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             @Param("admissionPayed") Boolean admissionPayed,
             Pageable pageable
     );
+
+    boolean existsByUser(User user);
+
+    boolean existsByGuardian(Guardian guardian);
 
 }

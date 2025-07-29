@@ -63,7 +63,7 @@ export const useCreateEventMutation = () => {
 export const useUpdateEventMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   return useMutation(EventClient.update, {
     onSuccess: async () => {
       navigate("/events");
@@ -75,6 +75,54 @@ export const useUpdateEventMutation = () => {
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message ?? "Something going wrong!");
+    },
+  });
+};
+
+export const useEnableEventMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EventClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EVENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableEventMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EventClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EVENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteEventMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EventClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EVENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
     },
   });
 };

@@ -51,4 +51,52 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SubjectInUseException.class)
+    public ResponseEntity<String> handleSubjectInUseException(SubjectInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CourseInUseException.class)
+    public ResponseEntity<String> handleCourseInUseException(CourseInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserInUserException.class)
+    public ResponseEntity<String> handleUserInUserException(UserInUserException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentInUseException.class)
+    public ResponseEntity<String> handleStudentInUseException(StudentInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(HallInUseException.class)
+    public ResponseEntity<String> handleHallInUseException(HallInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EventInUseException.class)
+    public ResponseEntity<String> handleEventInUseException(EventInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EnrollmentPaymentInUseException.class)
+    public ResponseEntity<String> handleEnrollmentPaymentInUseException(EnrollmentPaymentInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
 }

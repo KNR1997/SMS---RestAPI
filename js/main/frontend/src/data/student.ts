@@ -123,3 +123,51 @@ export const useStudentEnrolledCoursesQuery = (
     loading: isLoading,
   };
 };
+
+export const useEnableStudentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(StudentClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableStudentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(StudentClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteStudentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(StudentClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

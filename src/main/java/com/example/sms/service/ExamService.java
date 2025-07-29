@@ -172,4 +172,41 @@ public class ExamService {
     public void delete() {
         //
     }
+
+    public void enableExam(int eventId) {
+        Exam exam = examRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exam not found with ID: " + eventId));
+
+        exam.setActive(true);
+        examRepository.save(exam);
+    }
+
+    public void disableExam(int examId) {
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exam not found with ID: " + examId));
+
+        exam.setActive(false);
+        examRepository.save(exam);
+    }
+
+    public void deleteExam(Integer examId) {
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exam not found with ID: " + examId));
+
+//        boolean isCourseUsedInExams = examRepository.existsByCourse(course);
+//        boolean isCourseUsedInEnrollments = enrollmentRepository.existsByCourse(course);
+//        boolean isCourseUsedInEvents = eventRepository.existsByCourse(course);
+//
+//        if (isCourseUsedInExams) {
+//            throw new CourseInUseException("Course is linked to existing exam and cannot be deleted.");
+//        }
+//        if (isCourseUsedInEnrollments) {
+//            throw new CourseInUseException("Course is linked to existing enrollment and cannot be deleted.");
+//        }
+//        if (isCourseUsedInEvents) {
+//            throw new CourseInUseException("Course is linked to existing event and cannot be deleted.");
+//        }
+
+        eventRepository.deleteById(examId);
+    }
 }

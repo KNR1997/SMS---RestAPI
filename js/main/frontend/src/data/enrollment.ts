@@ -10,7 +10,7 @@ import { API_ENDPOINTS } from "./client/api-endpoints";
 import { mapPaginatorData } from "../utils/data-mappers";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { CourseClient } from "./client/course";
+import { courseClient } from "./client/course";
 import { EnrollmentClient } from "./client/enrollment";
 
 export const useEnrollmentsQuery = (
@@ -71,7 +71,7 @@ export const useUpdateCourseMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  return useMutation(CourseClient.update, {
+  return useMutation(courseClient.update, {
     onSuccess: async () => {
       navigate("/courses");
       toast.success("Successfully updated!");
@@ -97,4 +97,52 @@ export const useStudentCountPerCourseQuery = () => {
     error,
     loading: isLoading,
   };
+};
+
+export const useEnableEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
 };

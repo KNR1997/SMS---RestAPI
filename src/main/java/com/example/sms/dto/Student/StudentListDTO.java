@@ -20,6 +20,8 @@ public class StudentListDTO {
 
     private Boolean admissionPayed;
 
+    private boolean isActive;
+
     public StudentListDTO(Student student) {
         this.id = student.getId();
         this.firstName = student.getUser().getFirstName();
@@ -28,5 +30,6 @@ public class StudentListDTO {
         this.gradeType = student.getGradeType();
         this.studentId = student.getStudentId();
         this.admissionPayed = student.getAdmissionPayed();
+        this.isActive = student.isActive();
     }
 }

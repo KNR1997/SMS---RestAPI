@@ -39,4 +39,7 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventStatusType status = EventStatusType.PENDING;
+
+    @Column(name = "active")
+    private boolean active = true;
 }

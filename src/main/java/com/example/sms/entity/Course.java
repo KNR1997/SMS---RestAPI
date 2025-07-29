@@ -39,4 +39,7 @@ public class Course {
 
     private String description;
 
+    @Column(name = "active")
+    private boolean active = true;
+
 }

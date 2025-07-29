@@ -34,6 +34,9 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(name = "active")
+    private boolean active = true;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

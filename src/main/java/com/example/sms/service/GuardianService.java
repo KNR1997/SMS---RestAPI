@@ -3,11 +3,14 @@ package com.example.sms.service;
 import com.example.sms.dto.Guardian.GuardianCreateDTO;
 import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.dto.Subject.SubjectListDTO;
+import com.example.sms.entity.Exam;
 import com.example.sms.entity.Guardian;
 import com.example.sms.entity.Subject;
 import com.example.sms.exception.BadRequestException;
+import com.example.sms.exception.GuardianInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.GuardianRepository;
+import com.example.sms.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,9 @@ public class GuardianService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     public Page<GuardianListDTO> getGuardiansPaginated(
             Pageable pageable,
@@ -73,5 +79,34 @@ public class GuardianService {
         guardian.setRelationship(updateDto.getRelationship());
 
         return guardianRepository.save(guardian);
+    }
+
+    public void enableGuardian(int guardianId) {
+        Guardian guardian = guardianRepository.findById(guardianId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guardian not found with ID: " + guardianId));
+
+        guardian.setActive(true);
+        guardianRepository.save(guardian);
+    }
+
+    public void disableGuardian(int guardianId) {
+        Guardian guardian = guardianRepository.findById(guardianId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guardian not found with ID: " + guardianId));
+
+        guardian.setActive(false);
+        guardianRepository.save(guardian);
+    }
+
+    public void deleteGuardian(Integer guardianId) {
+        Guardian guardian = guardianRepository.findById(guardianId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guardian not found with ID: " + guardianId));
+
+        boolean isGuardianUsedInStudents = studentRepository.existsByGuardian(guardian);
+
+        if (isGuardianUsedInStudents) {
+            throw new GuardianInUseException("Guardian is linked to existing student and cannot be deleted.");
+        }
+
+        guardianRepository.deleteById(guardianId);
     }
 }

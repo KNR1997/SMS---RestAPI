@@ -14,10 +14,13 @@ public class HallPaginatedDataResponse {
 
     private Integer lectureCapacity;
 
+    private boolean isActive;
+
     public HallPaginatedDataResponse(Hall hall) {
         this.id = hall.getId();
         this.name = hall.getName();
         this.examCapacity = hall.getExamCapacity();
         this.lectureCapacity = hall.getLectureCapacity();
+        this.isActive = hall.isActive();
     }
 }

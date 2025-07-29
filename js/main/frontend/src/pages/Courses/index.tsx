@@ -1,8 +1,8 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import PageMeta from "../../components/common/PageMeta";
-import Loader from "../../components/ui/loader/loader";
-import ErrorMessage from "../../components/ui/error-message";
-import { useState, Fragment } from "react";
+import PageBreadcrumb from "@components/common/PageBreadCrumb";
+import PageMeta from "@components/common/PageMeta";
+import Loader from "@components/ui/loader/loader";
+import ErrorMessage from "@components/ui/error-message";
+import { useState } from "react";
 import { EGrade, SortOrder } from "../../types";
 import { useCoursesQuery } from "../../data/course";
 import CourseList from "../../components/course/course-list";

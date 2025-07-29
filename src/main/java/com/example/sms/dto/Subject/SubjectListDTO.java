@@ -14,10 +14,13 @@ public class SubjectListDTO {
 
     private String code;
 
+    private boolean isActive;
+
     public SubjectListDTO(Subject subject) {
         this.id = subject.getId();
         this.name = subject.getName();
         this.slug = subject.getSlug();
         this.code = subject.getCode();
+        this.isActive = subject.isActive();
     }
 }

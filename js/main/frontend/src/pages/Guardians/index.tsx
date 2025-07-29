@@ -1,22 +1,17 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import PageMeta from "../../components/common/PageMeta";
-import Loader from "../../components/ui/loader/loader";
-import ErrorMessage from "../../components/ui/error-message";
+import PageBreadcrumb from "@components/common/PageBreadCrumb";
+import PageMeta from "@components/common/PageMeta";
+import Loader from "@components/ui/loader/loader";
+import ErrorMessage from "@components/ui/error-message";
 import { useState } from "react";
 import { SortOrder } from "../../types";
 import { useGuardiansQuery } from "../../data/guardian";
-import GuardianList from "../../components/guardian/guardian-list";
-import UserFilter from "@components/user/user-filter";
-import cn from "classnames";
-import { Card } from "antd";
+import GuardianList from "@components/guardian/guardian-list";
+import Card from "@components/common/card";
 import Search from "@components/common/search";
-import { ArrowUp } from "@components/icons/arrow-up";
-import { ArrowDown } from "@components/icons/arrow-down";
 
 export default function Guardians() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [visible, setVisible] = useState(false);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 

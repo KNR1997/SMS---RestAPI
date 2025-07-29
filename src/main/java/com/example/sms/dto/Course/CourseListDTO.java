@@ -18,6 +18,8 @@ public class CourseListDTO {
 
     private Double fee;
 
+    private boolean isActive;
+
     public CourseListDTO(Course course) {
         this.id = course.getId();
         this.name = course.getName();
@@ -25,5 +27,6 @@ public class CourseListDTO {
         this.code = course.getCode();
         this.gradeType = course.getGradeType();
         this.fee = course.getFee();
+        this.isActive = course.isActive();
     }
 }

@@ -22,4 +22,10 @@ export const EventClient = {
       }),
     });
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.EVENTS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.EVENTS}/${id}/disable`, {});
+  },
 };

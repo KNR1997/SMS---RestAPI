@@ -25,4 +25,7 @@ public class Guardian {
     @Enumerated(EnumType.STRING)
     private RelationshipType relationship;
 
+    @Column(name = "active")
+    private boolean active = true;
+
 }

@@ -23,9 +23,9 @@ import { useNavigate } from "react-router";
 type FormValues = {
   student: Student;
   admission: number;
-  course: Course;
+  courses: Course[];
   totalPayment: string;
-  months: { label: string; value: number }[];
+  month: { label: string; value: number };
 };
 
 const defaultValues = {
@@ -52,8 +52,8 @@ export default function CreatePaymentForm() {
     useCreatePaymentMutation();
 
   const selectedStudent = watch("student");
-  const selectedCourse = watch("course");
-  const selectedMonths = watch("months");
+  const selectedCourses = watch("courses");
+  const selectedMonth = watch("month");
   const studentGradeType = selectedStudent?.gradeType;
 
   const { enrollments } = useEnrollmentsQuery({
@@ -85,10 +85,8 @@ export default function CreatePaymentForm() {
   };
 
   const totalPayment =
-    (selectedStudent?.admissionPayed ? 0 : 2000) +
-    selectedCourse?.fee * selectedMonths?.length;
-
-  console.log("totalPayment: ", totalPayment);
+    (selectedStudent?.admissionPayed ? 0 : 2000) + 
+    courses.reduce((sum, course) => sum + (course.fee || 0), 0);
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -100,24 +98,27 @@ export default function CreatePaymentForm() {
       //   courseId: course.id,
       //   paymentMonths: values.months.map((month) => month.value),
       // })),
-      coursePaymentList: [
-        {
-          courseId: values.course.id,
-          paymentMonths: values.months.map((month) => month.value),
-        },
-      ],
+      coursePaymentList: values.courses.map((course) => ({
+        courseId: course.id,
+        paymentMonths: [values.month.value]
+      })),
     };
-    console.log("payment create data: ", input);
+    // console.log("payment create data: ", input);
     createPayment({ ...input });
   };
 
   const enableCreatePaymentButton = () => {
     return (
       selectedStudent != null &&
-      selectedCourse != null &&
-      selectedMonths?.length > 0
+      selectedCourses != null &&
+      selectedMonth != null
     );
   };
+
+  const filterPayingMonths = () => {
+  const currentMonth = new Date().getMonth(); // JS months are 0-indexed, so +1
+    return monthOptions.filter((month) => month.value > currentMonth);
+  }
 
   return (
     <div className="grid grid-cols-2 gap-5  ">
@@ -156,17 +157,17 @@ export default function CreatePaymentForm() {
               Courses <span className="text-error-500">*</span>
             </Label>
             <SelectInput
-              name="course"
+              name="courses"
               control={control}
               getOptionLabel={(option: any) => `${option.name} - ${option.fee}`}
               getOptionValue={(option: any) => option.id}
               options={eligibleCoursesToCreatePayment()}
               isClearable={true}
-              // isMulti
+              isMulti
             />
-            {errors.course && (
+            {errors.courses && (
               <p className="text-error-500 text-sm mt-1">
-                {errors.course.message}
+                {errors.courses.message}
               </p>
             )}
           </div>
@@ -175,17 +176,17 @@ export default function CreatePaymentForm() {
               Paying Months <span className="text-error-500">*</span>
             </Label>
             <SelectInput
-              name="months"
+              name="month"
               control={control}
               getOptionLabel={(option: any) => option.label}
               getOptionValue={(option: any) => option.value}
-              options={monthOptions}
+              options={filterPayingMonths()}
               isClearable={true}
-              isMulti
+              // isMulti
             />
-            {errors.months && (
+            {errors.month && (
               <p className="text-error-500 text-sm mt-1">
-                {errors.months.message}
+                {errors.month.message}
               </p>
             )}
           </div>
