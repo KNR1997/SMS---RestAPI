@@ -17,6 +17,8 @@ public class GuardianListDTO {
 
     private String contactNumber;
 
+    private boolean isActive;
+
     public GuardianListDTO(Guardian guardian) {
         this.id = guardian.getId();
         this.firstName = guardian.getFirstName();
@@ -24,5 +26,6 @@ public class GuardianListDTO {
         this.email = guardian.getEmail();
         this.nationalIdentityNumber = guardian.getNationalIdentityNumber();
         this.contactNumber = guardian.getContactNumber();
+        this.isActive = guardian.isActive();
     }
 }

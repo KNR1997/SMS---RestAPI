@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,5 +81,24 @@ public class EnrollmentController {
     @GetMapping("/students-per-course")
     public List<CourseStudentCountDTO> getStudentCountsPerCourse() {
         return enrollmentService.getStudentsCountInCourses();
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableEnrollment(@PathVariable Integer id) {
+        enrollmentService.enableEnrollment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableEnrollment(@PathVariable Integer id) {
+        enrollmentService.disableEnrollment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEnrollment(@PathVariable Integer id) {
+        enrollmentService.deleteEnrollment(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -34,4 +34,13 @@ export const EnrollmentClient = {
       `${API_ENDPOINTS.ENROLLMENTS}/students-per-course`
     );
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.ENROLLMENTS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(
+      `${API_ENDPOINTS.ENROLLMENTS}/${id}/disable`,
+      {}
+    );
+  },
 };

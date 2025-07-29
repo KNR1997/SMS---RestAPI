@@ -13,9 +13,13 @@ public class ExamPaginatedDataResponse {
 
     private ExamStatusType status;
 
+    private boolean isActive;
+
     public ExamPaginatedDataResponse(Exam exam) {
         this.id = exam.getId();
         this.courseName = exam.getCourse().getName();
         this.status = exam.getStatus();
+        this.isActive = exam.isActive();
+
     }
 }

@@ -117,12 +117,9 @@ export const useDisableCourseMutation = () => {
 };
 
 export const useDeleteCourseMutation = () => {
-  const navigate = useNavigate();
-
   const queryClient = useQueryClient();
   return useMutation(courseClient.delete, {
     onSuccess: async () => {
-      navigate("/courses");
       toast.success("Successfully deleted!");
     },
     // Always refetch after error or success:

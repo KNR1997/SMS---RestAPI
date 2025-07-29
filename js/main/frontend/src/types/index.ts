@@ -29,6 +29,7 @@ export interface Enrollment {
   status: string;
   lastPaidMonth: number;
   lastPaidMonthName: string;
+  active: boolean;
 }
 
 export interface EnrollmentPayment {
@@ -123,6 +124,7 @@ export interface Exam {
   courseName: string;
   status: ExamStatusType;
   code: string;
+  active: boolean;
 }
 
 export interface ExamPageData {
@@ -264,6 +266,7 @@ export interface Guardian {
   email: string;
   nationalIdentityNumber: string;
   contactNumber: number;
+  active: boolean;
 }
 
 export interface GuardianPageData {
@@ -367,6 +370,7 @@ export interface Hall {
   name: string;
   examCapacity: number;
   lectureCapacity: number;
+  active: boolean;
 }
 
 export interface CreateHall {
@@ -402,6 +406,7 @@ export interface Event {
   reference: number;
   halls: Hall[];
   status: EventStatusType;
+  active: boolean;
 }
 
 export interface EmployeePayment {

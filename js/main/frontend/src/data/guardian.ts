@@ -80,3 +80,51 @@ export const useUpdateGuardianMutation = () => {
     },
   });
 };
+
+export const useEnableGuardianMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(GuardianClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.GUARDIANS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableGuardianMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(GuardianClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.GUARDIANS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteGuardianMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(GuardianClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.GUARDIANS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

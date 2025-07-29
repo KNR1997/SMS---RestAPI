@@ -29,4 +29,10 @@ export const GuardianClient = {
       `${API_ENDPOINTS.GUARDIANS}/by-identityNumber/${id}`
     );
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.GUARDIANS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.GUARDIANS}/${id}/disable`, {});
+  },
 };

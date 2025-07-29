@@ -33,4 +33,10 @@ export const ExamClient = {
       {}
     );
   },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.EXAMS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.EXAMS}/${id}/disable`, {});
+  },
 };

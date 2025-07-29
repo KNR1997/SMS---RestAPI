@@ -32,6 +32,9 @@ public class Enrollment {
 
     private Integer lastPaidMonth = 0;
 
+    @Column(name = "active")
+    private boolean active = true;
+
     public void setEnrollmentDateToToday() {
         this.enrollmentDate = LocalDate.now();
     }

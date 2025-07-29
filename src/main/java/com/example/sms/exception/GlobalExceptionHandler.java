@@ -78,4 +78,25 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(HallInUseException.class)
+    public ResponseEntity<String> handleHallInUseException(HallInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EventInUseException.class)
+    public ResponseEntity<String> handleEventInUseException(EventInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EnrollmentPaymentInUseException.class)
+    public ResponseEntity<String> handleEnrollmentPaymentInUseException(EnrollmentPaymentInUseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // or BAD_REQUEST depending on your preference
+                .body(ex.getMessage());
+    }
 }

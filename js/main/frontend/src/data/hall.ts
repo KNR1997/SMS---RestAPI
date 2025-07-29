@@ -78,3 +78,51 @@ export const useUpdateHallMutation = () => {
     },
   });
 };
+
+export const useEnableHallMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(HallClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.HALLS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableHallMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(HallClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.HALLS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteHallMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(HallClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.HALLS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

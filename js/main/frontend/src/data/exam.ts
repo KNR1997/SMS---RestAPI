@@ -60,7 +60,6 @@ export const useExamPageDataQuery = ({ slug }: GetParams) => {
   };
 };
 
-
 export const useCreateExamMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -83,7 +82,7 @@ export const useCreateExamMutation = () => {
 export const useUpdateExamMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   return useMutation(ExamClient.update, {
     onSuccess: async () => {
       navigate("/exams");
@@ -100,7 +99,7 @@ export const useUpdateExamMutation = () => {
 };
 
 export const useGenerateExamResultTableMutation = () => {
-    return useMutation(ExamClient.generateResultTable, {
+  return useMutation(ExamClient.generateResultTable, {
     onSuccess: async () => {
       // navigate("/exams");
       toast.success("Result Table created!");
@@ -113,4 +112,52 @@ export const useGenerateExamResultTableMutation = () => {
       toast.error(error?.response?.data?.message ?? "Something going wrong!");
     },
   });
-}
+};
+
+export const useEnableExamMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(ExamClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EXAMS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableExamMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(ExamClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EXAMS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteExamMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(ExamClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.EXAMS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

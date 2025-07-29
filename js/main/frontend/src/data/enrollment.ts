@@ -98,3 +98,51 @@ export const useStudentCountPerCourseQuery = () => {
     loading: isLoading,
   };
 };
+
+export const useEnableEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.enable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDisableEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.disable, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useDeleteEnrollmentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(EnrollmentClient.delete, {
+    onSuccess: async () => {
+      toast.success("Successfully deleted!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data);
+    },
+  });
+};

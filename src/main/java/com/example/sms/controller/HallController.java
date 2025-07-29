@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -59,6 +60,25 @@ public class HallController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateHall(@PathVariable Integer id, @RequestBody HallUpdateDTO updateDto) {
         hallService.update(id, updateDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableHall(@PathVariable Integer id) {
+        hallService.enableHall(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableHall(@PathVariable Integer id) {
+        hallService.disableHall(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHall(@PathVariable Integer id) {
+        hallService.deleteHall(id);
         return ResponseEntity.noContent().build();
     }
 }

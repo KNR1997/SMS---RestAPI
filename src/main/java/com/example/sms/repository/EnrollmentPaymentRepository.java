@@ -2,7 +2,9 @@ package com.example.sms.repository;
 
 import com.example.sms.dto.Course.CoursePaymentSummary;
 import com.example.sms.entity.Course;
+import com.example.sms.entity.Enrollment;
 import com.example.sms.entity.EnrollmentPayment;
+import com.example.sms.entity.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,5 +34,7 @@ public interface EnrollmentPaymentRepository extends JpaRepository<EnrollmentPay
             @Param("monthNumber") int monthNumber,
             @Param("teacherId") Long teacherId
     );
+
+    boolean existsByEnrollment(Enrollment enrollment);
 
 }

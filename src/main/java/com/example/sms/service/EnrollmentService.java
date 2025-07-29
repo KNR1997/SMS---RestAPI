@@ -9,8 +9,10 @@ import com.example.sms.entity.*;
 import com.example.sms.enums.EnrollmentStatusType;
 import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
+import com.example.sms.exception.EnrollmentPaymentInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.CourseRepository;
+import com.example.sms.repository.EnrollmentPaymentRepository;
 import com.example.sms.repository.EnrollmentRepository;
 import com.example.sms.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class EnrollmentService {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private EnrollmentPaymentRepository enrollmentPaymentRepository;
 
     public Page<EnrollmentListDTO> getEnrollmentsPaginated(
             Pageable pageable,
@@ -119,6 +124,35 @@ public class EnrollmentService {
 
     public List<CourseStudentCountDTO> getStudentsCountInCourses() {
         return enrollmentRepository.getCourseStudentCounts();
+    }
+
+    public void enableEnrollment(int enrollmentId) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found with ID: " + enrollmentId));
+
+        enrollment.setActive(true);
+        enrollmentRepository.save(enrollment);
+    }
+
+    public void disableEnrollment(int enrollmentId) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found with ID: " + enrollmentId));
+
+        enrollment.setActive(false);
+        enrollmentRepository.save(enrollment);
+    }
+
+    public void deleteEnrollment(Integer enrollmentId) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found with ID: " + enrollmentId));
+
+        boolean isEnrollmentUsedInEnrollmentPayment = enrollmentPaymentRepository.existsByEnrollment(enrollment);
+
+        if (isEnrollmentUsedInEnrollmentPayment) {
+            throw new EnrollmentPaymentInUseException("Enrollment is linked to existing payment and cannot be deleted.");
+        }
+
+        enrollmentRepository.deleteById(enrollmentId);
     }
 
 }

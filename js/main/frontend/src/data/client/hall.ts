@@ -1,8 +1,13 @@
-import { CreateHall, Hall, HallPaginator, HallQueryOptions, QueryOptions } from "@types";
+import {
+  CreateHall,
+  Hall,
+  HallPaginator,
+  HallQueryOptions,
+  QueryOptions,
+} from "@types";
 import { crudFactory } from "./crud-factory";
 import { API_ENDPOINTS } from "./api-endpoints";
 import { HttpClient } from "./http-client";
-
 
 export const HallClient = {
   ...crudFactory<Hall, QueryOptions, CreateHall>(API_ENDPOINTS.HALLS),
@@ -16,5 +21,11 @@ export const HallClient = {
         name,
       }),
     });
+  },
+  enable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.HALLS}/${id}/enable`, {});
+  },
+  disable: ({ id }: { id: number }) => {
+    return HttpClient.put<any>(`${API_ENDPOINTS.HALLS}/${id}/disable`, {});
   },
 };

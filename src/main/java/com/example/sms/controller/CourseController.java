@@ -79,7 +79,7 @@ public class CourseController {
     }
 
     @PutMapping("/{id}/enable")
-    public ResponseEntity<Void> enableSubject(@PathVariable Integer id) {
+    public ResponseEntity<Void> enableCourse(@PathVariable Integer id) {
         courseService.enableCourse(id);
         return ResponseEntity.noContent().build();
     }

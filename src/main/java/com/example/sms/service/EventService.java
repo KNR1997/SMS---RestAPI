@@ -7,6 +7,8 @@ import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
 import com.example.sms.entity.*;
 import com.example.sms.enums.EventStatusType;
 import com.example.sms.enums.RoleType;
+import com.example.sms.exception.CourseInUseException;
+import com.example.sms.exception.EventInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,5 +199,34 @@ public class EventService {
 
     public void delete() {
         //
+    }
+
+    public void enableEvent(int eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
+
+        event.setActive(true);
+        eventRepository.save(event);
+    }
+
+    public void disableEvent(int eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
+
+        event.setActive(false);
+        eventRepository.save(event);
+    }
+
+    public void deleteEvent(Integer eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
+
+        boolean isEventUsedInEventHallAssignment = eventHallAssignmentRepository.existsByEvent(event);
+
+        if (isEventUsedInEventHallAssignment) {
+            throw new EventInUseException("Event is linked to existing data and cannot be deleted.");
+        }
+
+        eventRepository.deleteById(eventId);
     }
 }
