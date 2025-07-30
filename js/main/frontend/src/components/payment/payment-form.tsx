@@ -47,7 +47,7 @@ export default function CreatePaymentForm() {
     defaultValues: defaultValues,
   });
 
-  const { students } = useStudentsQuery({});
+  const { students } = useStudentsQuery({ is_active: true });
   const { mutate: createPayment, isLoading: creating } =
     useCreatePaymentMutation();
 
@@ -74,6 +74,7 @@ export default function CreatePaymentForm() {
 
   const { courses } = useCoursesQuery({
     grade: studentGradeType,
+    is_active: true,
   });
 
   const eligibleCoursesToCreatePayment = () => {
@@ -85,7 +86,7 @@ export default function CreatePaymentForm() {
   };
 
   const totalPayment =
-    (selectedStudent?.admissionPayed ? 0 : 2000) + 
+    (selectedStudent?.admissionPayed ? 0 : 2000) +
     courses.reduce((sum, course) => sum + (course.fee || 0), 0);
 
   const onSubmit = async (values: FormValues) => {
@@ -100,7 +101,7 @@ export default function CreatePaymentForm() {
       // })),
       coursePaymentList: values.courses.map((course) => ({
         courseId: course.id,
-        paymentMonths: [values.month.value]
+        paymentMonths: [values.month.value],
       })),
     };
     // console.log("payment create data: ", input);
@@ -116,9 +117,9 @@ export default function CreatePaymentForm() {
   };
 
   const filterPayingMonths = () => {
-  const currentMonth = new Date().getMonth(); // JS months are 0-indexed, so +1
+    const currentMonth = new Date().getMonth(); // JS months are 0-indexed, so +1
     return monthOptions.filter((month) => month.value > currentMonth);
-  }
+  };
 
   return (
     <div className="grid grid-cols-2 gap-5  ">

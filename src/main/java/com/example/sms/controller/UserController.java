@@ -65,6 +65,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> patchUser(@PathVariable Integer id, @RequestBody @Valid UserCreateDTO updateDto) {
+        userService.patch(id, updateDto);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{id}/reset-password")
     public ResponseEntity<Void> resetUserPassword(@PathVariable Integer id) {
         User user = userService.resetUserPassword(id);

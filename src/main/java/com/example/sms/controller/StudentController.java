@@ -43,7 +43,8 @@ public class StudentController {
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String grade,
-            @RequestParam(required = false) Boolean admissionPayed
+            @RequestParam(required = false) Boolean admissionPayed,
+            @RequestParam(required = false) Boolean is_active
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
@@ -54,7 +55,8 @@ public class StudentController {
                 search,
                 grade,
                 admissionPayed,
-                currentUser
+                currentUser,
+                is_active
         );
 
         PaginatedResponse<StudentListDTO> response = new PaginatedResponse<>(studentPage);

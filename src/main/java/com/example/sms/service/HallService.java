@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
+
 @Service
 public class HallService {
 
@@ -22,8 +24,9 @@ public class HallService {
     @Autowired
     private EventHallAssignmentRepository eventHallAssignmentRepository;
 
-    public Page<Hall> getPaginated(Pageable pageable, String search) {
-        return hallRepository.findAll(pageable);
+    public Page<Hall> getPaginated(Pageable pageable, String search, Boolean is_active) {
+        String name = extractSearchValue(search, "name");
+        return hallRepository.searchHalls(name, is_active, pageable);
     }
 
     public Hall getById(Integer id) {

@@ -34,7 +34,7 @@ interface Props {
 }
 
 export default function StudentEnrollForm({ initialValues }: Props) {
-  const { students } = useStudentsQuery({});
+  const { students } = useStudentsQuery({ is_active: true });
 
   const {
     control,
@@ -69,11 +69,13 @@ export default function StudentEnrollForm({ initialValues }: Props) {
   const studentGradeType = selectedStudent?.gradeType;
 
   useEffect(() => {
-    if (selectedStudent && selectedStudent?.admissionPayed) setValue("admission", 0);
+    if (selectedStudent && selectedStudent?.admissionPayed)
+      setValue("admission", 0);
   }, [selectedStudent, setValue]);
 
   const { courses } = useCoursesQuery({
-    gradeType: studentGradeType,
+    grade: studentGradeType,
+    is_active: true,
   });
 
   const { mutate: enrollStudent, isLoading: creating } =

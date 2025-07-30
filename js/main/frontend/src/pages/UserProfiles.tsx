@@ -6,14 +6,13 @@ import PageMeta from "../components/common/PageMeta";
 import { useMeQuery } from "@data/user";
 import Loader from "@components/ui/loader/loader";
 import ErrorMessage from "@components/ui/error-message";
+import UserPasswordCard from "@components/UserProfile/UserPasswordCard";
 
 export default function UserProfiles() {
   const { user, loading, error } = useMeQuery();
 
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
-
-  console.log('user: ', user)
 
   return (
     <>
@@ -29,8 +28,9 @@ export default function UserProfiles() {
         {user && (
           <div className="space-y-6">
             <UserMetaCard user={user} />
-            <UserInfoCard user={user} />
+            <UserInfoCard initialValues={user} />
             <UserAddressCard user={user} />
+            <UserPasswordCard user={user} />
           </div>
         )}
       </div>

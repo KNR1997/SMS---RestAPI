@@ -28,7 +28,7 @@ const defaultValues = {
 
 const validationSchema = yup.object().shape({
   student: yup.object().required("Student is required"),
-  courses: yup.array().required("Course is required")
+  courses: yup.array().required("Course is required"),
 });
 
 interface Props {
@@ -36,7 +36,7 @@ interface Props {
 }
 
 export default function EnrollForm({ initialValues }: Props) {
-  const { students } = useStudentsQuery({});
+  const { students } = useStudentsQuery({ is_active: true });
 
   const {
     control,
@@ -83,6 +83,7 @@ export default function EnrollForm({ initialValues }: Props) {
   // Get all courses filter by selected student grade
   const { courses } = useCoursesQuery({
     grade: studentGradeType,
+    is_active: true,
   });
 
   // filter courses by already enrolled courses

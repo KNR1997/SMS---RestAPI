@@ -33,12 +33,13 @@ public class HallController {
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String grade
+            @RequestParam(required = false) String grade,
+            @RequestParam(required = false) Boolean is_active
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<Hall> hallPage = hallService.getPaginated(pageable, search);
+        Page<Hall> hallPage = hallService.getPaginated(pageable, search, is_active);
 
         PaginatedResponse<HallPaginatedDataResponse> response = new PaginatedResponse<>(hallPage.map(HallPaginatedDataResponse::new));
         return ResponseEntity.ok(response);

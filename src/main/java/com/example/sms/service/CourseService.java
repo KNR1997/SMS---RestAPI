@@ -48,7 +48,8 @@ public class CourseService {
             Pageable pageable,
             String search,
             String grade,
-            User currentUser
+            User currentUser,
+            Boolean is_active
     ) {
         GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
         String name = extractSearchValue(search, "name");
@@ -57,7 +58,7 @@ public class CourseService {
 
         if (currentUser.isAdmin()) {
             // Admin sees all courses
-            coursePage = courseRepository.searchCourses(name, gradeType, pageable);
+            coursePage = courseRepository.searchCourses(name, gradeType, is_active, pageable);
 
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             // Student sees only enrolled courses

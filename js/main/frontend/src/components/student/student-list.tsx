@@ -17,6 +17,8 @@ import {
   useEnableStudentMutation,
 } from "@data/student";
 import ActionButtons from "@components/common/action-buttons";
+import { adminOnly, hasAccess } from "../../utils/auth-utils";
+import { useAuth } from "../../context/AuthContext";
 
 export type IProps = {
   students: Student[];
@@ -31,6 +33,8 @@ export default function StudentList({
   onPagination,
   paginatorInfo,
 }: IProps) {
+  const { user } = useAuth();
+  let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
@@ -148,9 +152,9 @@ export default function StudentList({
                       id={student.id}
                       editUrl={`/students/${student.id}/edit`}
                       isActive={student.active}
-                      enableDisableButton
+                      enableDisableButton={has_permission}
                       onEnableDisableClick={handleActionClick}
-                      enableDelete
+                      enableDelete={has_permission}
                       onDeleteClick={handleActionClick}
                     />
                   </TableCell>

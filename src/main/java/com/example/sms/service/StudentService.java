@@ -62,14 +62,15 @@ public class StudentService {
             String search,
             String grade,
             Boolean admissionPayed,
-            User currentUser
+            User currentUser,
+            Boolean is_active
     ) {
         Page<Student> studentPage = null;
         String name = extractSearchValue(search, "name");
         GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
 
         if (currentUser.isAdmin()) {
-            studentPage = studentRepository.searchStudent(name, gradeType, admissionPayed, pageable);
+            studentPage = studentRepository.searchStudent(name, gradeType, admissionPayed, is_active, pageable);
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
