@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin
 @RequestMapping("/api/exams")
 @SecurityRequirement(name = "bearerAuth")
-public class ExamController {
+public class    ExamController {
 
     @Autowired
     private ExamService examService;
@@ -37,7 +37,10 @@ public class ExamController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(pageable, search);
+        Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(
+                pageable,
+                search
+        );
 
         PaginatedResponse<ExamPaginatedDataResponse> response = new PaginatedResponse<>(examPaginatedDataResponses);
         return ResponseEntity.ok(response);

@@ -3,6 +3,7 @@ package com.example.sms.service;
 import com.example.sms.dto.Event.EventCreateDTO;
 import com.example.sms.dto.Exam.ExamCreateDTO;
 import com.example.sms.dto.Exam.ExamUpdateDTO;
+import com.example.sms.dto.Guardian.GuardianListDTO;
 import com.example.sms.dto.response.Exam.ExamPageDataResponse;
 import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
 import com.example.sms.entity.*;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class ExamService {
@@ -57,6 +60,10 @@ public class ExamService {
         Page<Exam> examPage = examRepository.findAll(pageable);
         return examPage.map(ExamPaginatedDataResponse::new);
     }
+//    {
+//        Page<Exam> examPage = examRepository.findAll(pageable);
+//        return examPage.map(ExamPaginatedDataResponse::new);
+//    }
 
     public ExamPageDataResponse getExamPageData(Integer examId) {
         Exam exam = examRepository.findById(examId)
