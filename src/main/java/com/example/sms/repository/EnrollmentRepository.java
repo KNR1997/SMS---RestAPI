@@ -20,8 +20,13 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 
     @Query("SELECT DISTINCT s FROM Student s " +
             "JOIN Enrollment e ON e.student = s " +
-            "WHERE e.course IN :courses")
-    Page<Student> findDistinctStudentsByCourseIn(@Param("courses") List<Course> courses, Pageable pageable);
+            "WHERE e.course IN :courses AND " +
+            "(:is_active IS NULL OR s.active = :is_active)")
+    Page<Student> findDistinctStudentsByCourseIn(
+            @Param("courses") List<Course> courses,
+            @Param("is_active") Boolean is_active,
+            Pageable pageable
+    );
 
     List<Enrollment> findByCourse(Course course);
 
@@ -34,9 +39,11 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
             "JOIN e.course c " +
             "JOIN e.student s " +
             "JOIN s.user u WHERE " +
+            "(:teacherId IS NULL OR c.teacher.id = :teacherId) AND " +
             "(:name IS NULL OR LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%'))) ")
     Page<Enrollment> searchEnrollment(
             @Param("name") String name,
+            @Param("teacherId") Integer teacherId,
             Pageable pageable
     );
 

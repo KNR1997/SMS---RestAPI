@@ -31,6 +31,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     Page<Course> findByTeacherAndGradeType(User teacher, GradeType gradeType, Pageable pageable);
 
     @Query("SELECT c FROM Course c WHERE " +
+            "(:teacherId IS NULL OR c.teacher.id = :teacherId) AND " +
             "(:is_active IS NULL OR c.active = :is_active) AND " +
             "(:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
             "(:grade IS NULL OR c.gradeType = :grade)")
@@ -38,6 +39,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
             @Param("name") String name,
             @Param("grade") GradeType grade,
             @Param("is_active") Boolean is_active,
+            @Param("teacherId") Integer teacherId,
             Pageable pageable
     );
 

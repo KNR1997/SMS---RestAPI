@@ -76,7 +76,7 @@ public class StudentService {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             List<Course> courses = courseRepository.findByTeacher(user);
-            studentPage = enrollmentRepository.findDistinctStudentsByCourseIn(courses, pageable);
+            studentPage = enrollmentRepository.findDistinctStudentsByCourseIn(courses, true, pageable);
         }
         assert studentPage != null;
         return studentPage.map(StudentListDTO::new);

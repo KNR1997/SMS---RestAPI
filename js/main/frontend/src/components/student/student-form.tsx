@@ -103,8 +103,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
   const [guardianFound, setGuardianFound] = useState<boolean>(false);
   const [triggerSearch, setTriggerSearch] = useState(false);
 
-  console.log('initialValues: ', initialValues)
-
   // This hook must be declared at the top level of the component
   const { guardian } = useGuardianByIDNumberQuery({ id: guardianSearchInput });
 

@@ -18,6 +18,8 @@ export interface Course {
   teacherId: number;
   fee: number;
   active: boolean;
+  batch: number;
+  description: string;
 }
 
 export interface Enrollment {
@@ -307,6 +309,7 @@ export interface Student {
   gradeType: EGrade;
   admissionPayed: boolean;
   active: boolean;
+  guardian?: Guardian;
 }
 
 export interface StudentPageData {
@@ -393,7 +396,7 @@ export enum EventType {
 export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
-  DELETE = "DELETE"
+  DELETE = "DELETE",
 }
 
 export enum EventStatusType {

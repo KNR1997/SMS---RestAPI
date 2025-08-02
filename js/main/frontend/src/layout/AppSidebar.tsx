@@ -3,16 +3,10 @@ import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
 import {
-  BoxCubeIcon,
   CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
   FileIcon,
   DollarLineIcon,
   UserCircleIcon,
@@ -22,15 +16,22 @@ import {
   BoxIconLine,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
 import { useAuth } from "../context/AuthContext";
 import { ERole } from "../types";
+
+type SubNavItem = {
+  name: string;
+  path: string;
+  pro?: boolean;
+  new?: boolean;
+  roles?: string[]; // Optional role-based control
+};
 
 type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  subItems?: SubNavItem[];
   roles: string[];
 };
 
@@ -42,45 +43,6 @@ const navItems: NavItem[] = [
     // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
   },
-  // {
-  //   icon: <CalenderIcon />,
-  //   name: "Calendar",
-  //   path: "/calendar",
-  //   roles: [ERole.ROLE_ADMIN],
-  // },
-  // {
-  //   icon: <UserCircleIcon />,
-  //   name: "User Profile",
-  //   path: "/profile",
-  //   roles: [ERole.ROLE_STUDENT]
-  // },
-  // {
-  //   name: "Forms",
-  //   icon: <ListIcon />,
-  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  // },
-  // {
-  //   name: "Tables",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  // },
-  // {
-  //   name: "Invoices",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "All Invoices", path: "/invoices", pro: false }],
-  //   roles: [
-  //     ERole.ROLE_FINISH_GOOD_HEAD,
-  //     ERole.ROLE_FINISH_GOOD,
-  //     ERole.ROLE_FINANCE_HEAD,
-  //     ERole.ROLE_FINANCE,
-  //   ],
-  // },
-  // {
-  //   name: "Requests",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "All Requests", path: "/requests", pro: false }],
-  //   roles: [ERole.ROLE_FINISH_GOOD_HEAD, ERole.ROLE_FINANCE_HEAD],
-  // },
   {
     name: "Subjects",
     icon: <FileIcon />,
@@ -102,15 +64,13 @@ const navItems: NavItem[] = [
   {
     name: "My Courses",
     icon: <BoxIconLine />,
-    path: '/courses',
-    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    path: "/courses",
     roles: [ERole.ROLE_TEACHER],
   },
-    {
+  {
     name: "My Students",
     icon: <BoxIconLine />,
-    path: '/students',
-    // subItems: [{ name: "All Courses", path: "/courses", pro: false }],
+    path: "/students",
     roles: [ERole.ROLE_TEACHER],
   },
   {
@@ -128,32 +88,32 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "All Students", path: "/students", pro: false },
       { name: "Create student", path: "/students/create", pro: false },
-      // { name: "Entroll student", path: "/students/enroll", pro: false },
-      // { name: "Payment", path: "/payments/create", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Guardians",
     icon: <UserCircleIcon />,
-    subItems: [
-      { name: "All Guardians", path: "/guardians", pro: false },
-      // { name: "Create student", path: "/students/create", pro: false },
-      // { name: "Entroll student", path: "/students/enroll", pro: false },
-      // { name: "Payment", path: "/payments/create", pro: false },
-    ],
+    subItems: [{ name: "All Guardians", path: "/guardians", pro: false }],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Enrollments",
     icon: <PaperPlaneIcon />,
     subItems: [
-      { name: "All Enrollments", path: "/enrollments", pro: false },
-      { name: "Create enrollment", path: "/enrollments/create", pro: false },
-      // { name: "Entroll student", path: "/students/enroll", pro: false },
-      // { name: "Payment", path: "/payments/create", pro: false },
+      {
+        name: "All Enrollments",
+        path: "/enrollments",
+        pro: false,
+      },
+      {
+        name: "Create enrollment",
+        path: "/enrollments/create",
+        pro: false,
+        roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST], // Only ADMIN can see
+      },
     ],
-    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER, ERole.ROLE_RECEPTIONIST],
   },
   {
     name: "Courses",
@@ -189,7 +149,7 @@ const navItems: NavItem[] = [
         pro: false,
       },
     ],
-    roles: [ ERole.ROLE_STUDENT],
+    roles: [ERole.ROLE_STUDENT],
   },
   {
     name: "Employee Payments",
@@ -232,10 +192,20 @@ const navItems: NavItem[] = [
     icon: <CalenderIcon />,
     subItems: [
       { name: "Calendar", path: "/events-calendar", pro: false },
-      { name: "All Events", path: "/events", pro: false },
-      { name: "Create event", path: "/events/create", pro: false },
+      {
+        name: "All Events",
+        path: "/events",
+        pro: false,
+        roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST, ERole.ROLE_TEACHER],
+      },
+      {
+        name: "Create event",
+        path: "/events/create",
+        pro: false,
+        roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
+      },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST, ERole.ROLE_TEACHER],
   },
   {
     name: "Events",
@@ -253,53 +223,44 @@ const navItems: NavItem[] = [
       { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
       { name: "Student Report", path: "/reports/student-report", pro: false },
       { name: "Employee Report", path: "/reports/employee-report", pro: false },
-      { name: "Institute Income Report", path: "/reports/institute-income-report", pro: false },
-      { name: "Monthly Active Student Report", path: "/reports/monthly-active-student-report", pro: false },
-      { name: "Student Registration Increment Report", path: "/reports/student-registration-increment-report", pro: false },
+      {
+        name: "Institute Income Report",
+        path: "/reports/institute-income-report",
+        pro: false,
+      },
+      {
+        name: "Monthly Active Student Report",
+        path: "/reports/monthly-active-student-report",
+        pro: false,
+      },
+      {
+        name: "Student Registration Increment Report",
+        path: "/reports/student-registration-increment-report",
+        pro: false,
+      },
     ],
     roles: [ERole.ROLE_ADMIN],
   },
 ];
 
-const othersItems: NavItem[] = [
-  // {
-  //   icon: <PieChartIcon />,
-  //   name: "Charts",
-  //   subItems: [
-  //     { name: "Line Chart", path: "/line-chart", pro: false },
-  //     { name: "Bar Chart", path: "/bar-chart", pro: false },
-  //   ],
-  // },
-  // {
-  //   icon: <BoxCubeIcon />,
-  //   name: "UI Elements",
-  //   subItems: [
-  //     { name: "Alerts", path: "/alerts", pro: false },
-  //     { name: "Avatar", path: "/avatars", pro: false },
-  //     { name: "Badge", path: "/badge", pro: false },
-  //     { name: "Buttons", path: "/buttons", pro: false },
-  //     { name: "Images", path: "/images", pro: false },
-  //     { name: "Videos", path: "/videos", pro: false },
-  //   ],
-  // },
-  // {
-  //   icon: <PlugInIcon />,
-  //   name: "Authentication",
-  //   subItems: [
-  //     { name: "Sign In", path: "/signin", pro: false },
-  //     { name: "Sign Up", path: "/signup", pro: false },
-  //   ],
-  // },
-];
+const othersItems: NavItem[] = [];
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
   const { user } = useAuth();
 
-  const filteredItems = navItems.filter((item) =>
-    item.roles.some((role) => user?.erole == role)
-  );
+  const filteredItems = navItems
+    .filter((item) => item.roles.includes(user?.erole))
+    .map((item) => ({
+      ...item,
+      subItems: item.subItems?.filter(
+        (sub) =>
+          !sub.roles || // If subItem has no roles, show it by default
+          sub.roles.includes(user?.erole)
+      ),
+    }))
+    .filter((item) => item.subItems?.length || item.path); // hide items with no visible subItems or path
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";

@@ -19,6 +19,7 @@ import {
 import ActionButtons from "@components/common/action-buttons";
 import { adminOnly, hasAccess } from "../../utils/auth-utils";
 import { useAuth } from "../../context/AuthContext";
+import StudentPopup from "./student-popup";
 
 export type IProps = {
   students: Student[];
@@ -36,6 +37,8 @@ export default function StudentList({
   const { user } = useAuth();
   let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
+  const [openStudentPopup, setOpenStudentPopup] = useState(false);
+  const [popupData, setPopupData] = useState<Student | null>(null);
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
     action: ActionType;
@@ -58,6 +61,16 @@ export default function StudentList({
     } else if (selectedRecord.action == ActionType.DELETE) {
       deleteStudent({ id: selectedRecord.id });
     }
+    closeModal();
+  };
+
+  const handlePopupClick = (data: any) => {
+    setPopupData(data);
+    setOpenStudentPopup(true);
+  };
+
+  const closeStudentPopup = () => {
+    setOpenStudentPopup(false);
     closeModal();
   };
 
@@ -150,12 +163,16 @@ export default function StudentList({
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <ActionButtons
                       id={student.id}
+                      enableEdit={has_permission}
                       editUrl={`/students/${student.id}/edit`}
                       isActive={student.active}
                       enableDisableButton={has_permission}
                       onEnableDisableClick={handleActionClick}
                       enableDelete={has_permission}
                       onDeleteClick={handleActionClick}
+                      enablePopup={!has_permission}
+                      data={student}
+                      onPopupClick={handlePopupClick}
                     />
                   </TableCell>
                 </TableRow>
@@ -182,6 +199,17 @@ export default function StudentList({
         description={`Are you sure you want to ${selectedRecord?.action.toLowerCase()} this student?`}
         onConfirm={handleModalClick}
         onCancel={closeModal}
+        confirmColor={
+          selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
+        }
+      />
+      <StudentPopup
+        isOpen={openStudentPopup}
+        title="Student Details"
+        data={popupData?.guardian}
+        // description={`Guardian Details ${popupData?.guardian?.firstName}`}
+        onConfirm={handleModalClick}
+        onCancel={closeStudentPopup}
         confirmColor={
           selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
         }

@@ -58,28 +58,20 @@ public class CourseService {
 
         if (currentUser.isAdmin()) {
             // Admin sees all courses
-            coursePage = courseRepository.searchCourses(name, gradeType, is_active, pageable);
+            coursePage = courseRepository.searchCourses(name, gradeType, is_active, null, pageable);
 
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             // Student sees only enrolled courses
             Student student = studentRepository.findByUser(currentUser)
                     .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
-
             coursePage = courseRepository.searchCoursesByStudentEnrollments(name, gradeType, student.getId(), pageable);
-
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-            coursePage = (gradeType != null)
-                    ? courseRepository.findByTeacherAndGradeType(user, gradeType, pageable)
-                    : courseRepository.findByTeacher(user, pageable);
-        } else {
-            coursePage = (gradeType != null)
-                    ? courseRepository.findByGradeType(gradeType, pageable)
-                    : courseRepository.findAll(pageable);
+            coursePage = courseRepository.searchCourses(name, gradeType, true, user.getId(), pageable);
         }
 
+        assert coursePage != null;
         return coursePage.map(CourseListDTO::new);
     }
 
