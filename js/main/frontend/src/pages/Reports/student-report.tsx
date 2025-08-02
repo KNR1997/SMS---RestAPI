@@ -15,6 +15,7 @@ export default function StudentReport() {
 
   const { courses, loading, error, paginatorInfo } = useCoursesQuery({
     page,
+    is_active: true,
     orderBy,
     sortedBy,
   });

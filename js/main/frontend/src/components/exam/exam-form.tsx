@@ -42,9 +42,11 @@ interface Props {
 }
 
 export default function CreateOrUpdateExamForm({ initialValues }: Props) {
-  const { halls } = useHallsQuery({});
+  const { halls } = useHallsQuery({is_active: true});
   const { events } = useEventsQuery({});
-  const { courses } = useCoursesQuery({});
+  const { courses } = useCoursesQuery({
+    is_active: true
+  });
 
   const {
     register,

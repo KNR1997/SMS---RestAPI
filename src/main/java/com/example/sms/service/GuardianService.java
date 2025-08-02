@@ -32,11 +32,12 @@ public class GuardianService {
 
     public Page<GuardianListDTO> getGuardiansPaginated(
             Pageable pageable,
-            String search
+            String search,
+            Boolean is_active
     )
     {
         String name = extractSearchValue(search, "name");
-        Page<Guardian> guardianPage = guardianRepository.searchGuardian(name, pageable);
+        Page<Guardian> guardianPage = guardianRepository.searchGuardian(name, is_active, pageable);
 
         return guardianPage.map(GuardianListDTO::new);
     }

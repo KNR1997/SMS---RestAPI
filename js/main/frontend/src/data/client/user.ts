@@ -1,4 +1,5 @@
 import {
+  ChangePasswordInput,
   CreateUser,
   QueryOptions,
   User,
@@ -43,5 +44,8 @@ export const UserClient = {
   },
   disable: ({ id }: { id: number }) => {
     return HttpClient.put<any>(`${API_ENDPOINTS.USERS}/${id}/disable`, {});
+  },
+  changePassword: (data: ChangePasswordInput) => {
+    return HttpClient.post<any>(API_ENDPOINTS.CHANGE_PASSWORD, data);
   },
 };

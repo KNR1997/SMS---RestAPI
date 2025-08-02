@@ -17,6 +17,7 @@ import {
   generateCourseCode,
   generateCourseName,
 } from "../../utils/use-code-generate";
+import { useEffect } from "react";
 
 type FormValues = {
   name: string;
@@ -56,7 +57,9 @@ export default function CreateOrUpdateCourseForm({
   initialValues,
   isEditable = false,
 }: Props) {
-  const { subjects } = useSubjectsQuery({ is_active: true });
+  const { subjects } = useSubjectsQuery({
+    is_active: true,
+  });
   const { users } = useUsersQuery({
     role: ERole.ROLE_TEACHER,
   });
@@ -64,30 +67,36 @@ export default function CreateOrUpdateCourseForm({
   const {
     control,
     register,
+    setValue,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<FormValues>({
     // @ts-ignore
-    defaultValues: initialValues
-      ? {
-          ...initialValues,
-          gradeType: initialValues?.gradeType
-            ? gradeOptions.find(
-                (gradeType) => gradeType.value === initialValues.gradeType
-              )
-            : null,
-          subject: initialValues?.subjectId
-            ? subjects.find((subject) => subject.id === initialValues.subjectId)
-            : null,
-          teacher: initialValues?.teacherId
-            ? users.find((user) => user.id === initialValues.teacherId)
-            : null,
-        }
-      : defaultValues,
+    defaultValues: defaultValues, // no derived values here
     //@ts-ignore
     resolver: yupResolver(validationSchema),
   });
+
+  useEffect(() => {
+    if (initialValues && subjects.length > 0 && users.length > 0) {
+      const foundSubject = subjects.find(
+        (s) => s.id === initialValues.subjectId
+      );
+      const foundTeacher = users.find((u) => u.id === initialValues.teacherId);
+      const foundGradeType = gradeOptions.find(
+        (g) => g.value === initialValues.gradeType
+      );
+
+      if (foundSubject) setValue("subject", foundSubject);
+      if (foundTeacher) setValue("teacher", foundTeacher);
+      if (foundGradeType) setValue("gradeType", foundGradeType);
+      if (initialValues.batch) setValue("batch", initialValues.batch);
+      if (initialValues.fee) setValue("fee", initialValues.fee);
+      if (initialValues.description)
+        setValue("description", initialValues.description);
+    }
+  }, [initialValues, subjects, users, setValue]);
 
   const { mutate: createCourse, isLoading: creating } =
     useCreateCourseMutation();

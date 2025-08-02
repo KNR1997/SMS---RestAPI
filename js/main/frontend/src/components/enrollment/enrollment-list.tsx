@@ -11,7 +11,7 @@ import {
   useDeleteEnrollmentMutation,
   useDisableEnrollmentMutation,
   useEnableEnrollmentMutation,
-  useInvokeEnrollmentMutation,
+  // useInvokeEnrollmentMutation,
 } from "@data/enrollment";
 import {
   ActionType,
@@ -23,6 +23,9 @@ import { useModal } from "../../hooks/useModal";
 import { useState } from "react";
 import ActionButtons from "@components/common/action-buttons";
 import ConfirmationModal from "@components/common/confirmation-modal";
+import { adminOnly, hasAccess } from "../../utils/auth-utils";
+import { useAuth } from "../../context/AuthContext";
+import EnrollmentPopup from "./enrollment-popup";
 
 export type IProps = {
   enrollments: Enrollment[];
@@ -39,9 +42,14 @@ export default function EnrollmentList({
   paginatorInfo,
   showActions = true,
 }: IProps) {
+  const { user } = useAuth();
+  let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
+  const [openEnrollmentPopup, setOpenEnrollmentPopup] = useState(false);
+  const [popupData, setPopupData] = useState<Enrollment | null>(null);
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
+    data?: any;
     action: ActionType;
   } | null>(null);
   const { mutate: enableEnrollment } = useEnableEnrollmentMutation();
@@ -65,7 +73,17 @@ export default function EnrollmentList({
     closeModal();
   };
 
-  const { mutate: invokeEnrollment } = useInvokeEnrollmentMutation();
+  const handlePopupClick = (data: any) => {
+    setPopupData(data);
+    setOpenEnrollmentPopup(true);
+  };
+
+  const closeEnrollmentPopup = () => {
+    setOpenEnrollmentPopup(false);
+    closeModal();
+  };
+
+  // const { mutate: invokeEnrollment } = useInvokeEnrollmentMutation();
 
   return (
     <>
@@ -155,12 +173,16 @@ export default function EnrollmentList({
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <ActionButtons
                         id={enrollment.id}
+                        enableEdit={has_permission}
                         editUrl={`/enrollments/${enrollment.id}/view`}
                         isActive={enrollment.active}
-                        enableDisableButton
+                        enableDisableButton={has_permission}
                         onEnableDisableClick={handleActionClick}
-                        enableDelete
+                        enableDelete={has_permission}
                         onDeleteClick={handleActionClick}
+                        enablePopup={!has_permission}
+                        data={enrollment}
+                        onPopupClick={handlePopupClick}
                       />
                       {/* <button>
                       <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
@@ -191,6 +213,16 @@ export default function EnrollmentList({
         description={`Are you sure you want to ${selectedRecord?.action.toLowerCase()} this enrollment?`}
         onConfirm={handleModalClick}
         onCancel={closeModal}
+        confirmColor={
+          selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
+        }
+      />
+      <EnrollmentPopup
+        isOpen={openEnrollmentPopup}
+        title="Enrollment Details"
+        description={`Last Payment month ${popupData?.lastPaidMonthName}`}
+        onConfirm={handleModalClick}
+        onCancel={closeEnrollmentPopup}
         confirmColor={
           selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
         }

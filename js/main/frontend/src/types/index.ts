@@ -18,6 +18,8 @@ export interface Course {
   teacherId: number;
   fee: number;
   active: boolean;
+  batch: number;
+  description: string;
 }
 
 export interface Enrollment {
@@ -247,6 +249,7 @@ export interface User {
   studentId: number;
   role: ERole;
   active: boolean;
+  phoneNumber: string;
 }
 
 export interface CreateUser {
@@ -257,6 +260,11 @@ export interface CreateUser {
   role: ERole;
   address: string;
   genderType: EGender;
+}
+
+export interface ChangePasswordInput {
+  oldPassword: string;
+  newPassword: string;
 }
 
 export interface Guardian {
@@ -301,6 +309,7 @@ export interface Student {
   gradeType: EGrade;
   admissionPayed: boolean;
   active: boolean;
+  guardian?: Guardian;
 }
 
 export interface StudentPageData {
@@ -387,7 +396,7 @@ export enum EventType {
 export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
-  DELETE = "DELETE"
+  DELETE = "DELETE",
 }
 
 export enum EventStatusType {
@@ -539,6 +548,7 @@ export interface StudentQueryOptions extends QueryOptions {
   name: string;
   admissionPayed: number | null;
   grade: EGrade | null;
+  is_active: boolean;
 }
 
 export interface PaymentQueryOptions extends QueryOptions {}
@@ -550,11 +560,13 @@ export interface SubjectQueryOptions extends QueryOptions {
 
 export interface GuardianQueryOptions extends QueryOptions {
   name: string;
+  is_active: boolean;
 }
 
 export interface CourseQueryOptions extends QueryOptions {
   name: string;
   grade: EGrade | null;
+  is_active: boolean;
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {
@@ -582,6 +594,7 @@ export interface ExamResultQueryOptions extends QueryOptions {
 
 export interface HallQueryOptions extends QueryOptions {
   name: string;
+  is_active: boolean;
 }
 
 export interface EventQueryOptions extends QueryOptions {

@@ -30,7 +30,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("SELECT s FROM Student s " +
             "JOIN s.user u " +
-            "WHERE (:name IS NULL OR " +
+            "WHERE " +
+            "(:is_active IS NULL OR s.active = :is_active) AND " +
+            "(:name IS NULL OR " +
             "LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +
             "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
             "(:grade IS NULL OR s.gradeType = :grade) AND " +
@@ -39,6 +41,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             @Param("name") String name,
             @Param("grade") GradeType grade,
             @Param("admissionPayed") Boolean admissionPayed,
+            @Param("is_active") Boolean is_active,
             Pageable pageable
     );
 

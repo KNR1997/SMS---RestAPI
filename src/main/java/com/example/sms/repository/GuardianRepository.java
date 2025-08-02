@@ -17,11 +17,13 @@ public interface GuardianRepository extends JpaRepository<Guardian, Integer> {
     boolean existsByNationalIdentityNumber(String slug);
 
     @Query("SELECT g FROM Guardian g WHERE " +
+            "(:is_active IS NULL OR g.active = :is_active) AND " +
             "LOWER(g.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +
             "LOWER(g.lastName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +
             "(:name IS NULL OR LOWER(g.nationalIdentityNumber) LIKE LOWER(CONCAT('%', :name, '%'))) ")
     Page<Guardian> searchGuardian(
             @Param("name") String name,
+            @Param("is_active") Boolean is_active,
             Pageable pageable
     );
 

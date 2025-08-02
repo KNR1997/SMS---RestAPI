@@ -25,6 +25,7 @@ export default function StudentCourses() {
 
   const { courses, loading, error, paginatorInfo } = useCoursesQuery({
     name: searchTerm,
+    is_active: true,
     page,
     orderBy,
     sortedBy,

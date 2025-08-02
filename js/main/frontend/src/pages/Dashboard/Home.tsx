@@ -17,8 +17,12 @@ import Widgets from "@components/ecommerce/Widgets";
 import AdminOnly from "@components/admin/AdminOnly";
 
 export default function Home() {
-  const { paginatorInfo, loading, error } = useStudentsQuery({});
-  const { paginatorInfo: coursePaginatorInfo } = useCoursesQuery({});
+  const { paginatorInfo, loading, error } = useStudentsQuery({
+    is_active: true,
+  });
+  const { paginatorInfo: coursePaginatorInfo } = useCoursesQuery({
+    is_active: true,
+  });
   const { studentsPerGrades, loading: studentsPerGradesLoading } =
     useStudentCountPerGradeQuery();
   const { studentsPerCourses, loading: studenPerCoursesLoading } =

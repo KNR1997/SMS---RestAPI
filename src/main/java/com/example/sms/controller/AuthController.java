@@ -12,6 +12,8 @@ import com.example.sms.repository.RoleRepository;
 import com.example.sms.repository.StudentRepository;
 import com.example.sms.repository.UserRepository;
 import com.example.sms.security.JwtUtils;
+import com.example.sms.service.CurrentUserService;
+import com.example.sms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +47,12 @@ public class AuthController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CurrentUserService currentUserService;
 
 
     @PostMapping("/login/")
@@ -102,14 +110,24 @@ public class AuthController {
 
         // Map User to MeDTO
         MeDTO meDTO = new MeDTO(
+                user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().getName(),
                 studentGradeType,
-                studentId);
+                studentId,
+                user.getPhoneNumber()
+        );
         return ResponseEntity.ok(meDTO); // You might want to return a DTO instead of the full User entity
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        User currentUser = currentUserService.getCurrentUser();
+        userService.changePassword(currentUser, changePasswordDTO);
+        return ResponseEntity.noContent().build();
     }
 
 }

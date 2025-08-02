@@ -11,10 +11,7 @@ import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.EnrollmentPaymentInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
-import com.example.sms.repository.CourseRepository;
-import com.example.sms.repository.EnrollmentPaymentRepository;
-import com.example.sms.repository.EnrollmentRepository;
-import com.example.sms.repository.StudentRepository;
+import com.example.sms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +42,9 @@ public class EnrollmentService {
     @Autowired
     private EnrollmentPaymentRepository enrollmentPaymentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Page<EnrollmentListDTO> getEnrollmentsPaginated(
             Pageable pageable,
             String search,
@@ -60,13 +60,15 @@ public class EnrollmentService {
             if (studentId != null) {
                 enrollmentPage = enrollmentRepository.findByStudentId(studentId, pageable);
             } else {
-                enrollmentPage = enrollmentRepository.searchEnrollment(name, pageable);
+                enrollmentPage = enrollmentRepository.searchEnrollment(name, null, pageable);
             }
         } else if (currentUser.getRole().getName().equals(RoleType.ROLE_STUDENT)) {
             Student student = studentService.getStudentByUser(currentUser);
             enrollmentPage = enrollmentRepository.findByStudentId(student.getId(), pageable);
-        } else {
-            enrollmentPage = enrollmentRepository.findAll(pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)) {
+            User user = userRepository.findById(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            enrollmentPage = enrollmentRepository.searchEnrollment(name, user.getId(), pageable);
         }
         assert enrollmentPage != null;
         return enrollmentPage.map(EnrollmentListDTO::new);

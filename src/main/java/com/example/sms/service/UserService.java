@@ -1,15 +1,13 @@
 package com.example.sms.service;
 
 
+import com.example.sms.dto.ChangePasswordDTO;
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.User.UserListDTO;
-import com.example.sms.entity.Course;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
-import com.example.sms.enums.GradeType;
 import com.example.sms.enums.RoleType;
 import com.example.sms.exception.BadRequestException;
-import com.example.sms.exception.CourseInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.exception.UserInUserException;
 import com.example.sms.repository.*;
@@ -20,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
@@ -111,7 +108,47 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User resetUserPassword(Integer id){
+    public User patch(Integer id, UserCreateDTO updateDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        if (updateDto.getEmail() != null && !Objects.equals(user.getEmail(), updateDto.getEmail())) {
+            if (userRepository.existsByEmail(updateDto.getEmail())) {
+                throw new BadRequestException("User with email '" + updateDto.getEmail() + "' already exists.");
+            }
+            user.setEmail(updateDto.getEmail());
+        }
+
+        if (updateDto.getFirstName() != null) {
+            user.setFirstName(updateDto.getFirstName());
+        }
+
+        if (updateDto.getLastName() != null) {
+            user.setLastName(updateDto.getLastName());
+        }
+
+        if (updateDto.getUsername() != null) {
+            user.setUsername(updateDto.getUsername());
+        }
+
+        if (updateDto.getNic() != null) {
+            user.setNic(updateDto.getNic());
+        }
+
+        if (updateDto.getPhoneNumber() != null) {
+            user.setPhoneNumber(updateDto.getPhoneNumber());
+        }
+
+        if (updateDto.getPassword() != null && !updateDto.getPassword().isEmpty()) {
+            user.setPassword(encoder.encode(updateDto.getPassword()));
+        }
+
+        // Intentionally skipping updateDto.getRole() to prevent role change
+
+        return userRepository.save(user);
+    }
+
+    public User resetUserPassword(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         user.setPassword(encoder.encode("1234"));
@@ -140,7 +177,7 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + userId));
 
         boolean isUserUsedInCourses = courseRepository.existsByTeacher(user);
-        boolean isUserUsedInEmployeePayments= employeePaymentRepository.existsByEmployee(user);
+        boolean isUserUsedInEmployeePayments = employeePaymentRepository.existsByEmployee(user);
         boolean isUserUsedInStudents = studentRepository.existsByUser(user);
 
         if (isUserUsedInCourses) {
@@ -156,4 +193,17 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public User changePassword(User currentUser, ChangePasswordDTO changePasswordDTO) {
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + currentUser.getId()));
+
+        // Check if old password matches
+        if (!encoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
+            throw new BadRequestException("Old password is incorrect");
+        }
+
+        // Set the new password
+        user.setPassword(encoder.encode(changePasswordDTO.getNewPassword()));
+        return userRepository.save(user);
+    }
 }

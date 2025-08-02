@@ -69,6 +69,22 @@ export const useUpdateUserMutation = () => {
   });
 };
 
+export const usePatchUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(UserClient.patch, {
+    onSuccess: async () => {
+      toast.success("Successfully updated!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ME);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
+    },
+  });
+};
+
 // get single user from the backend
 export const useUserQuery = (id: string) => {
   const { data, error, isLoading } = useQuery<User, Error>(
@@ -164,4 +180,8 @@ export const useDeleteUserMutation = () => {
       toast.error(error?.response?.data);
     },
   });
+};
+
+export const useChangePasswordMutation = () => {
+  return useMutation(UserClient.changePassword);
 };

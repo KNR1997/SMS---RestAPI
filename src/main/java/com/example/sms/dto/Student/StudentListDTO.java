@@ -1,5 +1,6 @@
 package com.example.sms.dto.Student;
 
+import com.example.sms.dto.Guardian.GuardianDetailDTO;
 import com.example.sms.enums.GradeType;
 import com.example.sms.entity.Student;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class StudentListDTO {
 
     private boolean isActive;
 
+    private GuardianDetailDTO guardian;
+
     public StudentListDTO(Student student) {
         this.id = student.getId();
         this.firstName = student.getUser().getFirstName();
@@ -31,5 +34,6 @@ public class StudentListDTO {
         this.studentId = student.getStudentId();
         this.admissionPayed = student.getAdmissionPayed();
         this.isActive = student.isActive();
+        this.guardian = new GuardianDetailDTO(student.getGuardian());
     }
 }

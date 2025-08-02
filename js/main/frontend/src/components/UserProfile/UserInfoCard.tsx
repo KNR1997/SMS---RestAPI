@@ -4,14 +4,78 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { ERole, User } from "@types";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { usePatchUserMutation } from "@data/user";
 
-export default function UserInfoCard({ user }: { user: User }) {
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  bio: string;
+  username: string;
+  nic: string;
+};
+
+const validationSchema = yup.object().shape({});
+
+const defaultValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  bio: "",
+  username: "",
+  nic: "",
+};
+
+interface Props {
+  initialValues?: User;
+}
+
+export default function UserInfoCard({ initialValues }: Props) {
   const { isOpen, openModal, closeModal } = useModal();
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
+  const { mutate: patchUser, isLoading } = usePatchUserMutation();
+
+  console.log("initialValues: ", initialValues);
+
+  // const handleSave = () => {
+  //   // Handle save logic here
+  //   console.log("Saving changes...");
+  //   closeModal();
+  // };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    // @ts-ignore
+    defaultValues: initialValues
+      ? {
+          ...initialValues,
+        }
+      : defaultValues,
+    //@ts-ignore
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = async (values: FormValues) => {
+    const input = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      username: values.username,
+      // password: values.password,
+      nic: values.nic,
+      phoneNumber: values.phoneNumber,
+    };
+
+    if (initialValues) patchUser({ id: initialValues.id, ...input });
   };
+
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -26,7 +90,7 @@ export default function UserInfoCard({ user }: { user: User }) {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.firstName}
+                {initialValues?.firstName}
               </p>
             </div>
 
@@ -35,7 +99,7 @@ export default function UserInfoCard({ user }: { user: User }) {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.lastName}
+                {initialValues?.lastName}
               </p>
             </div>
 
@@ -44,7 +108,7 @@ export default function UserInfoCard({ user }: { user: User }) {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.email}
+                {initialValues?.email}
               </p>
             </div>
 
@@ -53,7 +117,7 @@ export default function UserInfoCard({ user }: { user: User }) {
                 Phone
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +09 363 398 46
+                {initialValues?.phoneNumber}
               </p>
             </div>
 
@@ -62,7 +126,9 @@ export default function UserInfoCard({ user }: { user: User }) {
                 Bio
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.erole == ERole.ROLE_STUDENT ? "Student" : "Role"}
+                {initialValues?.erole == ERole.ROLE_STUDENT
+                  ? "Student"
+                  : "Role"}
               </p>
             </div>
           </div>
@@ -101,41 +167,8 @@ export default function UserInfoCard({ user }: { user: User }) {
               Update your details to keep your profile up-to-date.
             </p>
           </div>
-          <form className="flex flex-col">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
-              <div>
-                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-                  Social Links
-                </h5>
-
-                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                  <div>
-                    <Label>Facebook</Label>
-                    <Input
-                      type="text"
-                      value="https://www.facebook.com/PimjoHQ"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>X.com</Label>
-                    <Input type="text" value="https://x.com/PimjoHQ" />
-                  </div>
-
-                  <div>
-                    <Label>Linkedin</Label>
-                    <Input
-                      type="text"
-                      value="https://www.linkedin.com/company/pimjo"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Instagram</Label>
-                    <Input type="text" value="https://instagram.com/PimjoHQ" />
-                  </div>
-                </div>
-              </div>
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
                   Personal Information
@@ -144,36 +177,51 @@ export default function UserInfoCard({ user }: { user: User }) {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
                     <Label>First Name</Label>
-                    <Input type="text" value="Musharof" />
+                    <Input
+                      {...register("firstName")}
+                      errorMessage={errors.firstName?.message!}
+                    />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Last Name</Label>
-                    <Input type="text" value="Chowdhury" />
+                    <Input
+                      {...register("lastName")}
+                      errorMessage={errors.lastName?.message!}
+                    />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Email Address</Label>
-                    <Input type="text" value="randomuser@pimjo.com" />
+                    <Input
+                      {...register("email")}
+                      errorMessage={errors.email?.message!}
+                    />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Phone</Label>
-                    <Input type="text" value="+09 363 398 46" />
+                    <Input
+                      {...register("phoneNumber")}
+                      errorMessage={errors.phoneNumber?.message!}
+                    />
                   </div>
 
                   <div className="col-span-2">
                     <Label>Bio</Label>
-                    <Input type="text" value="Team Manager" />
+                    <Input
+                      {...register("bio")}
+                      errorMessage={errors.bio?.message!}
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeModal}>
+              {/* <Button size="sm" variant="outline" onClick={closeModal}>
                 Close
-              </Button>
-              <Button size="sm" onClick={handleSave}>
+              </Button> */}
+              <Button disabled={isLoading} size="sm">
                 Save Changes
               </Button>
             </div>

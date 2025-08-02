@@ -17,6 +17,8 @@ import {
   useEnableCourseMutation,
 } from "@data/course";
 import Badge from "@components/ui/badge/Badge";
+import { useAuth } from "../../context/AuthContext";
+import { adminOnly, hasAccess } from "../../utils/auth-utils";
 
 export type IProps = {
   courses: Course[];
@@ -33,6 +35,8 @@ export default function CourseList({
   paginatorInfo,
   showActions = true,
 }: IProps) {
+  const { user } = useAuth();
+  let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
@@ -147,9 +151,9 @@ export default function CourseList({
                         id={course.id}
                         editUrl={`/courses/${course.slug}/edit`}
                         isActive={course.active}
-                        enableDisableButton
+                        enableDisableButton={has_permission}
                         onEnableDisableClick={handleActionClick}
-                        enableDelete
+                        enableDelete={has_permission}
                         onDeleteClick={handleActionClick}
                       />
                     </TableCell>

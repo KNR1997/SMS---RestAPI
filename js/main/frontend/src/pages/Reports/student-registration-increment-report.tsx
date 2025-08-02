@@ -19,6 +19,7 @@ export default function StudentRegistrationIncrementReport() {
 
   const { courses, loading, error, paginatorInfo } = useCoursesQuery({
     page,
+    is_active: true,
     orderBy,
     sortedBy,
   });

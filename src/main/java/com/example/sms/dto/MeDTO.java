@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MeDTO {
+    private Integer id;
 
     private String firstName;
 
@@ -24,5 +25,7 @@ public class MeDTO {
     private GradeType gradeType;
 
     private Integer studentId;
+
+    private String phoneNumber;
 
 }
