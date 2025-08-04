@@ -55,18 +55,6 @@ export default function Subjects() {
               placeholderText="Search by Course Name"
             />
           </div>
-
-          <button
-            className="mt-5 flex items-center whitespace-nowrap text-base font-semibold text-accent md:mt-0 md:ms-5 dark:text-white/90"
-            onClick={toggleVisible}
-          >
-            Filters
-            {visible ? (
-              <ArrowUp className="ms-2" />
-            ) : (
-              <ArrowDown className="ms-2" />
-            )}
-          </button>
         </div>
       </Card>
       <div className="space-y-6">

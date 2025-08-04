@@ -8,6 +8,7 @@ import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
 import com.example.sms.entity.*;
 import com.example.sms.enums.EventType;
 import com.example.sms.enums.ExamStatusType;
+import com.example.sms.enums.GradeType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class ExamService {
@@ -53,8 +56,14 @@ public class ExamService {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
-    public Page<ExamPaginatedDataResponse> getPaginated(Pageable pageable, String search) {
-        Page<Exam> examPage = examRepository.findAll(pageable);
+    public Page<ExamPaginatedDataResponse> getPaginated(
+            Pageable pageable,
+            String search,
+            String grade
+    ) {
+        GradeType gradeType = grade != null ? GradeType.valueOf(grade.toUpperCase()) : null;
+        String name = extractSearchValue(search, "name");
+        Page<Exam> examPage = examRepository.searchExam(name,gradeType,pageable);
         return examPage.map(ExamPaginatedDataResponse::new);
     }
 
