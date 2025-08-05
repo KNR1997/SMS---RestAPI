@@ -57,6 +57,8 @@ export default function Home() {
           <EcommerceMetrics
             totalStudents={paginatorInfo?.total}
             totalCourses={coursePaginatorInfo?.total}
+            totalTeachers={paginatorInfo?.total}
+            totalEmployees={coursePaginatorInfo?.total}
           />
           {/* {studentsPerGrades && (
             <StudentInGrades studentsPerGrades={studentsPerGrades} />
@@ -64,7 +66,7 @@ export default function Home() {
         </div>
 
         <AdminOnly>
-          <div className="col-span-12 xl:col-span-5">
+          <div className="col-span-12 xl:col-span-">
             {studentsPerGrades && (
               <StudentInGrades studentsPerGrades={studentsPerGrades} />
             )}

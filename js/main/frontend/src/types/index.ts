@@ -397,6 +397,7 @@ export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
   DELETE = "DELETE",
+  RESET_PASSWORD = "RESET PASSWORD",
 }
 
 export enum EventStatusType {
@@ -586,6 +587,7 @@ export interface EmployeePaymentQueryOptions extends QueryOptions {
 
 export interface ExamQueryOptions extends QueryOptions {
   name: string;
+  grade: EGrade | null;
 }
 
 export interface ExamResultQueryOptions extends QueryOptions {

@@ -144,7 +144,8 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
           guardianFirstName: initialValues.guardianPageData.firstName,
           guardianLastName: initialValues.guardianPageData.lastName,
           guardianEmail: initialValues.guardianPageData.email,
-          guardianIdNumber: initialValues.guardianPageData.nationalIdentityNumber,
+          guardianIdNumber:
+            initialValues.guardianPageData.nationalIdentityNumber,
           guardianContactNumber: initialValues.guardianPageData.contactNumber,
           guardianRelatioship: relationshipOptions.find(
             (relationshipOption) =>
@@ -186,7 +187,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
       },
     };
 
-    console.log('input: ', input)
+    console.log("input: ", input);
 
     if (!initialValues) {
       createStudent(input);
