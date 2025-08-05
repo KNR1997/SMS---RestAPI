@@ -7,6 +7,8 @@ import com.example.sms.dto.response.Exam.ExamPageDataResponse;
 import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
 import com.example.sms.entity.User;
 import com.example.sms.service.CurrentUserService;
+import com.example.sms.entity.User;
+import com.example.sms.service.CurrentUserService;
 import com.example.sms.service.ExamService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +47,13 @@ public class ExamController {
         User currentUser = currentUserService.getCurrentUser();
 
         Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(
+                
                 pageable,
+               
                 search,
                 currentUser
+        ,
+                grade
         );
 
         PaginatedResponse<ExamPaginatedDataResponse> response = new PaginatedResponse<>(examPaginatedDataResponses);

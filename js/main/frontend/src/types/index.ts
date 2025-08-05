@@ -587,6 +587,7 @@ export interface EmployeePaymentQueryOptions extends QueryOptions {
 
 export interface ExamQueryOptions extends QueryOptions {
   name: string;
+  grade: EGrade | null;
 }
 
 export interface ExamResultQueryOptions extends QueryOptions {

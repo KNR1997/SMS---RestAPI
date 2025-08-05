@@ -21,7 +21,8 @@ type Props = {
   onEnableDisableClick: (id: number, action: ActionType) => void;
   onDeleteClick?: (id: number, action: ActionType) => void;
   enablePasswordReset?: boolean;
-  onPasswordResetClick?: (id: number, action: ActionType) => void;
+  //onPasswordResetClick?: ({ id }: { id: number }) => void;
+  onPasswordResetClick: (id: number, action: ActionType) => void;
   enablePopup?: boolean;
   onPopupClick?: (data: any) => void;
   enableExamResult?: boolean;
@@ -57,7 +58,9 @@ const ActionButtons = ({
   return (
     <div>
       {enablePasswordReset && onPasswordResetClick && (
-        <button title="Reset Password to 123456" onClick={() => onPasswordResetClick(id, ActionType.RESET_PASSWORD)}>
+        <button
+          onClick={() => onPasswordResetClick(id, ActionType.RESET_PASSWORD)}
+        >
           <Refresh className="text-blue-400 mr-2 hover:text-gray-700 dark:blue:text-red-300 size-5" />
         </button>
       )}
