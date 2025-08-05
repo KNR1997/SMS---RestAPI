@@ -14,6 +14,9 @@ import {
   PaperPlaneIcon,
   GroupIcon,
   BoxIconLine,
+  Building,
+  Exam,
+  Report,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -141,7 +144,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Exam Results",
-    icon: <PaperPlaneIcon />,
+    icon: <Exam className="" />,
     subItems: [
       {
         name: "My Exam Results",
@@ -171,7 +174,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Halls",
-    icon: <FileIcon />,
+    icon: <Building className="fill-gray-800 size-6 dark:fill-white/90" />,
     subItems: [
       { name: "All Halls", path: "/halls", pro: false },
       { name: "Create hall", path: "/halls/create", pro: false },
@@ -180,10 +183,15 @@ const navItems: NavItem[] = [
   },
   {
     name: "Exams",
-    icon: <CalenderIcon />,
+    icon: <Exam className="fill-gray-800 size-6 dark:fill-white/90" />,
     subItems: [
       { name: "All Exams", path: "/exams", pro: false },
-      { name: "Create exam", path: "/exams/create", pro: false, roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST] },
+      {
+        name: "Create exam",
+        path: "/exams/create",
+        pro: false,
+        roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
+      },
     ],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER],
   },
@@ -218,7 +226,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Reports",
-    icon: <PaperPlaneIcon />,
+    icon: <Report className="fill-gray-800 size-6 dark:fill-white/90" />,
     subItems: [
       { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
       { name: "Student Report", path: "/reports/student-report", pro: false },

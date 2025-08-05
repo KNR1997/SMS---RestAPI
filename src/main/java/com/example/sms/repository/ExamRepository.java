@@ -24,10 +24,12 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
     @Query("SELECT e FROM Exam e " +
             "JOIN Course c ON e.course = c WHERE " +
             "(:teacherId IS NULL OR c.teacher.id = :teacherId) AND " +
+            "(:grade IS NULL OR c.gradeType = :grade) AND " +
             "(:is_active IS NULL OR e.active = :is_active)")
     Page<Exam> searchExams(
             @Param("is_active") Boolean is_active,
             @Param("teacherId") Integer teacherId,
+            @Param("grade") GradeType grade,
             Pageable pageable
     );
 

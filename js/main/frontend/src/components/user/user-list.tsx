@@ -41,13 +41,8 @@ export default function UserList({
   const { mutate: disableUser } = useDisableUserMutation();
   const { mutate: deleteUser } = useDeleteUserMutation();
   const { mutate: resetPassword } = useResetUserPasswordMutation();
-  const { mutate: resetPassword } = useResetUserPasswordMutation();
 
   const handleActionClick = (id: number, action: ActionType) => {
-    openModal();
-    setSelectedRecord({ id, action });
-  };
-  const handleResetPassword = (id: number, action: ActionType) => {
     openModal();
     setSelectedRecord({ id, action });
   };

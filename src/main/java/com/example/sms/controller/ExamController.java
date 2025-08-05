@@ -47,12 +47,9 @@ public class ExamController {
         User currentUser = currentUserService.getCurrentUser();
 
         Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(
-                
                 pageable,
-               
                 search,
-                currentUser
-        ,
+                currentUser,
                 grade
         );
 

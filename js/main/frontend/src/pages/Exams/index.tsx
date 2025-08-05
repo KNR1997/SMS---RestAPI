@@ -6,12 +6,12 @@ import { useState } from "react";
 import { EGrade, SortOrder } from "../../types";
 import { useExamsQuery } from "@data/exam";
 import ExamList from "@components/exam/exam-list";
-import { Card } from "antd";
 import cn from "classnames";
 import Search from "@components/common/search";
 import { ArrowUp } from "@components/icons/arrow-up";
 import { ArrowDown } from "@components/icons/arrow-down";
 import CourseFilter from "@components/course/course-filter";
+import Card from "@components/common/card";
 
 export default function Exams() {
   const [searchTerm, setSearchTerm] = useState("");
