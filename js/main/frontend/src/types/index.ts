@@ -543,6 +543,7 @@ export interface UserQueryOptions extends QueryOptions {
   username: string;
   role: ERole | null;
   name: string;
+  is_active: boolean;
 }
 
 export interface StudentQueryOptions extends QueryOptions {

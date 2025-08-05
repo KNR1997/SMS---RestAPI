@@ -16,6 +16,8 @@ interface IProps {
 export default function EcommerceMetrics({
   totalStudents,
   totalCourses,
+  totalTeachers,
+  totalEmployees,
 }: IProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
@@ -34,10 +36,10 @@ export default function EcommerceMetrics({
               {totalStudents}
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             11.01%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -57,10 +59,10 @@ export default function EcommerceMetrics({
             </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -72,17 +74,17 @@ export default function EcommerceMetrics({
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Courses
+              Teachers
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {totalCourses}
+              {totalTeachers}
             </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -94,20 +96,20 @@ export default function EcommerceMetrics({
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Courses
+              Employees
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {totalCourses}
+              {totalEmployees}
             </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon />
-            9.05%
-          </Badge>
+            9.05%/
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
-    </div>
-  );
+    </div>
+  );
 }
