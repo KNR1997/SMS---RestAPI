@@ -397,6 +397,7 @@ export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
   DELETE = "DELETE",
+  RESET_PASSWORD = "RESET_PASSWORD"
 }
 
 export enum EventStatusType {

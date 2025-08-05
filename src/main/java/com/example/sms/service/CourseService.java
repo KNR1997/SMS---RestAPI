@@ -69,6 +69,8 @@ public class CourseService {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             coursePage = courseRepository.searchCourses(name, gradeType, true, user.getId(), pageable);
+        } else {
+            coursePage = courseRepository.searchCourses(name, gradeType, is_active, null, pageable);
         }
 
         assert coursePage != null;

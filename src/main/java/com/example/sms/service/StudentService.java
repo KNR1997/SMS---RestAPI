@@ -77,6 +77,8 @@ public class StudentService {
 
             List<Course> courses = courseRepository.findByTeacher(user);
             studentPage = enrollmentRepository.findDistinctStudentsByCourseIn(courses, true, pageable);
+        } else {
+            studentPage = studentRepository.searchStudent(name, gradeType, admissionPayed, is_active, pageable);
         }
         assert studentPage != null;
         return studentPage.map(StudentListDTO::new);

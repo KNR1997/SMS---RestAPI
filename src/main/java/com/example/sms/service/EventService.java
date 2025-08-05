@@ -76,6 +76,8 @@ public class EventService {
             List<Course> courses = courseRepository.findByTeacher(user);
 
             eventPage = eventRepository.findByCourseIn(courses, pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_RECEPTIONIST)) {
+            eventPage = eventRepository.findAll(pageable);
         } else {
             // fallback for other roles (optional)
             eventPage = Page.empty(pageable);

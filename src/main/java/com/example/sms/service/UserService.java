@@ -151,7 +151,7 @@ public class UserService {
     public User resetUserPassword(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
-        user.setPassword(encoder.encode("1234"));
+        user.setPassword(encoder.encode("123456"));
         return userRepository.save(user);
 
     }

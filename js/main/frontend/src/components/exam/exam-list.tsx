@@ -17,6 +17,8 @@ import {
   useEnableExamMutation,
 } from "@data/exam";
 import { useModal } from "../../hooks/useModal";
+import { useAuth } from "../../context/AuthContext";
+import { adminOnly, hasAccess } from "../../utils/auth-utils";
 
 export type IProps = {
   exams: Exam[];
@@ -33,6 +35,8 @@ export default function ExamList({
   paginatorInfo,
   showActions = true,
 }: IProps) {
+    const { user } = useAuth();
+    let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
@@ -142,12 +146,14 @@ export default function ExamList({
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <ActionButtons
                         id={exam.id}
+                        enableEdit={has_permission}
                         editUrl={`/exams/${exam.id}/edit`}
                         isActive={exam.active}
-                        enableDisableButton
+                        enableDisableButton={has_permission}
                         onEnableDisableClick={handleActionClick}
-                        enableDelete
+                        enableDelete={has_permission}
                         onDeleteClick={handleActionClick}
+                        enableExamResult={true}
                       />
                       {/* <button onClick={() => handleEdit(exam.id)}>
                       <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />

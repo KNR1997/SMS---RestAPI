@@ -8,6 +8,7 @@ import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
 import com.example.sms.entity.*;
 import com.example.sms.enums.EventType;
 import com.example.sms.enums.ExamStatusType;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,8 +54,24 @@ public class ExamService {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
-    public Page<ExamPaginatedDataResponse> getPaginated(Pageable pageable, String search) {
-        Page<Exam> examPage = examRepository.findAll(pageable);
+    @Autowired
+    private UserRepository userRepository;
+
+    public Page<ExamPaginatedDataResponse> getPaginated(
+            Pageable pageable,
+            String search,
+            User currentUser
+    ) {
+        Page<Exam> examPage = null;
+        if (currentUser.isAdmin()) {
+            // Admin sees all exams
+            examPage = examRepository.searchExams(null, null, pageable);
+        } else if (currentUser.getRole().getName().equals(RoleType.ROLE_TEACHER)){
+            User user = userRepository.findById(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            examPage = examRepository.searchExams(true, user.getId(), pageable);
+        }
+        assert examPage != null;
         return examPage.map(ExamPaginatedDataResponse::new);
     }
 

@@ -5,6 +5,8 @@ import com.example.sms.dto.Exam.ExamUpdateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.response.Exam.ExamPageDataResponse;
 import com.example.sms.dto.response.Exam.ExamPaginatedDataResponse;
+import com.example.sms.entity.User;
+import com.example.sms.service.CurrentUserService;
 import com.example.sms.service.ExamService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class ExamController {
     @Autowired
     private ExamService examService;
 
+    @Autowired
+    private CurrentUserService currentUserService;
+
     @GetMapping
     public ResponseEntity<PaginatedResponse<ExamPaginatedDataResponse>> getEventsPaginated(
             @RequestParam(defaultValue = "0") int page,
@@ -37,8 +42,13 @@ public class ExamController {
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
+        User currentUser = currentUserService.getCurrentUser();
 
-        Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(pageable, search);
+        Page<ExamPaginatedDataResponse> examPaginatedDataResponses = examService.getPaginated(
+                pageable,
+                search,
+                currentUser
+        );
 
         PaginatedResponse<ExamPaginatedDataResponse> response = new PaginatedResponse<>(examPaginatedDataResponses);
         return ResponseEntity.ok(response);

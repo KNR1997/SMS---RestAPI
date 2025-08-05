@@ -40,6 +40,7 @@ export default function UserList({
   const { mutate: enableUser } = useEnableUserMutation();
   const { mutate: disableUser } = useDisableUserMutation();
   const { mutate: deleteUser } = useDeleteUserMutation();
+  const { mutate: resetPassword } = useResetUserPasswordMutation();
 
   const handleActionClick = (id: number, action: ActionType) => {
     openModal();
@@ -54,11 +55,11 @@ export default function UserList({
       disableUser({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.DELETE) {
       deleteUser({ id: selectedRecord.id });
+    } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
+      resetPassword({ id: selectedRecord.id });
     }
     closeModal();
   };
-
-  const { mutate: resetPassword } = useResetUserPasswordMutation();
 
   return (
     <>
@@ -164,7 +165,7 @@ export default function UserList({
                       enableDelete
                       onDeleteClick={handleActionClick}
                       enablePasswordReset
-                      onPasswordResetClick={resetPassword}
+                      onPasswordResetClick={handleActionClick}
                     />
                   </TableCell>
                 </TableRow>

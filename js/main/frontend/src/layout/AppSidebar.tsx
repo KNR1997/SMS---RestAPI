@@ -183,9 +183,9 @@ const navItems: NavItem[] = [
     icon: <CalenderIcon />,
     subItems: [
       { name: "All Exams", path: "/exams", pro: false },
-      { name: "Create exam", path: "/exams/create", pro: false },
+      { name: "Create exam", path: "/exams/create", pro: false, roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST] },
     ],
-    roles: [ERole.ROLE_ADMIN],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER],
   },
   {
     name: "Events",
@@ -214,7 +214,7 @@ const navItems: NavItem[] = [
     // subItems: [
     //   { name: "Events", path: "/events-calendar", pro: false },
     // ],
-    roles: [ERole.ROLE_STUDENT, ERole.ROLE_TEACHER],
+    roles: [ERole.ROLE_STUDENT],
   },
   {
     name: "Reports",
