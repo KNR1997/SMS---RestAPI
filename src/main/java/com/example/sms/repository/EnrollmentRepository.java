@@ -51,5 +51,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 
     boolean existsByStudent(Student student);
 
+    List<Enrollment> findAllByActiveTrue();
 
 }

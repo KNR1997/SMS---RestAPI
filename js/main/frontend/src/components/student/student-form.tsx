@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,7 +21,6 @@ import {
   gradeOptions,
   relationshipOptions,
 } from "../../constants/role";
-import { useNavigate } from "react-router";
 import Card from "../common/card";
 import { useEffect, useState } from "react";
 import { useGuardianByIDNumberQuery } from "@data/guardian";
@@ -98,7 +97,6 @@ interface Props {
 }
 
 export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
-  const navigate = useNavigate();
   const [guardianSearchInput, setGuardianSearchInput] = useState("");
   const [guardianFound, setGuardianFound] = useState<boolean>(false);
   const [triggerSearch, setTriggerSearch] = useState(false);
@@ -187,28 +185,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
       },
     };
 
-    console.log("input: ", input);
-
     if (!initialValues) {
       createStudent(input);
     } else {
       updateStudent({ id: initialValues.id, ...input });
     }
   };
-
-  const handleCreateAndEnroll = handleSubmit(async (data) => {
-    try {
-      // console.log("handle create and enroll");
-      // You can do your actual submit logic here
-      await onSubmit(data); // if you already have an `onSubmit` function defined
-
-      // Navigate after successful submission
-      navigate("/enrollments/create");
-    } catch (error) {
-      console.error("Submission failed", error);
-      // Handle error (e.g., show toast)
-    }
-  });
 
   const handleSearchGuardian = () => {
     setTriggerSearch(true); // This will enable the query
@@ -433,7 +415,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
           </Button>
           {!initialValues && (
             <Button
-              onClick={handleCreateAndEnroll}
               disabled={creating || updating}
               size="sm"
             >

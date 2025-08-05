@@ -10,7 +10,7 @@ export const useStudentEnrollCourseMutation = () => {
 
   return useMutation(StudentEnrollmentClient.enrollToCourse, {
     onSuccess: async () => {
-      navigate("/enrollments");
+      navigate("/payments/create");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:

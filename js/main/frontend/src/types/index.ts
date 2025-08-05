@@ -397,7 +397,7 @@ export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
   DELETE = "DELETE",
-  RESET_PASSWORD = "RESET PASSWORD",
+  RESET_PASSWORD = "RESET_PASSWORD"
 }
 
 export enum EventStatusType {
@@ -543,6 +543,7 @@ export interface UserQueryOptions extends QueryOptions {
   username: string;
   role: ERole | null;
   name: string;
+  is_active: boolean;
 }
 
 export interface StudentQueryOptions extends QueryOptions {

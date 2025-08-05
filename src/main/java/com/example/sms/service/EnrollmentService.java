@@ -69,6 +69,8 @@ public class EnrollmentService {
             User user = userRepository.findById(currentUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             enrollmentPage = enrollmentRepository.searchEnrollment(name, user.getId(), pageable);
+        } else {
+            enrollmentPage = enrollmentRepository.searchEnrollment(name, null, pageable);
         }
         assert enrollmentPage != null;
         return enrollmentPage.map(EnrollmentListDTO::new);

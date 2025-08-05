@@ -46,10 +46,6 @@ export default function UserList({
     openModal();
     setSelectedRecord({ id, action });
   };
-  const handleResetPassword = (id: number, action: ActionType) => {
-    openModal();
-    setSelectedRecord({ id, action });
-  };
 
   const handleModalClick = () => {
     if (!selectedRecord) return;
@@ -59,6 +55,8 @@ export default function UserList({
       disableUser({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.DELETE) {
       deleteUser({ id: selectedRecord.id });
+    } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
+      resetPassword({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
       resetPassword({ id: selectedRecord.id });
     }
@@ -169,8 +167,7 @@ export default function UserList({
                       enableDelete
                       onDeleteClick={handleActionClick}
                       enablePasswordReset
-                      //onPasswordResetClick={resetPassword}
-                      onPasswordResetClick={handleResetPassword}
+                      onPasswordResetClick={handleActionClick}
                     />
                   </TableCell>
                 </TableRow>

@@ -55,8 +55,16 @@ import { ReactComponent as ErrorHexaIcon } from "./info-hexa.svg?react";
 import { ReactComponent as BanIcon } from "./ban.svg?react";
 import { ReactComponent as Reload } from "./reload.svg?react";
 import { ReactComponent as Refresh } from "./refresh.svg?react";
+import { ReactComponent as APlus } from "./a-plus.svg?react";
+import { ReactComponent as Building } from "./building.svg?react";
+import { ReactComponent as Report } from "./report.svg?react";
+import { ReactComponent as Exam } from "./exam.svg?react";
 
 export {
+  Building,
+  Report,
+  Exam,
+  APlus,
   Refresh,
   Reload,
   BanIcon,

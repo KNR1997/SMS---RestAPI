@@ -17,12 +17,12 @@ export const roleOptions = [
 
 export const gradeOptions = [
   //{ value: EGrade.GRADE_5, label: "Grade 5" },
-  { value: EGrade.GRADE_6, label: "Grade 6" },
-  { value: EGrade.GRADE_7, label: "Grade 7" },
-  { value: EGrade.GRADE_8, label: "Grade 8" },
-  { value: EGrade.GRADE_9, label: "Grade 9" },
-  { value: EGrade.GRADE_10, label: "Grade 10" },
-  { value: EGrade.GRADE_11, label: "Grade 11" },
+  { value: EGrade.GRADE_6, label: "Grade 6", level: 0 },
+  { value: EGrade.GRADE_7, label: "Grade 7", level: 1 },
+  { value: EGrade.GRADE_8, label: "Grade 8", level: 2 },
+  { value: EGrade.GRADE_9, label: "Grade 9", level: 3 },
+  { value: EGrade.GRADE_10, label: "Grade 10", level: 4 },
+  { value: EGrade.GRADE_11, label: "Grade 11", level: 5 },
 ];
 
 export const admissionPayedOptions = [

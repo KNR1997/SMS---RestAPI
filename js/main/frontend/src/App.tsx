@@ -290,7 +290,7 @@ export default function App() {
                 <Route
                   path="/payments"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
                       <Payments />
                     </ProtectedRoute>
                   }
@@ -357,7 +357,7 @@ export default function App() {
                 <Route
                   path="/exams"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN]}>
+                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}>
                       <Exams />
                     </ProtectedRoute>
                   }
