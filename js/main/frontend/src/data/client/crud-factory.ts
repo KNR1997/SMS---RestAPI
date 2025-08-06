@@ -1,4 +1,5 @@
-import { GetParams, PaginatorInfo } from "../../types";
+import { GetParams, PaginatorInfo, Student } from "../../types";
+import { API_ENDPOINTS } from "./api-endpoints";
 import { HttpClient } from "./http-client";
 
 interface LanguageParam {
@@ -20,6 +21,12 @@ export function crudFactory<Type, QueryParams extends LanguageParam, InputType>(
     },
     create(data: InputType) {
       return HttpClient.post<Type>(endpoint, data);
+    },
+    resetPassword: ({ id }: { id: number }) => {
+      return HttpClient.put<Student>(
+        `${API_ENDPOINTS.STUDENTS}/${id}/reset-password`,
+        {}
+      );
     },
     update({ id, ...input }: Partial<InputType> & { id: number }) {
       return HttpClient.put<Type>(`${endpoint}/${id}`, input);

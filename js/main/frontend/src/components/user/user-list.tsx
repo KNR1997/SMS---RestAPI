@@ -57,8 +57,6 @@ export default function UserList({
       deleteUser({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
       resetPassword({ id: selectedRecord.id });
-    } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
-      resetPassword({ id: selectedRecord.id });
     }
     closeModal();
   };

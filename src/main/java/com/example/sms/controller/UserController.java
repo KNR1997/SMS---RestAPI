@@ -39,7 +39,11 @@ public class UserController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable, role, search);
+        Page<UserListDTO> userPage = userService.getUsersPaginated(
+                pageable,
+                role,
+                search
+        );
 
         PaginatedResponse<UserListDTO> response = new PaginatedResponse<>(userPage);
         return ResponseEntity.ok(response);

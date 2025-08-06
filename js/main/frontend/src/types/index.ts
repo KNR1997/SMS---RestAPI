@@ -220,6 +220,8 @@ export enum PayerType {
   TEACHER = "TEACHER",
   MANAGER = "MANAGER",
   INSTITUTE = "INSTITUTE",
+  ADMIN = "ADMIN",
+  RECEPTIONIST = "RECEPTIONIST",
 }
 
 export enum PaymentType {
@@ -333,6 +335,8 @@ export interface Payment {
   paymentMethod: PaymentMethod;
   status: PaymentStatusType;
   referenceNumber: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface CreatePayment {
@@ -397,7 +401,7 @@ export enum ActionType {
   ENABLE = "ENABLE",
   DISABLE = "DISABLE",
   DELETE = "DELETE",
-  RESET_PASSWORD = "RESET_PASSWORD"
+  RESET_PASSWORD = "RESET_PASSWORD",
 }
 
 export enum EventStatusType {
@@ -553,7 +557,13 @@ export interface StudentQueryOptions extends QueryOptions {
   is_active: boolean;
 }
 
-export interface PaymentQueryOptions extends QueryOptions {}
+export interface PaymentQueryOptions extends QueryOptions {
+  role: ERole | null;
+  name: string;
+  grade: EGrade | null;
+  payerType: PayerType;
+  is_active: boolean;
+}
 
 export interface SubjectQueryOptions extends QueryOptions {
   name: string;
@@ -582,6 +592,9 @@ export interface CoursePaymentQueryOptions extends QueryOptions {
 }
 
 export interface EmployeePaymentQueryOptions extends QueryOptions {
+  role: ERole | null;
+  name: string;
+  is_active: boolean;
   employeeName: string;
   employeeId: number;
 }

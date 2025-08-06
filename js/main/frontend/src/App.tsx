@@ -28,6 +28,7 @@ import EditStudentPage from "./pages/Students/edit";
 import MyCourses from "./pages/Courses/my-courses";
 import CreatePaymentPage from "./pages/Payments/create";
 import Payments from "./pages/Payments";
+import StudentPayments from "./pages/Students/Payments";
 import Guardians from "./pages/Guardians";
 import EditGuardianPage from "./pages/Guardians/edit";
 import Enrollments from "./pages/Enrollments";
@@ -254,7 +255,9 @@ export default function App() {
                 <Route
                   path="/enrollments/create"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <CreateEnrollPage />
                     </ProtectedRoute>
                   }
@@ -290,8 +293,20 @@ export default function App() {
                 <Route
                   path="/payments"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
                       <Payments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/students/payments"
+                  element={
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST]}
+                    >
+                      <StudentPayments />
                     </ProtectedRoute>
                   }
                 />
@@ -344,7 +359,13 @@ export default function App() {
                 <Route
                   path="/events"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST, ERole.ROLE_TEACHER]}>
+                    <ProtectedRoute
+                      roles={[
+                        ERole.ROLE_ADMIN,
+                        ERole.ROLE_RECEPTIONIST,
+                        ERole.ROLE_TEACHER,
+                      ]}
+                    >
                       <Events />
                     </ProtectedRoute>
                   }
@@ -357,7 +378,9 @@ export default function App() {
                 <Route
                   path="/exams"
                   element={
-                    <ProtectedRoute roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}>
+                    <ProtectedRoute
+                      roles={[ERole.ROLE_ADMIN, ERole.ROLE_TEACHER]}
+                    >
                       <Exams />
                     </ProtectedRoute>
                   }

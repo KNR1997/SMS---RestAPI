@@ -1,9 +1,8 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.Payment.PaymentCreateDTO;
-import com.example.sms.dto.Payment.PaymentItemCreateDTO;
 import com.example.sms.dto.Payment.PaymentListDTO;
-import com.example.sms.entity.Event;
+import com.example.sms.dto.Payment.PaymentUserView;
 import com.example.sms.entity.Payment;
 import com.example.sms.enums.PaymentStatusType;
 import com.example.sms.exception.ResourceNotFoundException;
@@ -16,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
+
 @Service
 public class PaymentService {
 
@@ -25,8 +26,9 @@ public class PaymentService {
     @Autowired
     private PaymentItemService paymentItemService;
 
-    public Page<PaymentListDTO> getPaymentsPaginated(Pageable pageable) {
-        Page<Payment> paymentPage = paymentRepository.findAll(pageable);
+    public Page<PaymentListDTO> getPaymentsPaginated(Pageable pageable, String payerType, String search) {
+        String name = extractSearchValue(search, "name");
+        Page<PaymentUserView> paymentPage = paymentRepository.searchPayment(name, payerType, pageable);
         return paymentPage.map(PaymentListDTO::new);
     }
 
