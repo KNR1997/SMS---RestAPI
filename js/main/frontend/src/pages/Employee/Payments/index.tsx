@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ERole, SortOrder } from "@types";
 import { useEmployeePaymentsQuery } from "@data/employee-payment";
 import EmployeePaymentList from "@components/employee/employee-payement-list";
-import { Card } from "antd";
+import Card from "@components/common/card";
 import Search from "@components/common/search";
 import { ArrowUp } from "@components/icons/arrow-up";
 import cn from "classnames";

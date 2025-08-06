@@ -20,6 +20,7 @@ export interface Course {
   active: boolean;
   batch: number;
   description: string;
+  year: number;
 }
 
 export interface Enrollment {

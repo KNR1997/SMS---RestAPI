@@ -8,6 +8,7 @@ import { useCoursesQuery } from "@data/course";
 import { useExamResultsQuery } from "@data/examResult";
 import { SortOrder } from "@types";
 import { useState } from "react";
+import Card from "@components/common/card";
 
 export default function ExamResults() {
   const [page, setPage] = useState(1);

@@ -22,6 +22,8 @@ public class CourseDetailDTO {
 
     private Integer batch;
 
+    private Integer year;
+
     private Double fee;
 
     public CourseDetailDTO(Course course) {
@@ -34,5 +36,6 @@ public class CourseDetailDTO {
         this.teacherId = course.getTeacher().getId();
         this.batch = course.getBatch();
         this.fee = course.getFee();
+        this.year = course.getYear();
     }
 }

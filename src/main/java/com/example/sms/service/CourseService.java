@@ -108,6 +108,7 @@ public class CourseService {
         course.setSlug(createDto.getSlug());
         course.setCode(createDto.getCode());
         course.setGradeType(createDto.getGradeType());
+        course.setYear(createDto.getYear());
         course.setSubject(subject);
         course.setTeacher(teacher);
         course.setBatch(createDto.getBatch());
@@ -137,6 +138,7 @@ public class CourseService {
         course.setTeacher(teacher);
         course.setBatch(updateDto.getBatch());
         course.setFee(updateDto.getFee());
+        course.setYear(updateDto.getYear());
 
         return courseRepository.save(course);
     }

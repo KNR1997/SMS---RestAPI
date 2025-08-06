@@ -25,6 +25,14 @@ export const gradeOptions = [
   { value: EGrade.GRADE_11, label: "Grade 11", level: 5 },
 ];
 
+export const yearOptions = [
+  { value: 2023, label: 2023 },
+  { value: 2024, label: 2024 },
+  { value: 2025, label: 2025 },
+  { value: 2026, label: 2026 },
+  { value: 2027, label: 2027 },
+];
+
 export const admissionPayedOptions = [
   { value: 1, label: "Yes" },
   { value: 0, label: "No" },

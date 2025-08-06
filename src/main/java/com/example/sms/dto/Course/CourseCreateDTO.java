@@ -21,6 +21,8 @@ public class CourseCreateDTO {
 
     private Integer subjectId;
 
+    private Integer year;
+
     private Integer teacherId;
 
     private Integer batch;

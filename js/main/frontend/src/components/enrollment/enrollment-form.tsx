@@ -121,7 +121,9 @@ export default function EnrollForm({ initialValues }: Props) {
           <SelectInput
             name="student"
             control={control}
-            getOptionLabel={(option: any) => option.firstName}
+            getOptionLabel={(option: any) =>
+              `${option.firstName} ${option.lastName}`
+            }
             getOptionValue={(option: any) => option.id}
             options={students}
             isClearable={true}
@@ -132,7 +134,7 @@ export default function EnrollForm({ initialValues }: Props) {
             </p>
           )}
         </div>
-        <div>
+        {/* <div>
           <Label>
             Admission <span className="text-error-500">*</span>{" "}
           </Label>
@@ -141,7 +143,7 @@ export default function EnrollForm({ initialValues }: Props) {
             errorMessage={errors.admission?.message!}
             disabled
           />
-        </div>
+        </div> */}
         <div>
           <Label>
             Courses <span className="text-error-500">*</span>
@@ -180,7 +182,7 @@ export default function EnrollForm({ initialValues }: Props) {
             </p>
           )}
         </div> */}
-        <div>
+        {/* <div>
           <Label>
             Total Payment <span className="text-error-500">*</span>{" "}
           </Label>
@@ -189,7 +191,7 @@ export default function EnrollForm({ initialValues }: Props) {
             errorMessage={errors.totalPayment?.message!}
             disabled
           />
-        </div>
+        </div> */}
         <Button disabled={creating} size="sm">
           Enroll Student
         </Button>
