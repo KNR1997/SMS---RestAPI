@@ -47,6 +47,26 @@ export const useStudentQuery = ({ slug }: GetParams) => {
   };
 };
 
+export const useResetStudentPasswordMutation = () => {
+  //const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation(StudentClient.resetPassword, {
+    onSuccess: async () => {
+      // navigate("/users");
+      toast.success("Successfull Password Reset!");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+    },
+    onError: (error: any) => {
+      console.error("error: ", error);
+      toast.error(error?.response?.data?.message ?? "Something going wrong!");
+    },
+  });
+};
+
 export const useCreateStudentMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();

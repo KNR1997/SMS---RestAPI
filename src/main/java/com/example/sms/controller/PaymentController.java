@@ -30,12 +30,16 @@ public class PaymentController {
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String grade
+            @RequestParam(required = false) String payerType
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<PaymentListDTO> coursePage = paymentService.getPaymentsPaginated(pageable);
+        Page<PaymentListDTO> coursePage = paymentService.getPaymentsPaginated(
+                pageable,
+                payerType,
+                search
+        );
 
         PaginatedResponse<PaymentListDTO> response = new PaginatedResponse<>(coursePage);
         return ResponseEntity.ok(response);

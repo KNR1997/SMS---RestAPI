@@ -28,14 +28,18 @@ public class EmployeePaymentController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(required = false) Integer employeeId
+            @RequestParam(required = false) Integer employeeId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role
     ) {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
         Page<EmployeePaymentListDTO> listDTOS = employeePaymentService.getEmployeePaymentsPaginated(
                 pageable,
-                employeeId
+                employeeId,
+                role,
+                search
         );
 
         PaginatedResponse<EmployeePaymentListDTO> response = new PaginatedResponse<>(listDTOS);

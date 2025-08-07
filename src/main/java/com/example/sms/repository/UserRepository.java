@@ -1,5 +1,7 @@
 package com.example.sms.repository;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.User.UserCountDTO;
 import com.example.sms.entity.Course;
 import com.example.sms.entity.Role;
 import com.example.sms.entity.User;
@@ -12,6 +14,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
@@ -22,6 +26,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String slug);
 
     Page<User> findByRole(Pageable pageable, Role role);
+
+    @Query("SELECT u.role.name AS userName, COUNT(u.id) AS userCount " +
+            "FROM User u " +
+            "GROUP BY u.role.name")
+    List<UserCountDTO> getUsersCount();
 
     @Query("SELECT u FROM User u " +
             "JOIN u.role r " +

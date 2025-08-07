@@ -10,6 +10,7 @@ import com.example.sms.entity.Payment;
 import com.example.sms.entity.User;
 import com.example.sms.enums.PayerType;
 import com.example.sms.enums.PaymentMethod;
+import com.example.sms.enums.RoleType;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.EmployeePaymentRepository;
 import com.example.sms.repository.UserRepository;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
 @Service
 public class EmployeePaymentService {
@@ -31,14 +34,23 @@ public class EmployeePaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<EmployeePaymentListDTO> getEmployeePaymentsPaginated(Pageable pageable, Integer employeeId) {
-        Page<EmployeePayment> employeePaymentPage;
-        if (employeeId != null) {
-            employeePaymentPage = employeePaymentRepository.findByEmployeeId(employeeId, pageable);
+    public Page<EmployeePaymentListDTO> getEmployeePaymentsPaginated(
+            Pageable pageable,
+            Integer employeeId,
+            String roleType,
+            String search
+    ) {
+        RoleType role = roleType != null ? RoleType.valueOf(roleType.toUpperCase()) : null;
+        String name = extractSearchValue(search, "name");
 
-        } else {
-            employeePaymentPage = employeePaymentRepository.findAll(pageable);
-        }
+        Page<EmployeePayment> employeePaymentPage = employeePaymentRepository.searchPayment(name, role, pageable);
+
+//        if (employeeId != null) {
+//            employeePaymentPage = employeePaymentRepository.findByEmployeeId(employeeId, pageable);
+//
+//        } else {
+//            employeePaymentPage = employeePaymentRepository.findAll(pageable);
+//        }
         return employeePaymentPage.map(EmployeePaymentListDTO::new);
     }
 

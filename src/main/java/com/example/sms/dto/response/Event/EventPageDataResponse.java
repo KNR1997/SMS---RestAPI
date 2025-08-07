@@ -33,7 +33,7 @@ public class EventPageDataResponse {
 
     private EventStatusType status;
 
-    private Course course;
+    private Integer courseId;
 
     public EventPageDataResponse(Event event, List<Hall> halls) {
         this.id = event.getId();
@@ -45,6 +45,6 @@ public class EventPageDataResponse {
         this.reference = event.getReference();
         this.halls = halls;
         this.status = event.getStatus();
-//        this.course = event.getCourse();
+        this.courseId = event.getCourse().getId();
     }
 }

@@ -132,7 +132,9 @@ export default function CreatePaymentForm() {
             <SelectInput
               name="student"
               control={control}
-              getOptionLabel={(option: any) => option.firstName}
+              getOptionLabel={(option: any) =>
+                `${option.firstName} ${option.lastName}`
+              }
               getOptionValue={(option: any) => option.id}
               options={students}
               isClearable={true}

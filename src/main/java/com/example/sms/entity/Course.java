@@ -25,6 +25,8 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private GradeType gradeType;
 
+    private Integer year;
+
     private Integer batch;
 
     @ManyToOne(fetch = FetchType.LAZY)

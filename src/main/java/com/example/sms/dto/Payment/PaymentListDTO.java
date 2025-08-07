@@ -22,6 +22,10 @@ public class PaymentListDTO {
 
     private PaymentStatusType status;
 
+    private String firstName;
+
+    private String lastName;
+
     public PaymentListDTO(Payment payment) {
         this.id = payment.getId();
         this.payerType = payment.getPayerType();
@@ -29,5 +33,13 @@ public class PaymentListDTO {
         this.paymentDate = payment.getPaymentDate();
         this.paymentMethod = payment.getPaymentMethod();
         this.status = payment.getStatus();
+    }
+
+    public PaymentListDTO(PaymentUserView view) {
+        this.id = view.getPaymentId();
+        this.totalAmount = view.getPaymentAmount();
+        this.paymentDate = view.getPaymentDate();
+        this.firstName = view.getFirstName();
+        this.lastName = view.getLastName();
     }
 }

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { User, UserPaginator, UserQueryOptions } from "../types";
+import { User, UserCount, UserPaginator, UserQueryOptions } from "../types";
 import { API_ENDPOINTS } from "./client/api-endpoints";
 import { UserClient } from "./client/user";
 import { mapPaginatorData } from "../utils/data-mappers";
@@ -148,6 +148,18 @@ export const useEnableUserMutation = () => {
       toast.error(error?.response?.data?.message);
     },
   });
+};
+
+export const useUserPerCountQuery = () => {
+  const { data, error, isLoading } = useQuery<UserCount[], Error>(
+    [`${API_ENDPOINTS.USERS}/users-count`],
+    () => UserClient.useUserPerCount()
+  );
+  return {
+    userCount: data,
+    error,
+    loading: isLoading,
+  };
 };
 
 export const useDisableUserMutation = () => {

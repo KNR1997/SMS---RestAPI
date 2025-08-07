@@ -1,21 +1,27 @@
-import { StudentsPerCouse } from "@types";
+import { UserCount } from "@types";
 import Chart from "react-apexcharts";
 
 interface IProps {
-  studentsPerCourses: StudentsPerCouse[];
+  userPerCount: UserCount[];
 }
 
-export default function CourseStudentChart({ studentsPerCourses }: IProps) {
-  const series = studentsPerCourses?.map((data) => data.studentCount);
+// export default function UserCountChart({ userPerCount }: IProps) {
+//   const series = userPerCount?.map((data) => data.userCount);
+
+export default function UserCountChart({ userPerCount }: IProps) {
+  //  Filter out ROLE_STUDENT dynamically
+  const filteredUsers = userPerCount.filter(
+    (data) => data.userName !== "ROLE_STUDENT"
+  );
+
+  const series = filteredUsers.map((data) => data.userCount);
 
   const options = {
     chart: {
       type: "pie",
     },
-    labels: studentsPerCourses?.map((data) =>
-      data?.courseName?.length > 20
-        ? data.courseName.slice(0, 20)
-        : data.courseName
+    labels: filteredUsers?.map((data) =>
+      data?.userName?.length > 20 ? data.userName.slice(0, 20) : data.userName
     ), // Corresponding labels
     responsive: [
       {
@@ -38,16 +44,16 @@ export default function CourseStudentChart({ studentsPerCourses }: IProps) {
         <div className="flex justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-              Top Courses
+              Employee Count
             </h3>
             <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-              Most students in courses
+              Employee types count
             </p>
           </div>
         </div>
         <div className="relative ">
           <div className="max-w-md mx-auto" id="chartDarkStyle">
-            <Chart options={options} series={series} type="pie" width="100%" />
+            <Chart options={options} series={series} type="pie" width="90%" />
           </div>
         </div>
       </div>

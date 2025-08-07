@@ -9,7 +9,7 @@ import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
 } from "../../data/course";
-import { gradeOptions } from "../../constants/role";
+import { gradeOptions, yearOptions } from "../../constants/role";
 import { useSubjectsQuery } from "../../data/subject";
 import { useUsersQuery } from "../../data/user";
 import SelectInput from "../ui/select-input";
@@ -24,6 +24,7 @@ type FormValues = {
   slug: string;
   code: string;
   gradeType: { label: string; value: EGrade };
+  year: { label: number; value: number };
   subject: Subject;
   teacher: User;
   batch: number;
@@ -41,8 +42,7 @@ const defaultValues = {
 };
 
 const validationSchema = yup.object().shape({
-  // name: yup.string().required("Name is required"),
-  // code: yup.string().required("Code is required"),
+  year: yup.object().required("Year is required"),
   gradeType: yup.object().required("Grade is required"),
   subject: yup.object().required("Subject is required"),
   teacher: yup.object().required("Teacher is required"),
@@ -87,10 +87,12 @@ export default function CreateOrUpdateCourseForm({
       const foundGradeType = gradeOptions.find(
         (g) => g.value === initialValues.gradeType
       );
+      const foundYear = yearOptions.find((g) => g.value === initialValues.year);
 
       if (foundSubject) setValue("subject", foundSubject);
       if (foundTeacher) setValue("teacher", foundTeacher);
       if (foundGradeType) setValue("gradeType", foundGradeType);
+      if (foundYear) setValue("year", foundYear);
       if (initialValues.batch) setValue("batch", initialValues.batch);
       if (initialValues.fee) setValue("fee", initialValues.fee);
       if (initialValues.description)
@@ -109,6 +111,7 @@ export default function CreateOrUpdateCourseForm({
   const subject = watch("subject");
   const teacher = watch("teacher");
   const batch = watch("batch");
+  const year = watch("year");
 
   // const formattedSlug = formatSlug(name);
   const courseName = generateCourseName(
@@ -116,14 +119,16 @@ export default function CreateOrUpdateCourseForm({
     subject?.name,
     teacher?.firstName,
     teacher?.lastName,
-    batch
+    batch,
+    year?.value
   );
   const courseCode = generateCourseCode(
     gradeType?.value,
     subject?.code,
     teacher?.firstName,
     teacher?.lastName,
-    batch
+    batch,
+    year?.value
   );
 
   const onSubmit = async (values: FormValues) => {
@@ -132,6 +137,7 @@ export default function CreateOrUpdateCourseForm({
       slug: courseCode,
       code: courseCode,
       gradeType: values.gradeType.value,
+      year: values.year.value,
       subjectId: values.subject.id,
       teacherId: values.teacher.id,
       batch: values.batch,
@@ -168,6 +174,21 @@ export default function CreateOrUpdateCourseForm({
         </div>
         <div>
           <Label>
+            Year <span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            disabled={!isEditable}
+            name="year"
+            control={control}
+            options={yearOptions}
+            isClearable={true}
+          />
+          {errors.year && (
+            <p className="text-error-500 text-sm mt-1">{errors.year.message}</p>
+          )}
+        </div>
+        <div>
+          <Label>
             Subject <span className="text-error-500">*</span>
           </Label>
           <SelectInput
@@ -193,7 +214,9 @@ export default function CreateOrUpdateCourseForm({
             disabled={!isEditable}
             name="teacher"
             control={control}
-            getOptionLabel={(option: any) => option.firstName}
+            getOptionLabel={(option: any) =>
+              option.firstName + " " + option.lastName
+            }
             getOptionValue={(option: any) => option.id}
             options={users}
             isClearable={true}

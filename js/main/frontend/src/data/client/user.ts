@@ -27,6 +27,9 @@ export const UserClient = {
   fetchUser: ({ id }: { id: string }) => {
     return HttpClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`);
   },
+  useUserPerCount: () => {
+    return HttpClient.get<any>(`${API_ENDPOINTS.USERS}/users-count`);
+  },
   removeUser: ({ id }: { id: string }) => {
     return HttpClient.delete<any>(`${API_ENDPOINTS.USERS}/${id}`);
   },

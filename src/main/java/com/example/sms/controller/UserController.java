@@ -1,5 +1,7 @@
 package com.example.sms.controller;
 
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.User.UserCountDTO;
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.User.UserDetailDTO;
@@ -19,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -39,7 +42,11 @@ public class UserController {
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        Page<UserListDTO> userPage = userService.getUsersPaginated(pageable, role, search);
+        Page<UserListDTO> userPage = userService.getUsersPaginated(
+                pageable,
+                role,
+                search
+        );
 
         PaginatedResponse<UserListDTO> response = new PaginatedResponse<>(userPage);
         return ResponseEntity.ok(response);
@@ -97,4 +104,8 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/users-count")
+    public List<UserCountDTO> getUserCount() {
+        return userService.getPerUserCount();
+    }
 }

@@ -34,7 +34,7 @@ public class EnrollmentListDTO {
 
     public EnrollmentListDTO(Enrollment enrollment) {
         this.id = enrollment.getId();
-        this.studentName = enrollment.getStudent().getUser().getFirstName();
+        this.studentName = enrollment.getStudent().getUser().getFirstName()+" " + enrollment.getStudent().getUser().getLastName();
         this.courseName = enrollment.getCourse().getName();
         this.courseCode = enrollment.getCourse().getCode();
         this.enrollmentDate = enrollment.getEnrollmentDate();
@@ -43,6 +43,7 @@ public class EnrollmentListDTO {
         this.lastPaidMonthName = this.getLastPaidMonthName();
         this.isActive = enrollment.isActive();
     }
+
 
     public String getLastPaidMonthName() {
         if (lastPaidMonth == null || lastPaidMonth == 0) {

@@ -9,9 +9,11 @@ import StudentInGrades from "@components/ecommerce/StudentInGrades";
 import { useStudentCountPerGradeQuery } from "@data/subject";
 import { useStudentCountPerCourseQuery } from "@data/enrollment";
 import AdminOnly from "@components/admin/AdminOnly";
-import { useUsersQuery } from "@data/user";
+import { useUserPerCountQuery, useUsersQuery } from "@data/user";
 import { ERole, StudentsPerGrade } from "@types";
 import { gradeOptions } from "../../constants/role";
+import UserCountChart from "@components/ecommerce/UserCountChart";
+import UserBarChart from "@components/ecommerce/UserBarChart";
 
 export default function Home() {
   const {
@@ -29,6 +31,11 @@ export default function Home() {
     useStudentCountPerGradeQuery();
   const { studentsPerCourses, loading: studenPerCoursesLoading } =
     useStudentCountPerCourseQuery();
+
+  // commenting one
+
+  const { userCount, loading: userCountLoading } = useUserPerCountQuery();
+
   const { paginatorInfo: teacherPaginatorInfo, loading: teachersLoading } =
     useUsersQuery({
       role: ERole.ROLE_TEACHER,
@@ -43,6 +50,7 @@ export default function Home() {
     loading ||
     studenPerCoursesLoading ||
     studentsPerGradesLoading ||
+    userCountLoading ||
     coursesLoading ||
     teachersLoading ||
     usersLoading
@@ -91,6 +99,11 @@ export default function Home() {
               <CourseStudentChart studentsPerCourses={studentsPerCourses} />
             )}
           </div>
+
+          {/* commenting one */}
+          <div className="col-span-12 xl:col-span-5">
+            {userCount && <UserCountChart userPerCount={userCount} />}
+          </div>
         </AdminOnly>
 
         <div className="col-span-12 space-y-6 xl:col-span-7">
@@ -112,6 +125,9 @@ export default function Home() {
                 studentsPerGrades={orderStudentsPerGraders(studentsPerGrades)}
               />
             )}
+          </div>
+          <div className="col-span-12 xl:col-span-">
+            {userCount && <UserBarChart userPerCount={userCount} />}
           </div>
         </AdminOnly>
 

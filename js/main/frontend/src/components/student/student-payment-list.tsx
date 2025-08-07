@@ -20,7 +20,7 @@ export type IProps = {
   onOrder: (current: string) => void;
 };
 
-export default function PaymentList({
+export default function StudentPaymentList({
   payments,
   onPagination,
   paginatorInfo,
@@ -48,14 +48,14 @@ export default function PaymentList({
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Name
+                Student
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Payer
-              </TableCell>
+              </TableCell> */}
               {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -68,12 +68,12 @@ export default function PaymentList({
               >
                 Amount
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Status
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -94,21 +94,21 @@ export default function PaymentList({
             {payments.map((payment) => (
               <TableRow key={payment.id}>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {payment.payerType}
+                  {payment.firstName} {payment.lastName}
                 </TableCell>
                 {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {payment.id}
                 </TableCell> */}
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {payment.payerType}
-                </TableCell>
+                </TableCell> */}
                 {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {payment.paymentMethod}
                 </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   Rs. {payment.totalAmount}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <Badge
                     size="sm"
                     color={
@@ -121,7 +121,7 @@ export default function PaymentList({
                   >
                     {payment.status}
                   </Badge>
-                </TableCell>
+                </TableCell> */}
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {payment.paymentDate?.slice(0, 10)}
                 </TableCell>

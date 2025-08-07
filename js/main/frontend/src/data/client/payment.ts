@@ -12,13 +12,13 @@ import { HttpClient } from "./http-client";
 
 export const PaymentClient = {
   ...crudFactory<Payment, QueryOptions, CreatePayment>(API_ENDPOINTS.PAYMENTS),
-  paginated: ({ ...params }: Partial<PaymentQueryOptions>) => {
+  paginated: ({ name, ...params }: Partial<PaymentQueryOptions>) => {
     return HttpClient.get<PaymentPaginator>(API_ENDPOINTS.PAYMENTS, {
       searchJoin: "and",
       // self,
       ...params,
       page: params?.page ? params.page - 1 : 0,
-      search: HttpClient.formatSearchParams({}),
+      search: HttpClient.formatSearchParams({ name }),
     });
   },
 };

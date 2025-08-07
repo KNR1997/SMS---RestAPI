@@ -7,6 +7,7 @@ import com.example.sms.dto.response.Event.EventPaginatedDataResponse;
 import com.example.sms.entity.*;
 import com.example.sms.enums.EventStatusType;
 import com.example.sms.enums.RoleType;
+import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.CourseInUseException;
 import com.example.sms.exception.EventInUseException;
 import com.example.sms.exception.ResourceNotFoundException;
@@ -125,6 +126,11 @@ public class EventService {
     public Event create(EventCreateDTO createDTO) {
         Course course = courseRepository.findById(createDTO.getCourseId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        // Todo -> check if event exists in the hall with the time period
+//        if (courseRepository.existsByCode(createDto.getCode())) {
+//            throw new BadRequestException("Course with name '" + createDto.getName() + "' already exists.");
+//        }
 
         Event event = new Event();
         event.setCode(createDTO.getCode());

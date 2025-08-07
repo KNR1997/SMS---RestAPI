@@ -15,6 +15,7 @@ export const EmployeePaymentClient = {
   ),
   paginated: ({
     employeeName,
+    name,
     ...params
   }: Partial<EmployeePaymentQueryOptions>) => {
     return HttpClient.get<EmployeePaymentPaginator>(
@@ -26,6 +27,7 @@ export const EmployeePaymentClient = {
         page: params?.page ? params.page - 1 : 0,
         search: HttpClient.formatSearchParams({
           employeeName,
+          name,
         }),
       }
     );

@@ -20,6 +20,7 @@ import ActionButtons from "@components/common/action-buttons";
 import { adminOnly, hasAccess } from "../../utils/auth-utils";
 import { useAuth } from "../../context/AuthContext";
 import StudentPopup from "./student-popup";
+import { useResetUserPasswordMutation } from "@data/user";
 
 export type IProps = {
   students: Student[];
@@ -46,6 +47,7 @@ export default function StudentList({
   const { mutate: enableStudent } = useEnableStudentMutation();
   const { mutate: disableStudent } = useDisableStudentMutation();
   const { mutate: deleteStudent } = useDeleteStudentMutation();
+  const { mutate: resetPassword } = useResetUserPasswordMutation();
 
   const handleActionClick = (id: number, action: ActionType) => {
     openModal();
@@ -60,6 +62,8 @@ export default function StudentList({
       disableStudent({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.DELETE) {
       deleteStudent({ id: selectedRecord.id });
+    } else if (selectedRecord.action == ActionType.RESET_PASSWORD) {
+      resetPassword({ id: selectedRecord.id });
     }
     closeModal();
   };
@@ -173,6 +177,8 @@ export default function StudentList({
                       enablePopup={!has_permission}
                       data={student}
                       onPopupClick={handlePopupClick}
+                      enablePasswordReset={has_permission}
+                      onPasswordResetClick={handleActionClick}
                     />
                   </TableCell>
                 </TableRow>

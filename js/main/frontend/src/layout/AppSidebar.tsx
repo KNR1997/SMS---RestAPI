@@ -167,7 +167,7 @@ const navItems: NavItem[] = [
     name: "Student Payments",
     icon: <DollarLineIcon />,
     subItems: [
-      { name: "All Payments", path: "/payments", pro: false },
+      { name: "All Payments", path: "/students/payments", pro: false },
       { name: "Create payment", path: "/payments/create", pro: false },
     ],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
