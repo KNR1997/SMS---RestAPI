@@ -59,6 +59,12 @@ export interface StudentsPerCouse {
   courseName: string;
 }
 
+export interface UserCount {
+  roleName: string;
+  userCount: number;
+  userName: string;
+}
+
 export interface StudentsPerGrade {
   studentCount: number;
   grade: string;
@@ -422,6 +428,7 @@ export interface Event {
   halls: Hall[];
   status: EventStatusType;
   active: boolean;
+  courseId: number;
 }
 
 export interface EmployeePayment {

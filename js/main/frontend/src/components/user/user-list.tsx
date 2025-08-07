@@ -117,59 +117,61 @@ export default function UserList({
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+              {users
+                .filter((user) => user.role !== ERole.ROLE_STUDENT)
+                .map((user) => (
+                  <TableRow key={user.id}>
+                    {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {user.id}
                 </TableCell> */}
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {user.username}
                 </TableCell> */}
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.firstName} {user.lastName}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        user.role == ERole.ROLE_ADMIN
-                          ? "success"
-                          : user.role === ERole.ROLE_TEACHER
-                          ? "warning"
-                          : user.role === ERole.ROLE_RECEPTIONIST
-                          ? "dark"
-                          : "primary"
-                      }
-                    >
-                      {user.role}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={user.active ? "success" : "warning"}
-                    >
-                      {user?.active ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      {user.firstName} {user.lastName}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color={
+                          user.role == ERole.ROLE_ADMIN
+                            ? "success"
+                            : user.role === ERole.ROLE_TEACHER
+                            ? "warning"
+                            : user.role === ERole.ROLE_RECEPTIONIST
+                            ? "dark"
+                            : "primary"
+                        }
+                      >
+                        {user.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color={user.active ? "success" : "warning"}
+                      >
+                        {user?.active ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {user.email}
                 </TableCell> */}
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <ActionButtons
-                      id={user.id}
-                      editUrl={`/users/${user.id}/edit`}
-                      isActive={user.active}
-                      enableDisableButton
-                      onEnableDisableClick={handleActionClick}
-                      enableDelete
-                      onDeleteClick={handleActionClick}
-                      enablePasswordReset
-                      onPasswordResetClick={handleActionClick}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <ActionButtons
+                        id={user.id}
+                        editUrl={`/users/${user.id}/edit`}
+                        isActive={user.active}
+                        enableDisableButton
+                        onEnableDisableClick={handleActionClick}
+                        enableDelete
+                        onDeleteClick={handleActionClick}
+                        enablePasswordReset
+                        onPasswordResetClick={handleActionClick}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           {!!paginatorInfo?.total && (

@@ -69,6 +69,7 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
             (eventTypeOption) =>
               eventTypeOption.value === initialValues.eventType
           ),
+          course: courses.find((course) => course.id == initialValues.courseId),
         }
       : defaultValues,
     //@ts-ignore

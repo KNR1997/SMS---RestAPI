@@ -214,7 +214,9 @@ export default function CreateOrUpdateCourseForm({
             disabled={!isEditable}
             name="teacher"
             control={control}
-            getOptionLabel={(option: any) => option.firstName}
+            getOptionLabel={(option: any) =>
+              option.firstName + " " + option.lastName
+            }
             getOptionValue={(option: any) => option.id}
             options={users}
             isClearable={true}

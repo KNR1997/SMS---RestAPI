@@ -2,6 +2,8 @@ package com.example.sms.service;
 
 
 import com.example.sms.dto.ChangePasswordDTO;
+import com.example.sms.dto.Course.CourseStudentCountDTO;
+import com.example.sms.dto.User.UserCountDTO;
 import com.example.sms.dto.User.UserCreateDTO;
 import com.example.sms.dto.User.UserListDTO;
 import com.example.sms.entity.Role;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.sms.utils.SearchUtil.extractSearchValue;
@@ -74,6 +77,7 @@ public class UserService {
         user.setPassword(encoder.encode(userCreateDTO.getPassword()));
         user.setEmail(userCreateDTO.getEmail());
         user.setNic(userCreateDTO.getNic());
+        user.setPhoneNumber(userCreateDTO.getPhoneNumber());
 
         return userRepository.save(user);
     }
@@ -205,5 +209,8 @@ public class UserService {
         // Set the new password
         user.setPassword(encoder.encode(changePasswordDTO.getNewPassword()));
         return userRepository.save(user);
+    }
+    public List<UserCountDTO> getPerUserCount() {
+        return userRepository.getUsersCount();
     }
 }
