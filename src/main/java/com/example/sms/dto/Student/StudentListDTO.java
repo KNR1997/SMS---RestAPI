@@ -25,6 +25,8 @@ public class StudentListDTO {
 
     private GuardianDetailDTO guardian;
 
+    private String username;
+
     public StudentListDTO(Student student) {
         this.id = student.getId();
         this.firstName = student.getUser().getFirstName();
@@ -35,5 +37,6 @@ public class StudentListDTO {
         this.admissionPayed = student.getAdmissionPayed();
         this.isActive = student.isActive();
         this.guardian = new GuardianDetailDTO(student.getGuardian());
+        this.username = student.getUser().getUsername();
     }
 }

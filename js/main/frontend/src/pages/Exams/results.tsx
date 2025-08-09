@@ -19,6 +19,8 @@ export default function ExamResultsPage() {
   const { exam, loading: examLoading } = useExamQuery({
     slug: id!,
   });
+  const { mutate: generateTable, isLoading } =
+    useGenerateExamResultTableMutation();
 
   const { examResults, loading, error, paginatorInfo } = useExamResultsQuery({
     examId: id,
@@ -34,13 +36,9 @@ export default function ExamResultsPage() {
     setPage(current);
   }
 
-  // const {
-  //   mutate: generateTable,
-  //   error: tableCreating,
-  //   isLoading,
-  // } = useGenerateExamResultTableMutation();
-
-  const handleGenerateTable = () => {};
+  const handleGenerateTable = () => {
+    if (id) generateTable({ slug: id });
+  };
 
   return (
     <>
@@ -54,7 +52,12 @@ export default function ExamResultsPage() {
             Course: {exam?.course.name}
           </div>
           <div>
-            <Button size="sm" className="mr-5" onClick={handleGenerateTable}>
+            <Button
+              disabled={isLoading}
+              size="sm"
+              className="mr-5"
+              onClick={() => handleGenerateTable()}
+            >
               Generate Result table
             </Button>
           </div>

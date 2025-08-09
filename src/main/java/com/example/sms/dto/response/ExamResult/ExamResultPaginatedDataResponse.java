@@ -10,7 +10,7 @@ public class ExamResultPaginatedDataResponse {
 
     private String studentName;
 
-    private Integer studentId;
+    private String studentId;
 
     private String result;
 
@@ -19,7 +19,7 @@ public class ExamResultPaginatedDataResponse {
     public ExamResultPaginatedDataResponse(ExamResult examResult) {
         this.id = examResult.getId();
         this.studentName = examResult.getStudent().getStudentName();
-        this.studentId = examResult.getStudent().getId();
+        this.studentId = examResult.getStudent().getStudentId();
         this.result = examResult.getResult();
         this.courseName = examResult.getExam().getCourse().getName();
     }

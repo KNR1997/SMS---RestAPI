@@ -267,8 +267,8 @@ export interface CreateUser {
   // email: string;
   username: string;
   role: ERole;
-  address: string;
-  genderType: EGender;
+  // address: string;
+  // genderType: EGender;
 }
 
 export interface ChangePasswordInput {
@@ -319,6 +319,7 @@ export interface Student {
   admissionPayed: boolean;
   active: boolean;
   guardian?: Guardian;
+  username: string;
 }
 
 export interface StudentPageData {
@@ -368,7 +369,7 @@ export interface CreatePaymentItem {
 export interface CreateStudent {
   userDetails: CreateUser;
   guardianDetails: CreateGuardian;
-  dateOfBirth: Date;
+  // dateOfBirth: Date;
   gradeType: EGrade;
 }
 
@@ -402,6 +403,12 @@ export interface CreateHall {
 export enum EventType {
   COURSE = "COURSE",
   EXAM = "EXAM",
+}
+
+export enum EventRepeatType {
+  ONCE = "ONCE",
+  WEEKLY = "WEEKLY",
+  // YEARLY = "YEARLY",
 }
 
 export enum ActionType {
@@ -457,12 +464,12 @@ export interface CreateEmployeePayment {
 }
 
 export interface CreateEvent {
-  code: string;
+  code?: string;
   eventType: EventType;
   date: string;
   startTime: string;
   endTime: string;
-  reference: string;
+  // reference: string;
 }
 
 export enum SortOrder {

@@ -41,8 +41,6 @@ export default function EmployeeDetails({
 
   const month = watch("month");
 
-  console.log("employee: ", employee);
-
   const { coursePayments, loading, error } = useCoursePaymentsSummaryQuery({
     teacherId: employee?.id,
     monthNumber: month?.value ?? 0,

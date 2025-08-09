@@ -163,6 +163,7 @@ const EventsCalendar: React.FC = () => {
             initialView="dayGridMonth"
             headerToolbar={{
               // left: "prev,next addEventButton",
+              left: "prev,next",
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}

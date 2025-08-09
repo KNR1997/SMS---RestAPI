@@ -22,15 +22,21 @@ public class EnrollmentLockScheduler {
     }
 
     // This runs at 12:01 AM on the first day of every month
-    @Scheduled(cron = "0 1 0 1 * *")
+    @Scheduled(cron = "0 1 0 1 * *") // every month
 //    @Scheduled(cron = "0 */2 * * * *") // every 2 minutes
     public void lockAllEnrollmentsAtStartOfMonth() {
         List<Enrollment> enrollments = enrollmentRepository.findAllByActiveTrue(); // or just findAll()
         for (Enrollment enrollment : enrollments) {
-            enrollment.setStatus(EnrollmentStatusType.LOCKED);
+            if(enrollment.getLastPaidMonth() < setCurrentMonthToNow()) {
+                enrollment.setStatus(EnrollmentStatusType.LOCKED);
+            }
         }
         enrollmentRepository.saveAll(enrollments);
 //        System.out.println("Locked all enrollments at the start of the month: " + LocalDate.now());
         logger.info("Locked {} enrollments at {}", enrollments.size(), LocalDate.now());
+    }
+
+    public int setCurrentMonthToNow() {
+        return LocalDate.now().getMonthValue(); // returns 1-12
     }
 }
