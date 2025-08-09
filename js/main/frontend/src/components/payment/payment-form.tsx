@@ -118,13 +118,32 @@ export default function CreatePaymentForm() {
 
   const filterPayingMonths = () => {
     const currentMonth = new Date().getMonth(); // JS months are 0-indexed, so +1
-    return monthOptions.filter((month) => month.value > currentMonth);
+    console.log('currentMonth: ', currentMonth)
+    return monthOptions.filter((month) => month.value == currentMonth + 1);
   };
 
   return (
     <div className="grid grid-cols-2 gap-5  ">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6">
+          <div>
+            <Label>
+              Student Number<span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="student"
+              control={control}
+              getOptionLabel={(option: any) => `${option.studentId}`}
+              getOptionValue={(option: any) => option.id}
+              options={students}
+              isClearable={true}
+            />
+            {errors.student && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.student.message}
+              </p>
+            )}
+          </div>
           <div>
             <Label>
               Student <span className="text-error-500">*</span>

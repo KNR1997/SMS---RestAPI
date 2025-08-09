@@ -17,6 +17,7 @@ public class Student {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(unique = true)
     private String studentId;
 
     private Date dateOfBirth;

@@ -12,6 +12,7 @@ import com.example.sms.entity.Student;
 import com.example.sms.enums.EnrollmentStatusType;
 import com.example.sms.enums.PayerType;
 import com.example.sms.enums.PaymentType;
+import com.example.sms.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class CoursePaymentService {
         // Create the Payment
         Payment payment = paymentService.createPayment(new PaymentCreateDTO(
                 PayerType.STUDENT,
-                student.getId(),
+                student.getUser().getId(),
                 PayerType.INSTITUTE,
                 0,
                 createDTO.getTotalAmount(),
@@ -72,6 +73,9 @@ public class CoursePaymentService {
             Enrollment enrollment = enrollmentService.getEnrollmentsByStudentAndCourse(student, course);
 
             for (Integer monthNumber : coursePaymentItemDTO.getPaymentMonths()) {
+                if (monthNumber <= enrollment.getLastPaidMonth()) {
+                    throw new BadRequestException("Payment for course " + course.getName()+ " with month number " + monthNumber + " already exists.");
+                }
                 enrollmentPaymentService.createEnrollmentPayment(new EnrollmentPaymentCreateDTO(
                         enrollment,
                         monthNumber,

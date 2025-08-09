@@ -1,7 +1,10 @@
 package com.example.sms.controller;
 
+import com.example.sms.dto.PaginatedResponse;
 import com.example.sms.dto.Report.InstituteMonthlyIncomeDTO;
+import com.example.sms.dto.Student.StudentListDTO;
 import com.example.sms.entity.PaymentItem;
+import com.example.sms.entity.User;
 import com.example.sms.service.PaymentItemService;
 import com.example.sms.service.ReportService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,10 +13,12 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -75,4 +80,32 @@ public class ReportController {
         workbook.write(response.getOutputStream());
         workbook.close();
     }
+
+//    @GetMapping
+//    public ResponseEntity<PaginatedResponse<StudentListDTO>> getAllStudents(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(defaultValue = "id") String sort,
+//            @RequestParam(defaultValue = "desc") String direction,
+//            @RequestParam(required = false) String search,
+//            @RequestParam(required = false) String grade,
+//            @RequestParam(required = false) Boolean admissionPayed,
+//            @RequestParam(required = false) Boolean is_active
+//    ) {
+//        Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
+//        Pageable pageable = PageRequest.of(page, size, sortOrder);
+//        User currentUser = currentUserService.getCurrentUser();
+//
+//        Page<StudentListDTO> studentPage = studentService.getStudentsPaginated(
+//                pageable,
+//                search,
+//                grade,
+//                admissionPayed,
+//                currentUser,
+//                is_active
+//        );
+//
+//        PaginatedResponse<StudentListDTO> response = new PaginatedResponse<>(studentPage);
+//        return ResponseEntity.ok(response);
+//    }
 }

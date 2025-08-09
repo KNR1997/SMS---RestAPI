@@ -59,7 +59,7 @@ export default function Students() {
           <div className="flex w-full flex-row items-center ms-auto md:w-2/4">
             <Search
               onSearch={handleSearch}
-              placeholderText="Search by Subject Name"
+              placeholderText="Search by Student Name"
             />
           </div>
           <button

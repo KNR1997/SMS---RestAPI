@@ -10,7 +10,6 @@ import {
 } from "@data/student";
 import SelectInput from "@components/ui/select-input";
 import { useCoursesQuery } from "@data/course";
-import Input from "@components/form/input/InputField";
 import { useEffect } from "react";
 import { useStudentEnrollCourseMutation } from "@data/student-enrollment";
 
@@ -40,7 +39,6 @@ export default function EnrollForm({ initialValues }: Props) {
 
   const {
     control,
-    register,
     watch,
     setValue,
     handleSubmit,
@@ -114,6 +112,24 @@ export default function EnrollForm({ initialValues }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
+        <div>
+          <Label>
+            Student Number<span className="text-error-500">*</span>
+          </Label>
+          <SelectInput
+            name="student"
+            control={control}
+            getOptionLabel={(option: any) => `${option.studentId}`}
+            getOptionValue={(option: any) => option.id}
+            options={students}
+            isClearable={true}
+          />
+          {errors.student && (
+            <p className="text-error-500 text-sm mt-1">
+              {errors.student.message}
+            </p>
+          )}
+        </div>
         <div>
           <Label>
             Student <span className="text-error-500">*</span>

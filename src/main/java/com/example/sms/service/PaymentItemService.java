@@ -38,9 +38,9 @@ public class PaymentItemService {
         paymentItem.setDescription(createDto.getDescription());
 
         if (paymentType == PaymentType.ADMISSION_FEE) {
-            Integer studentId = createDto.getPayment().getPayerId();
-            Student student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
+            Integer userId = createDto.getPayment().getPayerId();
+            Student student = studentRepository.findByUser_Id(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Student not found with user ID: " + userId));
             student.setAdmissionPayed(true);
         } else if (paymentType == PaymentType.COURSE_FEE) {
 
