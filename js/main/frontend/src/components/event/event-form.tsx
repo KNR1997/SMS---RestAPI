@@ -131,7 +131,12 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
         const eventStartMinutes = toMinutes(event.startTime); // "HH:mm:ss" -> works fine, seconds ignored
         const eventEndMinutes = toMinutes(event.endTime);
 
-        return startMinutes < eventEndMinutes && eventEndMinutes < endMinutes;
+        return (
+          (startMinutes <= eventEndMinutes &&
+          eventEndMinutes <= endMinutes) ||
+          (startMinutes <= eventStartMinutes &&
+          eventStartMinutes <= endMinutes)
+        );
       });
     }
 

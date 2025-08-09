@@ -20,7 +20,7 @@ export const useCreateEmployeePaymentMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.EMPLOYEE_PAYMENTS);
     },
     onError: (error: any) => {
-      toast.error("Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };
