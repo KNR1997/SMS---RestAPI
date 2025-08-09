@@ -60,9 +60,9 @@ public class UserService {
     }
 
     public User createUser(UserCreateDTO userCreateDTO) {
-//        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-//            throw new BadRequestException("User with email '" + userCreateDTO.getEmail() + "' already exists.");
-//        }
+        if (userRepository.existsByUsername(userCreateDTO.getUsername())) {
+            throw new BadRequestException("User with username '" + userCreateDTO.getUsername() + "' already exists.");
+        }
 
         Role role = roleRepository.findByName(userCreateDTO.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for:" + userCreateDTO.getRole()));

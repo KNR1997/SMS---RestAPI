@@ -87,7 +87,9 @@ export default function CreatePaymentForm() {
 
   const totalPayment =
     (selectedStudent?.admissionPayed ? 0 : 2000) +
-    courses.reduce((sum, course) => sum + (course.fee || 0), 0);
+    (selectedCourses
+      ? selectedCourses?.reduce((sum, course) => sum + (course.fee || 0), 0)
+      : 0);
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -125,6 +127,24 @@ export default function CreatePaymentForm() {
     <div className="grid grid-cols-2 gap-5  ">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6">
+          <div>
+            <Label>
+              Student Number<span className="text-error-500">*</span>
+            </Label>
+            <SelectInput
+              name="student"
+              control={control}
+              getOptionLabel={(option: any) => `${option.studentId}`}
+              getOptionValue={(option: any) => option.id}
+              options={students}
+              isClearable={true}
+            />
+            {errors.student && (
+              <p className="text-error-500 text-sm mt-1">
+                {errors.student.message}
+              </p>
+            )}
+          </div>
           <div>
             <Label>
               Student <span className="text-error-500">*</span>
@@ -228,44 +248,46 @@ export default function CreatePaymentForm() {
           </Button>
         </div>
       </form>
-      <div className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-        <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-          Student Enrollments
-        </h4>
-        {enrollments.length > 0 ? (
-          enrollments.map((enrollment: Enrollment) => (
-            <Card
-              key={enrollment.id}
-              className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6"
-            >
-              <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
-                {enrollment.courseName}
-              </p>
-              <div className="flex gap-5">
-                <Badge
-                  size="sm"
-                  color={
-                    enrollment.status === EEnrollmentStatus.ACTIVE
-                      ? "success"
-                      : enrollment.status === EEnrollmentStatus.LOCKED
-                      ? "warning"
-                      : "error"
-                  }
-                >
-                  {enrollment.status}
-                </Badge>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                  {enrollment.lastPaidMonthName}
+      {selectedStudent && (
+        <div className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+            Student Enrollments
+          </h4>
+          {enrollments.length > 0 ? (
+            enrollments.map((enrollment: Enrollment) => (
+              <Card
+                key={enrollment.id}
+                className="p-5 mt-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6"
+              >
+                <p className="text-sm mb-2 font-medium text-gray-800 dark:text-white/90">
+                  {enrollment.courseName}
                 </p>
-              </div>
-            </Card>
-          ))
-        ) : (
-          <Button onClick={() => navigate("/enrollments/create")} size="sm">
-            Enroll Student
-          </Button>
-        )}
-      </div>
+                <div className="flex gap-5">
+                  <Badge
+                    size="sm"
+                    color={
+                      enrollment.status === EEnrollmentStatus.ACTIVE
+                        ? "success"
+                        : enrollment.status === EEnrollmentStatus.LOCKED
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {enrollment.status}
+                  </Badge>
+                  <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                    {enrollment.lastPaidMonthName}
+                  </p>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <Button onClick={() => navigate("/enrollments/create")} size="sm">
+              Enroll Student
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

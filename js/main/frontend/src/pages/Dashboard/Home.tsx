@@ -14,6 +14,7 @@ import { ERole, StudentsPerGrade } from "@types";
 import { gradeOptions } from "../../constants/role";
 import UserCountChart from "@components/ecommerce/UserCountChart";
 import UserBarChart from "@components/ecommerce/UserBarChart";
+import StudentPerCourseChart from "@components/ecommerce/StudentPerCourseChart";
 
 export default function Home() {
   const {
@@ -101,17 +102,17 @@ export default function Home() {
           </div>
 
           {/* commenting one */}
-          <div className="col-span-12 xl:col-span-5">
+          {/* <div className="col-span-12 xl:col-span-5">
             {userCount && <UserCountChart userPerCount={userCount} />}
-          </div>
+          </div> */}
         </AdminOnly>
 
         <div className="col-span-12 space-y-6 xl:col-span-7">
           <EcommerceMetrics
             totalStudents={studentPaginatorInfo?.total}
             totalCourses={coursePaginatorInfo?.total}
-            totalTeachers={teacherPaginatorInfo?.total}
-            totalEmployees={calculateEmployeeCount()}
+            //totalTeachers={teacherPaginatorInfo?.total}
+            //totalEmployees={calculateEmployeeCount()}
           />
           {/* {studentsPerGrades && (
             <StudentInGrades studentsPerGrades={studentsPerGrades} />
@@ -126,9 +127,15 @@ export default function Home() {
               />
             )}
           </div>
+          {/* <div className="col-span-12 xl:col-span-">
+            {studentsPerCourses && (
+              <StudentPerCourseChart studentsPerCoursess={studentsPerCourses} />
+            )}
+          </div>
+
           <div className="col-span-12 xl:col-span-">
             {userCount && <UserBarChart userPerCount={userCount} />}
-          </div>
+          </div> */}
         </AdminOnly>
 
         {/* <div className="col-span-12 xl:col-span-5">

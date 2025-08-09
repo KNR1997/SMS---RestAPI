@@ -21,6 +21,17 @@ export default function CoursePaymentSummaryList({
 }: // onPagination,
 // paginatorInfo,
 IProps) {
+  // Helper to calculate totals
+  const totals = coursePaymentSummary.reduce(
+    (acc, row) => {
+      acc.totalIncome += row.income;
+      acc.totalInstituteShare += row.income * 0.3;
+      acc.totalTeacherShare += row.income * 0.7;
+      return acc;
+    },
+    { totalIncome: 0, totalInstituteShare: 0, totalTeacherShare: 0 }
+  );
+
   return (
     <>
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -94,6 +105,7 @@ IProps) {
               ))}
             </TableBody>
           </Table>
+          <p className="flex justify-end m-5">Total: {totals.totalTeacherShare}</p>
           {/* {!!paginatorInfo?.total && (
             <div className="flex items-center justify-end pb-2">
               <Pagination

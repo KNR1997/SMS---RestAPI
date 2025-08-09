@@ -52,7 +52,7 @@ export const useCreatePaymentMutation = () => {
 
   return useMutation(PaymentClient.create, {
     onSuccess: async () => {
-      navigate("/payments");
+      navigate("/students/payments");
       toast.success("Successfully created!");
     },
     // Always refetch after error or success:
@@ -60,7 +60,7 @@ export const useCreatePaymentMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.PAYMENTS);
     },
     onError: (error: any) => {
-      toast.error("Something going wrong!");
+      toast.error(error?.response?.data?.error ?? "Something going wrong!");
     },
   });
 };

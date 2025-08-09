@@ -179,6 +179,7 @@ export default function CreateOrUpdateUserForm({ initialValues }: Props) {
             placeholder="user123"
             {...register("username")}
             errorMessage={errors.username?.message!}
+            disabled={Boolean(initialValues)}
           />
         </div>
         {!initialValues && (

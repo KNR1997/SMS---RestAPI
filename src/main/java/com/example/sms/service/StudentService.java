@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.sms.utils.SearchUtil.extractSearchValue;
 
@@ -109,7 +110,7 @@ public class StudentService {
         Student student = new Student();
         student.setUser(newUser);
         student.setStudentId(generateStudentId());
-        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
+//        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGradeType(studentCreateDTO.getGradeType());
 
         Guardian guardian;
@@ -141,7 +142,7 @@ public class StudentService {
         user.setAddress(studentCreateDTO.getUserDetails().getAddress());
 
         // Update Student model
-        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
+//        student.setDateOfBirth(studentCreateDTO.getDateOfBirth());
         student.setGradeType(studentCreateDTO.getGradeType());
 
         GuardianCreateDTO updateGuardian = studentCreateDTO.getGuardianDetails();

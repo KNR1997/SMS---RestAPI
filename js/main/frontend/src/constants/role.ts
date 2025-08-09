@@ -2,6 +2,7 @@ import {
   EGender,
   EGrade,
   ERole,
+  EventRepeatType,
   EventType,
   ExamStatusType,
   RelationshipType,
@@ -9,7 +10,7 @@ import {
 
 export const roleOptions = [
   { value: ERole.ROLE_ADMIN, label: "Admin" },
-  { value: ERole.ROLE_MANAGER, label: "Manager" },
+  // { value: ERole.ROLE_MANAGER, label: "Manager" },
   { value: ERole.ROLE_TEACHER, label: "Teacher" },
   { value: ERole.ROLE_RECEPTIONIST, label: "Receptionist" },
   { value: ERole.ROLE_STUDENT, label: "Student" },
@@ -52,6 +53,22 @@ export const relationshipOptions = [
 export const eventTypeOptions = [
   { value: EventType.COURSE, label: "Class" },
   { value: EventType.EXAM, label: "Exam" },
+];
+
+export const eventRepeatOptions = [
+  { value: EventRepeatType.ONCE, label: "Once" },
+  { value: EventRepeatType.WEEKLY, label: "Weekly" },
+  // { value: EventRepeatType.YEARLY, label: "Yearly" },
+];
+
+export const dayOfWeekOptions = [
+  { value: 0, label: "Sunday" },
+  { value: 1, label: "Monday" },
+  { value: 2, label: "Tuesday" },
+  { value: 3, label: "Wednesday" },
+  { value: 4, label: "Thursday" },
+  { value: 5, label: "Friday" },
+  { value: 6, label: "Saturday" },
 ];
 
 export const monthOptions = [

@@ -112,7 +112,8 @@ public class ExamService {
                 createDTO.getStartTime(),
                 createDTO.getEndTime(),
                 createDTO.getReference(),
-                createDTO.getHallIds()
+                createDTO.getHallIds(),
+                null
         ));
         event.setExam(exam);
         eventRepository.save(event);

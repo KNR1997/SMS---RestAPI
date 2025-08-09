@@ -34,7 +34,7 @@ type FormValues = {
   address: string;
   username: string;
   password: string;
-  dateOfBirth: Date;
+  // dateOfBirth: Date;
 
   guardianId: number;
   guardianFirstName: string;
@@ -69,9 +69,19 @@ const validationSchema = yup.object().shape({
   genderType: yup.object().required("Gender is required"),
   address: yup.string().required("Address is required"),
 
-  username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
-  dateOfBirth: yup.string().required("Birthday is required"),
+  // username: yup.string().required("Username is required"),
+  // password: yup.string().required("Password is required"),
+  username: yup.string().when("$isEdit", {
+    is: true,
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("Username is required"),
+  }),
+  password: yup.string().when("$isEdit", {
+    is: true,
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("Password is required"),
+  }),
+  // dateOfBirth: yup.string().required("Birthday is required"),
 
   guardianFirstName: yup.string().required("Guardian First Name is required"),
   guardianLastName: yup.string().required("Guardian Last Name is required"),
@@ -154,16 +164,17 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
       : defaultValues,
     //@ts-ignore
     resolver: yupResolver(validationSchema),
+    context: { isEdit: Boolean(initialValues) },
   });
 
-  const { mutate: createStudent, isLoading: creating } =
+  const { mutateAsync: createStudent, isLoading: creating } =
     useCreateStudentMutation();
   const { mutate: updateStudent, isLoading: updating } =
     useUpdateStudentMutation();
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      dateOfBirth: values.dateOfBirth,
+      // dateOfBirth: values.dateOfBirth,
       gradeType: values.gradeType.value,
       userDetails: {
         firstName: values.firstName,
@@ -228,7 +239,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 errorMessage={errors.lastName?.message!}
               />
             </div>
-            <div>
+            {/* <div>
               <Label>
                 Date of Birth <span className="text-error-500">*</span>{" "}
               </Label>
@@ -237,7 +248,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
                 {...register("dateOfBirth")}
                 errorMessage={errors.dateOfBirth?.message!}
               />
-            </div>
+            </div> */}
             <div>
               <Label>
                 Grade <span className="text-error-500">*</span>
@@ -378,49 +389,49 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
         </Card>
 
         {/* Login Details  */}
-        <Card>
-          <h2
-            className="text-xl text-gray-800 dark:text-white/90 mb-4"
-            x-text="pageName"
-          >
-            Login Details
-          </h2>
-          <div className="grid grid-cols-2 gap-5">
-            <div>
-              <Label>
-                Username <span className="text-error-500">*</span>{" "}
-              </Label>
-              <Input
-                //placeholder=" user123"
-                {...register("username")}
-                errorMessage={errors.username?.message!}
-              />
+        {!initialValues && (
+          <Card>
+            <h2
+              className="text-xl text-gray-800 dark:text-white/90 mb-4"
+              x-text="pageName"
+            >
+              Login Details
+            </h2>
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <Label>
+                  Username <span className="text-error-500">*</span>{" "}
+                </Label>
+                <Input
+                  //placeholder=" user123"
+                  {...register("username")}
+                  errorMessage={errors.username?.message!}
+                />
+              </div>
+              <div>
+                <Label>
+                  Password <span className="text-error-500">*</span>{" "}
+                </Label>
+                <Input
+                  type="password"
+                  //placeholder="user"
+                  {...register("password")}
+                  errorMessage={errors.password?.message!}
+                />
+              </div>
             </div>
-            <div>
-              <Label>
-                Password <span className="text-error-500">*</span>{" "}
-              </Label>
-              <Input
-                type="password"
-                //placeholder="user"
-                {...register("password")}
-                errorMessage={errors.password?.message!}
-              />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
+
         <div className="flex gap-5 justify-end">
           <Button disabled={creating || updating} size="sm">
-            {initialValues ? "Update" : "Create"} Student
+            {initialValues ? "Update" : "Create & Enroll"} Student
           </Button>
-          {!initialValues && (
-            <Button
-              disabled={creating || updating}
-              size="sm"
-            >
+          {/* {!initialValues && (
+            <Button disabled={creating || updating} size="sm">
               Create and Enroll
             </Button>
-          )}
+          )} */}
         </div>
       </div>
     </form>

@@ -59,13 +59,16 @@ const EventsCalendar: React.FC = () => {
       id: calendarEvent.id,
       title: calendarEvent.code,
       start: calendarEvent.date,
-      extendedProps: { calendar: calendarEvent.eventType == EventType.EXAM ? "Danger" : "Success" },
+      extendedProps: {
+        calendar:
+          calendarEvent.eventType == EventType.EXAM ? "Danger" : "Success",
+      },
     }));
   };
 
   useEffect(() => {
     // Initialize with some events
-    setEvents(formatEvents())
+    setEvents(formatEvents());
     // setEvents([
     //   {
     //     id: "1",
@@ -159,7 +162,8 @@ const EventsCalendar: React.FC = () => {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-              left: "prev,next addEventButton",
+              // left: "prev,next addEventButton",
+              left: "prev,next",
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
@@ -168,15 +172,15 @@ const EventsCalendar: React.FC = () => {
             select={handleDateSelect}
             eventClick={handleEventClick}
             eventContent={renderEventContent}
-            customButtons={{
-              addEventButton: {
-                text: "Add Event +",
-                click: openModal,
-              },
-            }}
+            // customButtons={{
+            //   addEventButton: {
+            //     text: "Add Event +",
+            //     click: openModal,
+            //   },
+            // }}
           />
         </div>
-        <Modal
+        {/* <Modal
           isOpen={isOpen}
           onClose={closeModal}
           className="max-w-[700px] p-6 lg:p-10"
@@ -293,7 +297,7 @@ const EventsCalendar: React.FC = () => {
               </button>
             </div>
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     </>
   );

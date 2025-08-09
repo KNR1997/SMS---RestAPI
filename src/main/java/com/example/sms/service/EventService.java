@@ -141,6 +141,7 @@ public class EventService {
         event.setEndTime(createDTO.getEndTime());
         event.setReference(createDTO.getReference());
         event.setStatus(EventStatusType.PENDING);
+        event.setEventRepeatType(createDTO.getEventRepeatType());
 
         for (Integer hallId : createDTO.getHallIds()) {
             Hall hall = hallRepository.findById(hallId)
@@ -165,6 +166,7 @@ public class EventService {
         event.setStartTime(updateDTO.getStartTime());
         event.setEndTime(updateDTO.getEndTime());
         event.setReference(updateDTO.getReference());
+        event.setEventRepeatType(updateDTO.getEventRepeatType());
 
         // 2. Get current assignments
         List<EventHallAssignment> existingAssignments = eventHallAssignmentRepository.findByEvent(event);

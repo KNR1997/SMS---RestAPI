@@ -1,5 +1,6 @@
 package com.example.sms.entity;
 
+import com.example.sms.enums.EventRepeatType;
 import com.example.sms.enums.EventStatusType;
 import com.example.sms.enums.EventType;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Data
 @Entity
@@ -42,4 +44,9 @@ public class Event {
 
     @Column(name = "active")
     private boolean active = true;
+
+    @Enumerated(EnumType.STRING)
+    private EventRepeatType eventRepeatType;
+
+    private Set<Integer> dayOfWeek;
 }

@@ -25,7 +25,7 @@ type FormValues = {
   date: string;
   startTime: string;
   endTime: string;
-  reference: string;
+  // reference: string;
 };
 
 const defaultValues = {
@@ -83,6 +83,8 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
   const course = watch("course");
   const selectedHalls = watch("halls");
   const selectedDate = watch("date");
+  const startTime = watch("startTime");
+  const endTime = watch("endTime");
 
   const nameSuggest = () => {
     if (!course) return "";
@@ -94,10 +96,13 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
     }
   };
 
+  function toMinutes(timeStr: string) {
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    return hours * 60 + minutes;
+  }
+
   const filterEvents = () => {
     let filteredEvents = events;
-
-    console.log("filteredEvents: ");
 
     if (selectedHalls && selectedHalls.length > 0) {
       const selectedHallIds = selectedHalls.map((hall) => hall.id ?? hall); // handle IDs or objects
@@ -118,6 +123,18 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
       });
     }
 
+    if (startTime && endTime) {
+      const startMinutes = toMinutes(startTime);
+      const endMinutes = toMinutes(endTime);
+
+      filteredEvents = filteredEvents.filter((event) => {
+        const eventStartMinutes = toMinutes(event.startTime); // "HH:mm:ss" -> works fine, seconds ignored
+        const eventEndMinutes = toMinutes(event.endTime);
+
+        return startMinutes < eventEndMinutes && eventEndMinutes < endMinutes;
+      });
+    }
+
     return filteredEvents;
   };
 
@@ -129,7 +146,7 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
       date: values.date,
       startTime: values.startTime,
       endTime: values.endTime,
-      reference: values.reference,
+      // reference: values.reference,
       hallIds: values.halls.map((hall) => hall.id),
     };
     if (!initialValues) {
@@ -242,7 +259,7 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
               errorMessage={errors.endTime?.message!}
             />
           </div>
-          <div>
+          {/* <div>
             <Label>
               Reference<span className="text-error-500">*</span>{" "}
             </Label>
@@ -250,9 +267,12 @@ export default function CreateOrUpdateEventForm({ initialValues }: Props) {
               {...register("reference")}
               errorMessage={errors.reference?.message!}
             />
-          </div>
+          </div> */}
 
-          <Button disabled={creating || updating} size="sm">
+          <Button
+            disabled={creating || updating || filterEvents().length > 0}
+            size="sm"
+          >
             {initialValues ? "Update" : "Create"} Event
           </Button>
         </div>

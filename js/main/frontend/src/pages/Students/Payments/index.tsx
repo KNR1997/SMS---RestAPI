@@ -5,7 +5,6 @@ import ErrorMessage from "@components/ui/error-message";
 import { useState } from "react";
 import { EGrade, PayerType, SortOrder } from "../../../types";
 import { usePaymentsQuery } from "../../../data/payment";
-import PaymentList from "@components/payment/payment-list";
 import Card from "@components/common/card";
 import cn from "classnames";
 import Search from "@components/common/search";
@@ -21,8 +20,6 @@ export default function StudentPayments() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState("id");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
-
-  console.log("searchTerm: ", searchTerm);
 
   const { payments, loading, error, paginatorInfo } = usePaymentsQuery({
     page,

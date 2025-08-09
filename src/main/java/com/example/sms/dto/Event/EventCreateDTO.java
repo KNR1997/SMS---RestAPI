@@ -1,5 +1,6 @@
 package com.example.sms.dto.Event;
 
+import com.example.sms.enums.EventRepeatType;
 import com.example.sms.enums.EventType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class EventCreateDTO {
     private String reference;
 
     private List<Integer> hallIds;
+
+    private EventRepeatType eventRepeatType;
 }
