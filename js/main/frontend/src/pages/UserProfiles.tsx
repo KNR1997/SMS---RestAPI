@@ -29,7 +29,7 @@ export default function UserProfiles() {
           <div className="space-y-6">
             <UserMetaCard user={user} />
             <UserInfoCard initialValues={user} />
-            <UserAddressCard user={user} />
+            {/* <UserAddressCard user={user} /> */}
             <UserPasswordCard user={user} />
           </div>
         )}

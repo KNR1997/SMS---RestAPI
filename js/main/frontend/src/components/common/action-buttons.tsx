@@ -59,6 +59,7 @@ const ActionButtons = ({
     <div>
       {enablePasswordReset && onPasswordResetClick && (
         <button
+          title="Reset password to 123456"
           onClick={() => onPasswordResetClick(id, ActionType.RESET_PASSWORD)}
         >
           <Refresh className="text-blue-400 mr-2 hover:text-gray-700 dark:blue:text-red-300 size-5" />

@@ -7,5 +7,7 @@ public enum PayerType {
 
     MANAGER,
 
-    INSTITUTE
+    INSTITUTE,
+
+    RECEPTIONIST
 }

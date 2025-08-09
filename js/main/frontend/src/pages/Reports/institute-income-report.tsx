@@ -21,35 +21,6 @@ export default function InstituteIncomeReport() {
   if (loading) return <Loader text="Loading..." />;
   if (error) return <ErrorMessage message={error.message} />;
 
-  console.log("instituteMonthlyIncomes: ", instituteMonthlyIncomes);
-
-  const reportData = [
-    {
-      id: 1,
-      month: "March",
-      income: 20000,
-    },
-    {
-      id: 2,
-      month: "April",
-      income: 30000,
-    },
-    {
-      id: 3,
-      month: "May",
-      income: 20000,
-    },
-    {
-      id: 4,
-      month: "June",
-      income: 20000,
-    },
-  ];
-
-  function handlePagination(current: number) {
-    setPage(current);
-  }
-
   const options: ApexOptions = {
     colors: ["#465fff"],
     chart: {
@@ -158,11 +129,11 @@ export default function InstituteIncomeReport() {
   return (
     <>
       <PageBreadcrumb pageTitle="Institute Income Report" />
-      <div className="flex justify-end py-2">
+      {/* <div className="flex justify-end py-2">
         <Button onClick={handleExportOrder} size="sm" className="mr-5">
           Export
         </Button>
-      </div>
+      </div> */}
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">

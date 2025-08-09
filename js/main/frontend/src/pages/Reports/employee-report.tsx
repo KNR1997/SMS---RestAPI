@@ -71,11 +71,11 @@ export default function EmployeeReport() {
   return (
     <>
       <PageBreadcrumb pageTitle="Employee Payment Report" />
-      <div className="flex justify-end py-2">
+      {/* <div className="flex justify-end py-2">
         <Button size="sm" className="mr-5">
           Export
         </Button>
-      </div>
+      </div> */}
       <div className="space-y-6">
         <EmployeePaymentReportDataList
           reportData={employeePayments}

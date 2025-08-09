@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import Badge from "@components/ui/badge/Badge";
 import { ERole } from "@types";
 import { useEffect } from "react";
+import { monthOptions } from "../../constants/role";
 
 interface IProps {
   employee: any;
@@ -49,25 +50,11 @@ export default function EmployeeDetails({
   useEffect(() => {
     if (!coursePayments || coursePayments.length === 0) {
       onReference(null);
+      onCalculate(25000, month?.value)
       return;
     }
     onReference(coursePayments);
   }, [coursePayments, onReference, month]);
-
-  const monthOptions = [
-    {
-      label: "June",
-      value: 6,
-    },
-    {
-      label: "July",
-      value: 7,
-    },
-    {
-      label: "August",
-      value: 8,
-    },
-  ];
 
   const onSubmit = async (values: FormValues) => {};
 

@@ -17,7 +17,7 @@ import {
   useEnableStudentMutation,
 } from "@data/student";
 import ActionButtons from "@components/common/action-buttons";
-import { adminOnly, hasAccess } from "../../utils/auth-utils";
+import { adminAndReceptionistOnly, adminOnly, hasAccess } from "../../utils/auth-utils";
 import { useAuth } from "../../context/AuthContext";
 import StudentPopup from "./student-popup";
 import { useResetUserPasswordMutation } from "@data/user";
@@ -36,7 +36,7 @@ export default function StudentList({
   paginatorInfo,
 }: IProps) {
   const { user } = useAuth();
-  let has_permission = hasAccess(adminOnly, user?.erole);
+  let has_permission = hasAccess(adminAndReceptionistOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
   const [openStudentPopup, setOpenStudentPopup] = useState(false);
   const [popupData, setPopupData] = useState<Student | null>(null);

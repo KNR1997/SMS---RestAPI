@@ -47,45 +47,6 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_STUDENT],
   },
   {
-    name: "Subjects",
-    icon: <FileIcon />,
-    subItems: [
-      { name: "All Subjects", path: "/subjects", pro: false },
-      { name: "Create subject", path: "/subjects/create", pro: false },
-    ],
-    roles: [ERole.ROLE_ADMIN],
-  },
-  {
-    name: "Courses",
-    icon: <BoxIconLine />,
-    subItems: [
-      { name: "All Courses", path: "/courses", pro: false },
-      { name: "Create course", path: "/courses/create", pro: false },
-    ],
-    roles: [ERole.ROLE_ADMIN],
-  },
-  {
-    name: "My Courses",
-    icon: <BoxIconLine />,
-    path: "/courses",
-    roles: [ERole.ROLE_TEACHER],
-  },
-  {
-    name: "My Students",
-    icon: <BoxIconLine />,
-    path: "/students",
-    roles: [ERole.ROLE_TEACHER],
-  },
-  {
-    name: "Users",
-    icon: <UserIcon />,
-    subItems: [
-      { name: "All Users", path: "/users", pro: false },
-      { name: "Create user", path: "/users/create", pro: false },
-    ],
-    roles: [ERole.ROLE_ADMIN],
-  },
-  {
     name: "Students",
     icon: <GroupIcon />,
     subItems: [
@@ -117,6 +78,36 @@ const navItems: NavItem[] = [
       },
     ],
     roles: [ERole.ROLE_ADMIN, ERole.ROLE_TEACHER, ERole.ROLE_RECEPTIONIST],
+  },
+  {
+    name: "Student Payments",
+    icon: <DollarLineIcon />,
+    subItems: [
+      { name: "All Payments", path: "/students/payments", pro: false },
+      { name: "Create payment", path: "/payments/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
+  },
+  {
+    name: "My Courses",
+    icon: <BoxIconLine />,
+    path: "/courses",
+    roles: [ERole.ROLE_TEACHER],
+  },
+  {
+    name: "My Students",
+    icon: <BoxIconLine />,
+    path: "/students",
+    roles: [ERole.ROLE_TEACHER],
+  },
+  {
+    name: "Users",
+    icon: <UserIcon />,
+    subItems: [
+      { name: "All Users", path: "/users", pro: false },
+      { name: "Create user", path: "/users/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
   },
   {
     name: "Courses",
@@ -164,13 +155,22 @@ const navItems: NavItem[] = [
     roles: [ERole.ROLE_ADMIN],
   },
   {
-    name: "Student Payments",
-    icon: <DollarLineIcon />,
+    name: "Subjects",
+    icon: <FileIcon />,
     subItems: [
-      { name: "All Payments", path: "/students/payments", pro: false },
-      { name: "Create payment", path: "/payments/create", pro: false },
+      { name: "All Subjects", path: "/subjects", pro: false },
+      { name: "Create subject", path: "/subjects/create", pro: false },
     ],
-    roles: [ERole.ROLE_ADMIN, ERole.ROLE_RECEPTIONIST],
+    roles: [ERole.ROLE_ADMIN],
+  },
+  {
+    name: "Courses",
+    icon: <BoxIconLine />,
+    subItems: [
+      { name: "All Courses", path: "/courses", pro: false },
+      { name: "Create course", path: "/courses/create", pro: false },
+    ],
+    roles: [ERole.ROLE_ADMIN],
   },
   {
     name: "Halls",
@@ -229,23 +229,27 @@ const navItems: NavItem[] = [
     icon: <Report className="fill-gray-800 size-6 dark:fill-white/90" />,
     subItems: [
       { name: "Teacher Report", path: "/reports/teacher-report", pro: false },
-      { name: "Student Report", path: "/reports/student-report", pro: false },
+      {
+        name: "Student Exam Report",
+        path: "/reports/student-report",
+        pro: false,
+      },
       { name: "Employee Report", path: "/reports/employee-report", pro: false },
       {
         name: "Institute Income Report",
         path: "/reports/institute-income-report",
         pro: false,
       },
-      {
-        name: "Monthly Active Student Report",
-        path: "/reports/monthly-active-student-report",
-        pro: false,
-      },
-      {
-        name: "Student Registration Increment Report",
-        path: "/reports/student-registration-increment-report",
-        pro: false,
-      },
+      // {
+      //   name: "Monthly Active Student Report",
+      //   path: "/reports/monthly-active-student-report",
+      //   pro: false,
+      // },
+      // {
+      //   name: "Student Registration Increment Report",
+      //   path: "/reports/student-registration-increment-report",
+      //   pro: false,
+      // },
     ],
     roles: [ERole.ROLE_ADMIN],
   },

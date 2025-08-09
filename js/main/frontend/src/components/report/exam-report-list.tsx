@@ -1,5 +1,4 @@
-import Badge from "@components/ui/badge/Badge";
-import Pagination from "@components/ui/pagination";
+import { ActionType, Exam, ExamStatusType, MappedPaginatorInfo } from "@types";
 import {
   Table,
   TableBody,
@@ -7,28 +6,22 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
-import {
-  useDeleteEnrollmentMutation,
-  useDisableEnrollmentMutation,
-  useEnableEnrollmentMutation,
-  // useInvokeEnrollmentMutation,
-} from "@data/enrollment";
-import {
-  ActionType,
-  EEnrollmentStatus,
-  Enrollment,
-  MappedPaginatorInfo,
-} from "@types";
-import { useModal } from "../../hooks/useModal";
-import { useState } from "react";
-import ActionButtons from "@components/common/action-buttons";
+import Pagination from "@components/ui/pagination";
+import Badge from "@components/ui/badge/Badge";
 import ConfirmationModal from "@components/common/confirmation-modal";
-import { adminAndReceptionistOnly, adminOnly, hasAccess } from "../../utils/auth-utils";
+import ActionButtons from "@components/common/action-buttons";
+import { useState } from "react";
+import {
+  useDeleteExamMutation,
+  useDisableExamMutation,
+  useEnableExamMutation,
+} from "@data/exam";
+import { useModal } from "../../hooks/useModal";
 import { useAuth } from "../../context/AuthContext";
-import EnrollmentPopup from "./enrollment-popup";
+import { adminOnly, hasAccess } from "../../utils/auth-utils";
 
 export type IProps = {
-  enrollments: Enrollment[];
+  exams: Exam[];
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
@@ -36,25 +29,22 @@ export type IProps = {
   showActions?: boolean;
 };
 
-export default function EnrollmentList({
-  enrollments,
+export default function ExamReportList({
+  exams,
   onPagination,
   paginatorInfo,
   showActions = true,
 }: IProps) {
-  const { user } = useAuth();
-  let has_permission = hasAccess(adminAndReceptionistOnly, user?.erole);
+    const { user } = useAuth();
+    let has_permission = hasAccess(adminOnly, user?.erole);
   const { isOpen, openModal, closeModal } = useModal();
-  const [openEnrollmentPopup, setOpenEnrollmentPopup] = useState(false);
-  const [popupData, setPopupData] = useState<Enrollment | null>(null);
   const [selectedRecord, setSelectedRecord] = useState<{
     id: number;
-    data?: any;
     action: ActionType;
   } | null>(null);
-  const { mutate: enableEnrollment } = useEnableEnrollmentMutation();
-  const { mutate: disableEnrollment } = useDisableEnrollmentMutation();
-  const { mutate: deleteEnrollment } = useDeleteEnrollmentMutation();
+  const { mutate: enableExam } = useEnableExamMutation();
+  const { mutate: disableExam } = useDisableExamMutation();
+  const { mutate: deleteExam } = useDeleteExamMutation();
 
   const handleActionClick = (id: number, action: ActionType) => {
     openModal();
@@ -64,26 +54,18 @@ export default function EnrollmentList({
   const handleModalClick = () => {
     if (!selectedRecord) return;
     if (selectedRecord.action == ActionType.ENABLE) {
-      enableEnrollment({ id: selectedRecord.id });
+      enableExam({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.DISABLE) {
-      disableEnrollment({ id: selectedRecord.id });
+      disableExam({ id: selectedRecord.id });
     } else if (selectedRecord.action == ActionType.DELETE) {
-      deleteEnrollment({ id: selectedRecord.id });
+      deleteExam({ id: selectedRecord.id });
     }
     closeModal();
   };
 
-  const handlePopupClick = (data: any) => {
-    setPopupData(data);
-    setOpenEnrollmentPopup(true);
+  const handleEnterExamResults = (id: number) => {
+    // navigate(`/exams/${id}/results`);
   };
-
-  const closeEnrollmentPopup = () => {
-    setOpenEnrollmentPopup(false);
-    closeModal();
-  };
-
-  // const { mutate: invokeEnrollment } = useInvokeEnrollmentMutation();
 
   return (
     <>
@@ -103,13 +85,7 @@ export default function EnrollmentList({
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Student
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Course Name
+                  Course
                 </TableCell>
                 <TableCell
                   isHeader
@@ -136,55 +112,53 @@ export default function EnrollmentList({
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {enrollments.map((enrollment) => (
-                <TableRow key={enrollment.id}>
+              {exams.map((exam) => (
+                <TableRow key={exam.id}>
                   {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {enrollment.id}
+                  {exam.id}
                 </TableCell> */}
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {enrollment.studentName}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {enrollment.courseName}
+                    {exam.courseName}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge
                       size="sm"
                       color={
-                        enrollment.status == EEnrollmentStatus.ACTIVE
+                        exam.status === ExamStatusType.COMPLETED
                           ? "success"
-                          : enrollment.status === EEnrollmentStatus.LOCKED
+                          : exam.status === ExamStatusType.PENDING
                           ? "warning"
                           : "error"
                       }
                     >
-                      {enrollment.status}
+                      {exam.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge
                       size="sm"
-                      color={enrollment.active ? "success" : "warning"}
+                      color={exam.active ? "success" : "warning"}
                     >
-                      {enrollment?.active ? "Active" : "Inactive"}
+                      {exam?.active ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   {showActions && (
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <ActionButtons
-                        id={enrollment.id}
-                        enableEdit={has_permission}
-                        editUrl={`/enrollments/${enrollment.id}/view`}
-                        isActive={enrollment.active}
-                        enableDisableButton={has_permission}
+                        id={exam.id}
+                        enableEdit={false}
+                        editUrl={`/exams/${exam.id}/edit`}
+                        isActive={exam.active}
+                        enableDisableButton={false}
                         onEnableDisableClick={handleActionClick}
-                        enableDelete={has_permission}
+                        enableDelete={false}
                         onDeleteClick={handleActionClick}
-                        enablePopup={!has_permission}
-                        data={enrollment}
-                        onPopupClick={handlePopupClick}
+                        enableExamResult={true}
                       />
-                      {/* <button>
+                      {/* <button onClick={() => handleEdit(exam.id)}>
+                      <PencilIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+                    </button>
+                    <button onClick={() => handleEnterExamResults(exam.id)}>
                       <BoltIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
                     </button> */}
                     </TableCell>
@@ -209,20 +183,10 @@ export default function EnrollmentList({
         isOpen={isOpen}
         title={`${selectedRecord?.action
           .toLowerCase()
-          .replace(/^\w/, (c) => c.toUpperCase())} Enrollment`}
-        description={`Are you sure you want to ${selectedRecord?.action.toLowerCase()} this enrollment?`}
+          .replace(/^\w/, (c) => c.toUpperCase())} Exam`}
+        description={`Are you sure you want to ${selectedRecord?.action.toLowerCase()} this exam?`}
         onConfirm={handleModalClick}
         onCancel={closeModal}
-        confirmColor={
-          selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
-        }
-      />
-      <EnrollmentPopup
-        isOpen={openEnrollmentPopup}
-        title="Enrollment Details"
-        description={`Last Payment month ${popupData?.lastPaidMonthName}`}
-        onConfirm={handleModalClick}
-        onCancel={closeEnrollmentPopup}
         confirmColor={
           selectedRecord?.action === ActionType.ENABLE ? "green" : "red"
         }

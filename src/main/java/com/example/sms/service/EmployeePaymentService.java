@@ -11,6 +11,7 @@ import com.example.sms.entity.User;
 import com.example.sms.enums.PayerType;
 import com.example.sms.enums.PaymentMethod;
 import com.example.sms.enums.RoleType;
+import com.example.sms.exception.BadRequestException;
 import com.example.sms.exception.ResourceNotFoundException;
 import com.example.sms.repository.EmployeePaymentRepository;
 import com.example.sms.repository.UserRepository;
@@ -63,18 +64,32 @@ public class EmployeePaymentService {
         boolean alreadyPayedForMonth = employeePaymentRepository.existsByEmployeeAndMonthNumber(user, createDTO.getMonthNumber());
 
         if (alreadyPayedForMonth) {
-            throw new IllegalStateException("Payment already exists for this employee and month.");
+            throw new BadRequestException("Payment already exists for this employee and month.");
         }
 
-        Payment payment = paymentService.createPayment(new PaymentCreateDTO(
-                PayerType.INSTITUTE,
-                0,
-                PayerType.TEACHER,
-                createDTO.getEmployeeId(),
-                createDTO.getAmount(),
-                PaymentMethod.CASH,
-                null
-        ));
+        Payment payment = null;
+
+        if (user.getRole().getName() == RoleType.ROLE_TEACHER) {
+            payment = paymentService.createPayment(new PaymentCreateDTO(
+                    PayerType.INSTITUTE,
+                    0,
+                    PayerType.TEACHER,
+                    createDTO.getEmployeeId(),
+                    createDTO.getAmount(),
+                    PaymentMethod.CASH,
+                    null
+            ));
+        } else if (user.getRole().getName() == RoleType.ROLE_RECEPTIONIST) {
+            payment = paymentService.createPayment(new PaymentCreateDTO(
+                    PayerType.INSTITUTE,
+                    0,
+                    PayerType.RECEPTIONIST,
+                    createDTO.getEmployeeId(),
+                    createDTO.getAmount(),
+                    PaymentMethod.CASH,
+                    null
+            ));
+        }
 
         EmployeePayment employeePayment = new EmployeePayment();
         employeePayment.setEmployee(user);
@@ -84,13 +99,15 @@ public class EmployeePaymentService {
         employeePayment.setPayment(payment);
         employeePayment.setReference(createDTO.getReference());
 
-        for (CoursePaymentSummaryDto cpsDto : createDTO.getCoursePaymentSummaries()) {
-            CoursePaymentSummary cps = new CoursePaymentSummary();
-            cps.setCourseName(cpsDto.getCourseName());
-            cps.setCourseFee(cpsDto.getCourseFee());
-            cps.setStudentCount(cpsDto.getStudentCount());
-            cps.setIncome(cpsDto.getIncome());
-            employeePayment.addCoursePaymentSummary(cps);
+        if (user.getRole().getName() == RoleType.ROLE_TEACHER) {
+            for (CoursePaymentSummaryDto cpsDto : createDTO.getCoursePaymentSummaries()) {
+                CoursePaymentSummary cps = new CoursePaymentSummary();
+                cps.setCourseName(cpsDto.getCourseName());
+                cps.setCourseFee(cpsDto.getCourseFee());
+                cps.setStudentCount(cpsDto.getStudentCount());
+                cps.setIncome(cpsDto.getIncome());
+                employeePayment.addCoursePaymentSummary(cps);
+            }
         }
 
         return employeePaymentRepository.save(employeePayment);

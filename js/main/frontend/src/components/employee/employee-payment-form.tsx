@@ -51,7 +51,7 @@ export default function CreateEmployeePaymentForm() {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      employeeId: values.employee.id,
+      employeeId: values?.employee.id,
       monthNumber: monthNumber,
       amount: totalIncome,
       reference: `${selectedEmployee.firstName} ${selectedEmployee.lastName}`,
@@ -69,6 +69,12 @@ export default function CreateEmployeePaymentForm() {
     setCoursePayments(coursePayments);
   };
 
+  const filteredRoles = roleOptions.filter(
+    (roleOption) =>
+      roleOption.value.includes(ERole.ROLE_RECEPTIONIST) ||
+      roleOption.value.includes(ERole.ROLE_TEACHER)
+  );
+
   return (
     <div className="grid grid-cols-2 gap-5  ">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +86,7 @@ export default function CreateEmployeePaymentForm() {
             <SelectInput
               name="role"
               control={control}
-              options={roleOptions}
+              options={filteredRoles}
               isClearable={true}
             />
             {errors.role && (
