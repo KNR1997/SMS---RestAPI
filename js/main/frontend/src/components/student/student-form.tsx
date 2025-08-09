@@ -414,10 +414,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: Props) {
             {initialValues ? "Update" : "Create"} Student
           </Button>
           {!initialValues && (
-            <Button
-              disabled={creating || updating}
-              size="sm"
-            >
+            <Button disabled={creating || updating} size="sm">
               Create and Enroll
             </Button>
           )}
